@@ -27,15 +27,6 @@ $themeroot='http://r-forge.r-project.org/themes/rforge/';
 rangeMapper is a suite of tools for easy generation of biodiversity (species richness) or life-history traits maps and, in general, maps of any variable associated with a species or population. rangeMapper performs range maps interpolation with a pre-defined grid, then computes at each grid cell a chosen statistical model. rangeMapper can be easily extended with any statistical model (from a simple average to mixed-effect and phylogenetic models) available in one of the existing R packages. The resulting raster maps are stored in a rangeMapper project file (a pre-customized SQLite database) and can thus be displayed and/or manipulated at any latter stage. rangeMapper is built on the framework provided by the sp, maptools and rgdal packages using sqlite support to store data. rangeMapper comes with a user-friendly platform-independent tcltk graphical user interface.
 
 
-
-<<<<<<< .mine
-<!-- end of project description -->
-
-rangeMapper is a suite of tools for easy generation of biodiversity (species richness) or life-history traits maps and, in general, maps of any variable associated with a species or population. rangeMapper performs range maps interpolation with a pre-defined grid, then computes at each grid cell a chosen statistical model. rangeMapper can be easily extended with any statistical model (from a simple average to mixed-effect and phylogenetic models) available in one of the existing R packages. The resulting raster maps are stored in a rangeMapper project file (a pre-customized SQLite database) and can thus be displayed and/or manipulated at any latter stage. rangeMapper is built on the framework provided by the sp, maptools and rgdal packages using sqlite support to store data. rangeMapper comes with a user-friendly platform-independent tcltk graphical user interface.
-
-
-=======
->>>>>>> .r14
 <p> <strong>Package vignette(s) :</strong> 
 <ul>
 <li> <a href="rangeMapper.pdf">Graphical user interface</a> 
