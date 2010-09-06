@@ -33,7 +33,7 @@ assemblage.stat(formula, FUN, data)
 	\code{\link{rangeMap.save}}.
 	}
 
-\author{Mihai Valcu \email{valcu@orn.mpg.de}}
+\author{Mihai Valcu \email{valcu@orn.mpg.de} }
 
 
  
