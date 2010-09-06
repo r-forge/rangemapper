@@ -91,6 +91,7 @@ unlist(lapply(fl, FUN = function(x) .Call("ogrP4S", x[,1], x[,2], PACKAGE = "rgd
 	names(metad[[2]]) = paste(names(metad[[2]]), "y", sep = "_")
 
 	cbind(Area, metad[[1]], metad[[2]])
+	
 	}
 
 

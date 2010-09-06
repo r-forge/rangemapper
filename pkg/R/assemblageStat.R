@@ -19,6 +19,8 @@ lmer_mean <- function(formula, data, lm.on.fail = FALSE) {
 functional_richness <- function(formula, data, community_range) {
 	x = data[, as.character(formula[[2L]]) ]
 	diff(range(x  , na.rm = T) )/community_range
+	
+	
 }	
 
 
