@@ -18,26 +18,28 @@ H3 {
 	color: navy;
       }
 
-ul { 
-list-style-type: circle; 
-} 
+ 
+ul.tick li {
+margin: 10;
+padding: 2px 0 2px 16px;
+list-style: none;
+background: url('tick.png') no-repeat center left;
+font-family: "Trebuchet MS";
+font-size: 12pt;
+color: navy;
+}
 
-      ul.list-tick {
-        margin: 5;
-        padding: 10;
-      }
 
-      ul.list-tick li {
-        margin: 10;
-        padding: 2px 0 2px 16px;
-        list-style: none;
-        background: url('tick.png') no-repeat center left;
-		font-family: "Trebuchet MS";
-		font-size: 12pt;
-		color: navy;
+ul.bull  li {
+margin: 10;
+padding: 2px 0 2px 16px;
+list-style: none;
+background: url('bullet.png') no-repeat center left;
+font-family: "Trebuchet MS";
+font-size: 12pt;
+color: navy;
+}
 
-		
-      }
 
 img.center {
     display: block;
