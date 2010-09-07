@@ -1,15 +1,21 @@
 
+
 H1 {
 	font-family: "Trebuchet MS";
+	font-variant: small-caps;
 	font-size: 12pt;
 	color: navy;
-	text-decoration: underline; 
+	margin-top:50px;
+	margin-bottom:50px;
+	margin-right:50px;
+	margin-left:50px;
       }
 
 H2 {
 	font-family: "Trebuchet MS";
 	font-size: 11pt;
 	color: navy;
+	margin: 20px 0 10px;
       }
 
 H3 {

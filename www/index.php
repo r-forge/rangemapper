@@ -21,9 +21,10 @@ $group_name=ereg_replace('([^\.]*)\..*$','\1',$_SERVER['HTTP_HOST']);
 
 <body>
 
-<h1>  rangeMapper - A package for easy generation of biodiversity (species richness) or life-history traits maps using species geographical  ranges </h1> 	  
 
-<h2>  rangeMapper project  </h2> 
+<h1>rangeMapper - A package for easy generation of biodiversity (species richness) or life-history traits maps using species geographical  ranges </h1>
+
+<h2>  The rangeMapper project:  </h2> 
 
 <ul class="tick">
 <li> A suite of tools for easy generation of biodiversity (species richness) or life-history traits maps and, in general, maps of any variable associated with a species or population. </li>
