@@ -9,5 +9,5 @@ Suggests: lme4
 SystemRequirements: Bwidget, Tktable
 Description: A package to manipulate species range (extent-of-occurrence) maps, mainly tools for easy generation of biodiversity (species richness) or life-history traits maps. 
 License: GPL (>= 2)
-URL: http://www.r-project.org
+URL: http://www.r-project.org, http://rangemapper.r-forge.r-project.org/
 	

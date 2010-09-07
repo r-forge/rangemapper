@@ -1,8 +1,14 @@
+
+
+	2010-Sep-07 16:25:58  Mihai Valcu
+		»	DESCRIPTION (URL): r-forge added
+		
 	2010-Sep-07 16:25:58  Mihai Valcu
 		»	DESCRIPTION (Date, Version): 0.05.3
 		»	R/rangeMapSave rangeMapSave method for rangeMapSaveR: sql changed from paste("SELECT r.id, b.",object@biotrait,"FROM... to
 			SELECT r.id, b.* FROM ranges r"
 		»	TODO added	
+	
 	2010-Sep-07 10:00:00 Mihai Valcu
 		»	ChangeLog file added
 		»	DESCRIPTION (Date, Version): 0.05.2
