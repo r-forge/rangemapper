@@ -93,24 +93,22 @@ setClass("rangeMapSaveR", representation (FUN = "function", formula = "formula")
 	
 		
 
-setClass("rangeMapFetch", 
-		representation(
-			tableName    = "character"
-		), 
-		contains = "rangeMap", 
+setClass("rangeMapFetch", representation(
+				tableName    = "character"	), 
+				contains = "rangeMap", 
 		
-		validity = function(object)	{
-			mapNam =paste(object@MAP, object@tableName, sep = "") 
-			
-			if(!.dbtable.exists(object@CON, mapNam) )
-			 stop(paste(sQuote(object@tableName), "is not a valid MAP!"))
-			
-			# check if empty map
-			mapvar = setdiff(.sqlQuery(object@CON, paste("pragma table_info(", mapNam, ")"))$name, object@ID )
-			isempty = .sqlQuery(object@CON, paste("select count (", mapvar, ") FROM", mapNam) )[, 1]
-			
-			if(isempty == 0)
-			 stop(paste(sQuote(object@tableName), "is an empty MAP!"))
+				validity = function(object)	{
+					mapNam =paste(object@MAP, object@tableName, sep = "") 
+					
+					if(!.dbtable.exists(object@CON, mapNam) )
+					 stop(paste(sQuote(object@tableName), "is not a valid MAP!"))
+					
+					# check if empty map
+					mapvar = setdiff(.sqlQuery(object@CON, paste("pragma table_info(", mapNam, ")"))$name, object@ID )
+					isempty = .sqlQuery(object@CON, paste("select count (", mapvar, ") FROM", mapNam) )[, 1]
+					
+					if(isempty == 0)
+					 stop(paste(sQuote(object@tableName), "is an empty MAP!"))
 			}
 	)
 		

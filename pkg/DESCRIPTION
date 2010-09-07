@@ -1,6 +1,6 @@
 Package: rangeMapper
-Version: 0.0-5.1
-Date: 2010-Sep-06
+Version: 0.0-5.2
+Date: 2010-Sep-07
 Title: A package for easy generation of biodiversity (species richness) or life-history traits maps using species geographical ranges
 Author: Mihai Valcu  <valcu@orn.mpg.de>, James Dale  <J.Dale@massey.ac.nz> 
 Maintainer: Mihai Valcu  <valcu@orn.mpg.de>

@@ -30,13 +30,15 @@ setMethod("rangeMapSave",
 			
 			# build sql subset
 			sset = subsetSQLstring(object@CON, object@subset)
+			
 			# build sql string
 			richnessSQL = paste("SELECT id, count(r.id) as", object@tableName ,"from ranges as r", 
 							if(!is.null(sset)) paste("WHERE", sset), "group by r.id")
-			# build table	
-			.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "AS", richnessSQL) )
-			.sqlQuery(object@CON,paste("CREATE  INDEX", paste(object@tableName, object@ID, sep = "_") ,"ON", 
-					 tableName, "(id)") )
+			
+			# build table and index	
+			.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@tableName, "NUMERIC)"))
+			.sqlQuery(object@CON,paste("CREATE  INDEX", paste(object@tableName, object@ID, sep = "_") ,"ON", tableName, "(id)") )
+			.sqlQuery(object@CON, paste("INSERT INTO" ,tableName, richnessSQL) )
 
 		 return(.dbtable.exists(object@CON, tableName))
 			} 
@@ -58,9 +60,10 @@ setMethod("rangeMapSave",
 				  if(!is.null(sset)) paste("AND", sset) )
 		sql = paste("SELECT id,", object@FUN ,"(", object@biotrait, ") as", object@biotrait, "from (",sql,") group by id")	
 
-		# build table
-		.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "AS", sql) )
+		# build table and index
+		.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@biotrait, "NUMERIC)"))
 		.sqlQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
+		.sqlQuery(object@CON, paste("INSERT INTO" ,tableName, sql) )
 		
 		# out msg
 		return(.dbtable.exists(object@CON, tableName))
@@ -97,9 +100,10 @@ setMethod("rangeMapSave",
 		names(X) = c(object@ID, object@biotrait)
 		row.names(X) = NULL
 				
-		#build table
-		dbWriteTable(object@CON, tableName, X, row.names = FALSE)
-		 .sqlQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
+		# build table and index
+		.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@biotrait, "NUMERIC)"))
+		.sqlQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
+		dbWriteTable(object@CON, tableName, X, row.names = FALSE, append = TRUE)
 		
 		#out msg
 		return(.dbtable.exists(object@CON, tableName))

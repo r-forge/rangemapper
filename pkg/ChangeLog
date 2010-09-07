@@ -1,0 +1,6 @@
+	2010-06-03  Mihai Valcu
+		»	ChangeLog file added
+		»	DESCRIPTION (Date, Version): 0.05.2
+		»	R/rangeMapSave-methods.R ("rangeMapSave"): BIO_tables are created by using the sequence CREATE TABLE..., 
+			CREATE  INDEX..., INSERT INTO ...
+			

@@ -582,7 +582,7 @@ gui.rangeMap.save <- function() {
 			formula = FUN.formula, tableName = tableName, subset = subsetSQL)
 
 	if(res)		
-		gui.msg( paste(tableName, "saved to the active project! Ellapsed time:", round(difftime(Sys.time(), t1, 2)), "mins" ) )
+		gui.msg( paste(tableName, "saved to the active project! Ellapsed time:", round(difftime(Sys.time(), t1, units = "mins"), 2), "mins" ) )
 			
 
 	}
