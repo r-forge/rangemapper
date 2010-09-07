@@ -39,10 +39,3 @@ functional_richness <- function(formula, data, community_range) {
 
 
 
-
-
-
-
-
-
-

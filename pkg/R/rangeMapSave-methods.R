@@ -85,7 +85,7 @@ setMethod("rangeMapSave",
 		# build sql subset
 		sset = subsetSQLstring(object@CON, object@subset)
 		# build sql string
-		sql = paste("SELECT r.id, b.",object@biotrait,"FROM ranges r left join ", 
+		sql = paste("SELECT r.id, b.* FROM ranges r left join ", 
 				object@biotab, " b WHERE r.bioid = b.", .extract.indexed(object@CON, object@biotab), 
 				  if(!is.null(sset)) paste("AND", sset) )
 
@@ -93,9 +93,9 @@ setMethod("rangeMapSave",
 		d = .sqlQuery(object@CON, sql)
 		
 		# apply R function (FUN has  a formula method)
-		X = sapply(split(d, d[, object@ID]), FUN = function(x) object@FUN(formula = object@formula, data = x, ...) )
-		
-		
+		dl = split(d, d[, object@ID])
+		X = sapply(dl, FUN = function(x) object@FUN(formula = object@formula, data = x, ...) )
+				
 		X = data.frame(id = names(X), X)
 		names(X) = c(object@ID, object@biotrait)
 		row.names(X) = NULL
