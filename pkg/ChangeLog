@@ -1,6 +1,10 @@
 
 
 	2010-Sep-07 16:25:58  Mihai Valcu
+		»	DESCRIPTION (Date, Version): 0.05.4
+		»	R/rangeMapSave rangeMapSave method for rangeMapSaveSQL and rangeMapSaveR: biotab argument is now given without the prefix.
+	
+	2010-Sep-07 16:25:58  Mihai Valcu
 		»	DESCRIPTION (URL): r-forge added
 		
 	2010-Sep-07 16:25:58  Mihai Valcu

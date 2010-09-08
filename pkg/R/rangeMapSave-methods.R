@@ -49,14 +49,18 @@ setMethod("rangeMapSave",
 setMethod("rangeMapSave",  
 	signature  = "rangeMapSaveSQL", 
 		definition = function(object) {
-		#build tableName
+		
+		# BIO_tab name
+		biotab = paste(object@BIO, object@biotab, sep = "")
+		
+		#build MAP_ tableName
 		tableName = paste(object@MAP, object@tableName, sep = "")
 	
 		# build sql subset
 		sset = subsetSQLstring(object@CON, object@subset)
 		# build sql string
 		sql = paste("SELECT r.id, b.",object@biotrait,"FROM ranges r left join ", 
-				object@biotab, " b WHERE r.bioid = b.", .extract.indexed(object@CON, object@biotab), 
+				biotab, " b WHERE r.bioid = b.", .extract.indexed(object@CON, biotab), 
 				  if(!is.null(sset)) paste("AND", sset) )
 		sql = paste("SELECT id,", object@FUN ,"(", object@biotrait, ") as", object@biotrait, "from (",sql,") group by id")	
 
@@ -78,7 +82,9 @@ setMethod("rangeMapSave",
 	signature  = "rangeMapSaveR", 
 		definition = function(object, ...) {
 		
-
+		# BIO_tab name
+		biotab = paste(object@BIO, object@biotab, sep = "")
+		
 		#build tableName
 		tableName = paste(object@MAP, object@tableName, sep = "")
 
@@ -86,7 +92,7 @@ setMethod("rangeMapSave",
 		sset = subsetSQLstring(object@CON, object@subset)
 		# build sql string
 		sql = paste("SELECT r.id, b.* FROM ranges r left join ", 
-				object@biotab, " b WHERE r.bioid = b.", .extract.indexed(object@CON, object@biotab), 
+				biotab, " b WHERE r.bioid = b.", .extract.indexed(object@CON, biotab), 
 				  if(!is.null(sset)) paste("AND", sset) )
 
 		# fetch table
