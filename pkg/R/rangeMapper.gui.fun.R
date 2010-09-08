@@ -578,7 +578,7 @@ gui.rangeMap.save <- function() {
 	if(.dbtable.exists(dbcon, paste("MAP",tableName, sep = "_")) ) stop( gui.msg( paste(tableName, "allready exists!" ) ))
 	
 	t1 = Sys.time()
-	res = rangeMap.save(CON = dbcon, FUN = FUN, biotab = paste("BIO_", VAR[1], sep = ""), biotrait = VAR[2], 
+	res = rangeMap.save(CON = dbcon, FUN = FUN, biotab = VAR[1], biotrait = VAR[2], 
 			formula = FUN.formula, tableName = tableName, subset = subsetSQL)
 
 	if(res)		

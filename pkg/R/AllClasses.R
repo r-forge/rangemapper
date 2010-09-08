@@ -57,14 +57,13 @@ setClass("rangeMapSaveSQL", representation (FUN = "character"),
 							validity = function(object) {
 							
 							biotab = paste(object@BIO, object@biotab, sep = "")
-		
-							# biotab should exist 
-							if(!.dbtable.exists(object@CON, biotab) ) 
+							
+							if(!.dbtable.exists(object@CON,biotab) ) 
 								stop(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))
 							
 							# object@biotrait should exist as a field in biotab
-							if(!.dbfield.exists(object@CON, biotab, object@biotrait) ) 
-								stop(sQuote(object@biotrait), "is not a field of", sQuote(biotab))
+							if(!.dbfield.exists(object@CON,biotab, object@biotrait) ) 
+								stop(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))
 										
 							# fun should  be known by sqlite	
 							.sqlAggregate(object@FUN)
@@ -76,11 +75,12 @@ setClass("rangeMapSaveR", representation (FUN = "function", formula = "formula")
 							contains = "rangeMapSave", 
  
 							validity = function(object) {
+							
 							biotab = paste(object@BIO, object@biotab, sep = "")
 							
 							# biotab should exist 
 							if(!.dbtable.exists(object@CON, biotab) ) 
-								stop(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))
+								stop(sQuote(biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))
 							
 							# object@biotrait should exist as a field in biotab
 							if(!.dbfield.exists(object@CON, biotab, object@biotrait) ) 
