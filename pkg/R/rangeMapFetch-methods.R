@@ -12,7 +12,7 @@ setMethod("canvasFetch",
 		
 		proj4string(map) = CRS(p4s)
 		
-		gridded(map) = TRUE
+		# gridded(map) = TRUE
 		
 		map
 		
