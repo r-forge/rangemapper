@@ -1,5 +1,9 @@
 
 
+	2010-Sep-14 16:13:58  Mihai Valcu
+		»	DESCRIPTION (Date, Version): 0.05.5
+		»	R/rangeMapFetch-methods.R: New method: canvasFetch
+	
 	2010-Sep-07 16:25:58  Mihai Valcu
 		»	DESCRIPTION (Date, Version): 0.05.4
 		»	R/rangeMapSave rangeMapSave method for rangeMapSaveSQL and rangeMapSaveR: biotab argument is now given without the prefix.

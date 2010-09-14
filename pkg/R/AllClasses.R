@@ -97,7 +97,7 @@ setClass("rangeMapSaveR", representation (FUN = "function", formula = "formula")
 		
 
 setClass("rangeMapFetch", representation(
-				tableName    = "character"	), 
+				tableName    = "character"), 
 				contains = "rangeMap", 
 		
 				validity = function(object)	{
@@ -114,7 +114,10 @@ setClass("rangeMapFetch", representation(
 					 stop(paste(sQuote(object@tableName), "is an empty MAP!"))
 			}
 	)
-		
+	
+
+	
+
 		
 
 		

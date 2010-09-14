@@ -3,3 +3,9 @@ Mihai Valcu 2010-Sep-07 16:03:37
 	* save R function called by rangeMapSave/rangeMapSaveR to a table similar "to SELECT sql FROM sqlite_master where type = 'table'"
 	* add version info to metadata and check when the project is oppened
 	* add validity: check if connection points to a valid rangeMapper project
+
+Mihai Valcu 2010-Sep-08 17:14:21
+	* select and plot more than one map on the same device
+
+	Mihai Valcu 2010-Sep-14 16:18:17
+	* show method for canvas
