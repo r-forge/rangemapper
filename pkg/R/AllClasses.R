@@ -29,8 +29,6 @@ setClass("rangeMap",
 			
 	)
 
-# TODO; set validity, ini database etc for rangeMap
-
 setClass("rangeMapSave", 
 		representation(
 			biotab    = "character", 
@@ -45,11 +43,9 @@ setClass("rangeMapSave",
 			
 		validity = function(object)	{
 		# the new table should not exist
-			stopifnot(!.dbtable.exists(object@CON, object@tableName) )
-
-			}
+			if(.dbtable.exists(object@CON, paste(object@MAP, object@tableName, sep = "") ) ) stop(sQuote(object@tableName), " already exists.")	
 			
-
+		}
 	)
 
 setClass("rangeMapSaveSQL", representation (FUN = "character"), 
@@ -94,7 +90,20 @@ setClass("rangeMapSaveR", representation (FUN = "function", formula = "formula")
 							}
 		)						
 	
-		
+setClass("MapImport", representation (path = "character", FUN = "function"), 
+							contains = "rangeMapSave", 
+ 
+							validity = function(object) {
+							
+							if(!file.exists(object@path)) stop(sQuote(object@path), "is not a valid path.")	
+							stopifnot(require("raster"))
+
+							}, 
+							prototype(
+							FUN = mean 
+							) 
+							
+		)		
 
 setClass("rangeMapFetch", representation(
 				tableName    = "character"), 

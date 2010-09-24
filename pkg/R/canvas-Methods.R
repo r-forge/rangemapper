@@ -26,16 +26,33 @@ canvas.save   <- function(con) {
 
 }
 
-canvas.fetch  <- function(con) {
 
-p4s  = .sqlQuery(con, "SELECT p4s from metadata")$p4s
+setMethod("canvasFetch",  
+	signature  = "rangeMap", 
+		definition = function(object) {
+		
+		# fetch map
+		map = .sqlQuery(object@CON, 'SELECT * FROM canvas' )
+	
+		coordinates(map) = ~ x + y
 
-cnv = dbReadTable(con, "canvas")
-coordinates(cnv) = ~x+y
-proj4string(cnv) = p4s
-return(cnv)
+		p4s = .sqlQuery(object@CON, paste("SELECT p4s FROM", object@METADATA) )[,1]
+		
+		proj4string(map) = CRS(p4s)
+		
+		gridded(map) = TRUE
+		
+		map
+		
+		}
+	)	
 
-}
+canvas.fetch <- function(dbcon) { 
+	x = new("rangeMap", CON = dbcon)
+	canvasFetch(x)	
+
+} 
+
 
 
 

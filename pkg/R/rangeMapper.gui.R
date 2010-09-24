@@ -64,6 +64,7 @@ rangeMapper <- function() {
             tkadd(ProjectMenu,"command",label="Remove BIO tables",command = function() gui.rangeMap.rm("BIO") )
           	tkadd(ProjectMenu,"command",label="show project's metadata",command = function() gui.show.metadata() )
   
+			tkadd(MapMenu,"command",label="import external MAP", command = function() gui.mapImport()  )
 			tkadd(MapMenu,"command",label="bioID locator",command=function() gui.msg("Not yet implemented!") )
 	
 			
@@ -226,11 +227,3 @@ rangeMapper <- function() {
          }
 
 	
-	
-	
-	
-	
-	
-
-
-

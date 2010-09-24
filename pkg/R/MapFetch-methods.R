@@ -1,23 +1,5 @@
 
-setMethod("canvasFetch",  
-	signature  = "rangeMap", 
-		definition = function(object) {
-		
-		# fetch map
-		map = .sqlQuery(object@CON, 'SELECT * FROM canvas' )
-	
-		coordinates(map) = ~ x + y
 
-		p4s = .sqlQuery(object@CON, paste("SELECT p4s FROM", object@METADATA) )[,1]
-		
-		proj4string(map) = CRS(p4s)
-		
-		# gridded(map) = TRUE
-		
-		map
-		
-		}
-	)	
 
 
 setMethod("rangeMapFetch",  
@@ -55,8 +37,4 @@ rangeMap.fetch <- function(dbcon, map) {
 
 } 
 
-canvas.fetch <- function(dbcon) { 
-	x = new("rangeMap", CON = dbcon)
-	canvasFetch(x)	
 
-} 

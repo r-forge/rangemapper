@@ -631,11 +631,19 @@ gui.rangeMap.rm <- function(table.type) {
 }
 
 
+gui.mapImport <- function() {
+
+	dbcon = gui.get.from.env("con")
+	if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
 
 
+	rangeMap.save(dbcon , path = tk_choose.files(caption = "Select file to import", multi = FALSE))
+	
+	
+	
 
 
-
+}
 
 
 
