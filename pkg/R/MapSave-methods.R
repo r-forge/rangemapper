@@ -123,23 +123,22 @@ setMethod("rangeMapSave",
 	signature  = "MapImport", 
 		definition = function(object, ...) {
 
-	#build tableName
 	tableName = paste(object@MAP, object@tableName, sep = "")		
 	
+	filenam = basename(object@path)
+	
 	cnv = canvas.fetch(object@CON)
-	gui.msg("Converting canvas to polygons.")
+	gui.msg("Converting canvas to polygons...")
 	cnv = rasterToPolygons(raster(cnv))
 	
-	if(nlayers(stack(object@path)) > 1) stop(sQuote(basename(object@path)), " contains more than one layer")
+	if(nlayers(stack(object@path)) > 1) stop(sQuote(filenam), " contains more than one layer")
 	
 	gui.msg("Loading external MAP data")
 	rst = raster(object@path)
 
 	# is there any other way to compare CRS-s ?	
 	if(!CRSargs(CRS(proj4string(cnv))) == CRSargs(projection(rst, FALSE))) 
-		warning(sQuote(basename(object@path)), " may have a different PROJ4 string;\n", 
-								"canvas:", CRSargs(CRS(proj4string(cnv))), "\n", 
-								basename(object@path), ":", CRSargs(projection(rst, FALSE)) )
+		warning(sQuote(filenam), " may have a different PROJ4 string;\n", "canvas:", CRSargs(CRS(proj4string(cnv))), "\n", filenam, ":", CRSargs(projection(rst, FALSE)) )
 
 	
 	rstp = as(as(rst, "SpatialGridDataFrame"), "SpatialPointsDataFrame") 
@@ -147,7 +146,7 @@ setMethod("rangeMapSave",
 	
 	rstp@data$ptid = as.numeric(rownames(rstp@data)) # add point id
 	
-	gui.msg("Performing overlay: canvas polygons over external MAP")	
+	gui.msg(paste("Performing overlay: canvas polygons over", filenam) )	
 	o = overlay(cnv, rstp)
 	o$ptid = as.numeric(rownames(o))
 
