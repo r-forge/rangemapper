@@ -154,7 +154,7 @@ setMethod("rangeMapSave",
 	o$ptid = NULL
 	
 	gui.msg("Agregating data")
-	o = aggregate(o[, 2], list(o[,1]), FUN = object@FUN, na.rm = TRUE,...)
+	o = aggregate(o[, 2], list(o[,1]), FUN = object@FUN, na.rm = TRUE, ...)
 	
 	names(o) = c(object@ID, object@tableName) 
 
