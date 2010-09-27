@@ -154,7 +154,7 @@ setMethod("rangeMapSave",
 	o$ptid = NULL
 	
 	gui.msg("Agregating data")
-	o = aggregate(o[, 2], list(o[,1]), FUN = mean, na.rm = TRUE)
+	o = aggregate(o[, 2], list(o[,1]), FUN = object@FUN, na.rm = TRUE,...)
 	
 	names(o) = c(object@ID, object@tableName) 
 
@@ -180,8 +180,10 @@ rangeMap.save  <- function(CON, FUN = NULL, biotab = NULL, biotrait = NULL, form
 	
 	#  external map
 	if(!is.null(path))  {
-		if(is.null(tableName)) tableName = make.db.names.default(basename(path))
-		rmap = new("MapImport", CON = CON, path = path, tableName =  tableName) } else
+			if(is.null(tableName)) tableName = make.db.names.default(basename(path))
+			rmap = new("MapImport", CON = CON, path = path, tableName = tableName) 
+			if(!is.null(FUN)) rmap@FUN = FUN
+			} else
 	
 	# species richness
 	if(is.null(FUN))  {
