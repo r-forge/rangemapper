@@ -193,9 +193,10 @@ rangeMap.save  <- function(CON, FUN = NULL, biotab = NULL, biotrait = NULL, form
 	if(is.character(FUN)) {
 		rmap = new("rangeMapSaveSQL", CON = CON, 
 					biotab = biotab, biotrait = biotrait, FUN = FUN, tableName = tableName, subset = subset) } else
+	if(is.function(FUN)) {				
 	# R aggregate		
 	rmap = new("rangeMapSaveR", CON = CON,
-			  biotab = biotab, biotrait = biotrait, FUN = FUN, formula = formula, tableName = tableName, subset = subset)
+			  biotab = biotab, biotrait = biotrait, FUN = FUN, formula = formula, tableName = tableName, subset = subset) }
 
 		  
 	rangeMapSave(rmap, ...)
