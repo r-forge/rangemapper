@@ -14,3 +14,5 @@ rangeMap.plot  <- function(map, colorpalette, ncols, style, scales = FALSE) {
 }
 
 
+
+

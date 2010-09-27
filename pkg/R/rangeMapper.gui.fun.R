@@ -630,7 +630,6 @@ gui.rangeMap.rm <- function(table.type) {
 
 }
 
-
 gui.mapImport <- function() {
 
 	dbcon = gui.get.from.env("con")

@@ -1,4 +1,3 @@
-
 	
 # Class definitions
 
@@ -112,15 +111,20 @@ setClass("rangeMapFetch", representation(
 				validity = function(object)	{
 					mapNam =paste(object@MAP, object@tableName, sep = "") 
 					
-					if(!.dbtable.exists(object@CON, mapNam) )
-					 stop(paste(sQuote(object@tableName), "is not a valid MAP!"))
+					invalidNam = sapply(mapNam, FUN = function(x) !.dbtable.exists(object@CON, x) )
+					
+					if( any(invalidNam) )
+					  stop(paste(sQuote(names(invalidNam[invalidNam] )), "is not a valid MAP(s)!"))
 					
 					# check if empty map
-					mapvar = setdiff(.sqlQuery(object@CON, paste("pragma table_info(", mapNam, ")"))$name, object@ID )
-					isempty = .sqlQuery(object@CON, paste("select count (", mapvar, ") FROM", mapNam) )[, 1]
+					mapvar = sapply(mapNam, function(x)
+								setdiff(.sqlQuery(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )
 					
-					if(isempty == 0)
-					 stop(paste(sQuote(object@tableName), "is an empty MAP!"))
+					sql = paste("select count (", mapvar, ") FROM", mapNam)
+					isempty = sapply(sql, function(x) .sqlQuery(object@CON,  x)[, 1] ) < 1
+					
+					if(any(isempty))
+					 stop(paste(sQuote(mapNam[isempty]), "is an empty MAP(s)!"))
 			}
 	)
 	

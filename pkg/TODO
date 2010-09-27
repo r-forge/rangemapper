@@ -1,12 +1,13 @@
-Mihai Valcu 2010-Sep-23 15:08:43
-	* summary methods extend summary spatial to include info on map creation (i.e. underlining function)
+Mihai Valcu 2010-Sep-27 11:51:22
+	* GUI script window working on .RangeMapper envir
+	* plot methods extending spplot
+
+	Mihai Valcu 2010-Sep-23 15:08:43
+	* summary methods; extend summary spatial to include info on map creation (i.e. underlining function)
 
 Mihai Valcu 2010-Sep-14 16:18:17
 	* show method for canvas
 	
-Mihai Valcu 2010-Sep-08 17:14:21
-	* select and plot more than one map on the same device
-
 
 Mihai Valcu 2010-Sep-07 16:03:37
 	* save R function called by rangeMapSave/rangeMapSaveR to a table similar "to SELECT sql FROM sqlite_master where type = 'table'"

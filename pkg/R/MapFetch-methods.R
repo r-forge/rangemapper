@@ -1,19 +1,28 @@
 
 
-
-
 setMethod("rangeMapFetch",  
 	signature  = "rangeMapFetch", 
 		definition = function(object) {
 		
-    	#build tableName
-		tableName = paste(object@MAP, object@tableName, sep = "")
+    	#build tableName(s)
+		mapNam = paste(object@MAP, object@tableName, sep = "")
 
 		# map variable
-		mapvar = setdiff(.sqlQuery(object@CON, paste("pragma table_info(", tableName, ")"))$name, object@ID )
+		mapvar = sapply(mapNam, function(x)
+					setdiff(.sqlQuery(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )		
+	
+		# build sql
+		dotid = paste('x', 1:length(mapNam), sep = "")
+		
+		sql = paste("SELECT c.x, c.y,", paste(mapvar, collapse = ","), 
+		"from canvas as c LEFT JOIN",paste(paste(mapNam, dotid, "on c.id = ", dotid, ".id"), collapse = " LEFT JOIN "))
+
+		
 		
 		# fetch map
-		map = .sqlQuery(object@CON, paste("SELECT c.x, c.y, r.", mapvar, "from canvas as c LEFT JOIN", tableName ,"r on c.id = r.id") )
+		# map = .sqlQuery(object@CON, paste("SELECT c.x, c.y, r.", mapvar, "from canvas as c LEFT JOIN", mapNam ,"r on c.id = r.id"))
+		
+		map = .sqlQuery(object@CON, sql)
 	
 		coordinates(map) = ~ x + y
 
@@ -29,12 +38,10 @@ setMethod("rangeMapFetch",
 	)	
 
 
-
 # user level functions 
-rangeMap.fetch <- function(dbcon, map) { 
-	x = new("rangeMapFetch", CON = dbcon, tableName = map)
+rangeMap.fetch <- function(dbcon, maps) { 
+	x = new("rangeMapFetch", CON = dbcon, tableName = maps)
 	rangeMapFetch(x)	
 
 } 
-
 
