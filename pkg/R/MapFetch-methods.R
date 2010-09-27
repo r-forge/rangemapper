@@ -10,17 +10,13 @@ setMethod("rangeMapFetch",
 		# map variable
 		mapvar = sapply(mapNam, function(x)
 					setdiff(.sqlQuery(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )		
-	
-		# build sql
+		# sql string
 		dotid = paste('x', 1:length(mapNam), sep = "")
+		mapdat = paste(paste(paste(dotid,mapvar, sep = "."), object@tableName, sep = " as "), collapse = ",")
 		
-		sql = paste("SELECT c.x, c.y,", paste(mapvar, collapse = ","), 
+		sql = paste("SELECT c.x, c.y,", mapdat, 
 		"from canvas as c LEFT JOIN",paste(paste(mapNam, dotid, "on c.id = ", dotid, ".id"), collapse = " LEFT JOIN "))
 
-		
-		
-		# fetch map
-		# map = .sqlQuery(object@CON, paste("SELECT c.x, c.y, r.", mapvar, "from canvas as c LEFT JOIN", mapNam ,"r on c.id = r.id"))
 		
 		map = .sqlQuery(object@CON, sql)
 	
