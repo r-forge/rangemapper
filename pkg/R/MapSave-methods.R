@@ -180,7 +180,7 @@ rangeMap.save  <- function(CON, FUN = NULL, biotab = NULL, biotrait = NULL, form
 	
 	#  external map
 	if(!is.null(path))  {
-		if(is.null(tableName)) tn = make.db.names.default(basename(path))
+		if(!is.null(tableName)) tn = make.db.names.default(basename(path))
 		rmap = new("MapImport", CON = CON, path = path, tableName =  tn) } else
 	
 	# species richness
