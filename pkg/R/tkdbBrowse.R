@@ -49,16 +49,20 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 	
 	onOK = function() {
 	v = tclvalue(tcl(dbTree,"selection", "get") )
+	print(v)
+	
 	v = unlist(strsplit(v, " "))
-		tabnam  = gsub("\\{", "", v[1] )
+
 		
+		tabnam  = gsub("\\{", "", v[1] )
 		fieldnam = as.numeric(gsub("\\}", "", v[2] ))
         fieldnam = fields[[tabnam]][fieldnam]
+
 	    
 		out <<- cbind(dbtable = tabnam,field = fieldnam) 
 		
-	   
-	   tkdestroy(top)
+			
+	    #tkdestroy(top)
 	}
 	
 	

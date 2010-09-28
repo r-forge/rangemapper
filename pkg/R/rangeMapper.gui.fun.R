@@ -599,15 +599,13 @@ gui.rangeMap.plot <- function() {
 
 	rangeMap = rangeMap.fetch(dbcon, map)
 	
-	gui.put.to.env("rangeMap", rangeMap)
-	
 	# ncols and style
 	classType = c("sd", "equal", "quantile", "kmeans", "hclust", "bclust", "fisher", "jenks")
 	gui.tkComboEntryBox(title = "plot MAP", fixedTxt = classType,  fixedTxtLab = "Class interval type",  freeTxt = 20, freeTxtLab = "Number of classes", name = "CLASSINT")
 	
 	classint = gui.get.from.env("CLASSINT")	
 	
-	rangeMap.plot(rangeMap, colorpalette, ncols = as.numeric(classint[2]) , style = classint[1]) 
+	rangeMap.plot(rangeMap, colorpalette, n = as.numeric(classint[2]) , style = classint[1]) 
 	
 }
 
