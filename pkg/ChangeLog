@@ -3,6 +3,7 @@
 		»	R/MapSave-methods.R: rangeMap.save got an overwrite argument
 		»	R/MapFetch-methods.R: rangeMap.fetch got an missing argument
 		»	R/MapPlot-methods.R: small changes to rangeMap.plot()
+		»	R/tkdbBrowse.R: re-writen to allow multiple selection
 		
 
 	2010-Sep-27 11:43:45 Mihai Valcu

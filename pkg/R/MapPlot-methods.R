@@ -2,7 +2,7 @@
 # TODO: add suitable methods and classes
 # ...arguments to pass to classIntervals (eg. n, style) and spplot
 
-rangeMap.plot  <- function(map, colorpalette= brewer.pal.get('Spectral'), scales = FALSE, ...) {
+rangeMap.plot  <- function(map, colorpalette= brewer.pal.get('Spectral'), ncols = 20, scales = FALSE, ...) {
 
 	trellis.par.set("regions", list(col= colorRampPalette(colorpalette, space = "Lab")(ncols) ) , warn = FALSE)
 	
@@ -17,7 +17,7 @@ rangeMap.plot  <- function(map, colorpalette= brewer.pal.get('Spectral'), scales
 
 	for(i in seq(along = mapVars)) {
 	
-	Int = classIntervals(as.numeric(na.omit(map@data[,mapVars[i]])), ...)
+	Int = classIntervals(as.numeric(na.omit(map@data[,mapVars[i]])), n = ncols, ...)
 	printMore = if(i<length(mapVars)) TRUE else FALSE
 	
 	print(spplot(map, mapVars[i] ,scales = list(draw = scales), cuts = ncols, checkEmptyRC = FALSE, 

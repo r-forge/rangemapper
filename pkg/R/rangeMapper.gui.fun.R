@@ -597,7 +597,7 @@ gui.rangeMap.plot <- function() {
 	
 	map = tkdbBrowse(dbcon, prefix = "MAP", tables.name.only = TRUE)
 
-	rangeMap = rangeMap.fetch(dbcon, map)
+	rangeMap = rangeMap.fetch(dbcon, map$dbtable )
 	
 	# ncols and style
 	classType = c("sd", "equal", "quantile", "kmeans", "hclust", "bclust", "fisher", "jenks")
@@ -605,7 +605,7 @@ gui.rangeMap.plot <- function() {
 	
 	classint = gui.get.from.env("CLASSINT")	
 	
-	rangeMap.plot(rangeMap, colorpalette, n = as.numeric(classint[2]) , style = classint[1]) 
+	rangeMap.plot(rangeMap, colorpalette, ncols = as.numeric(classint[2]) , style = classint[1]) 
 	
 }
 
