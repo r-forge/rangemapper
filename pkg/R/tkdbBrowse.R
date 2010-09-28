@@ -14,6 +14,7 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 	
 	fields = lapply(split(tabs, tabs), function(x) .sqlQuery(con, paste("PRAGMA table_info(", x, ");"))$name)
 	
+
 	if(!is.null(prefix)) { 
 		fields = fields[grep(prefix, names(fields))]
 		names(fields) = gsub(paste(prefix, "_", sep = ""), "", names(fields))
@@ -49,20 +50,28 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 	
 	onOK = function() {
 	v = tclvalue(tcl(dbTree,"selection", "get") )
-	print(v)
 	
-	v = unlist(strsplit(v, " "))
+	v = unlist(strsplit(v, "\\} \\{"))
+	v[1] = gsub("\\{", "", v[1] )
+	v[length(v)] = gsub("\\}", "", v[length(v)] )
+	
+	v = strsplit(v, " ")
+	if(tables.name.only)
+		v = data.frame(dbtable = unlist(v), fieldnam = NA)
+	
+	if(!tables.name.only) {
+	v = do.call("rbind", v)
+	v = data.frame(v, stringsAsFactors = FALSE)
+	names(v) = c("dbtable", "fieldnam")
+	for(i in 1:nrow(v) )
+		v[i, "fieldnam"] = fields[v[i, "dbtable"]][[1]][as.numeric(v[i, "fieldnam"])]
 
-		
-		tabnam  = gsub("\\{", "", v[1] )
-		fieldnam = as.numeric(gsub("\\}", "", v[2] ))
-        fieldnam = fields[[tabnam]][fieldnam]
+	}
+	
 
-	    
-		out <<- cbind(dbtable = tabnam,field = fieldnam) 
-		
+	    out <<- v 
 			
-	    #tkdestroy(top)
+	    tkdestroy(top)
 	}
 	
 	
@@ -75,10 +84,9 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 	
 	tkwait.window(top)
 	
-	if(!exists("out")) out = NULL else
-		if(tables.name.only) out = out[1] 
+	if(!exists("out")) out = NULL
 	
-	out
+	return(out)
 
 	
 }
