@@ -1,6 +1,7 @@
 	2010-Sep-28 11:43:36 Mihai Valcu
 		»	DESCRIPTION (Date, Version): 0.05.8
 		»	R/MapSave-methods.R: rangeMap.save got an overwrite argument
+		»	R/MapFetch-methods.R: rangeMap.fetch got an missing argument
 		
 
 	2010-Sep-27 11:43:45 Mihai Valcu

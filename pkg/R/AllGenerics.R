@@ -1,8 +1,8 @@
 
 
 
-setGeneric("rangeMapSave", function(object, ...) standardGeneric("rangeMapSave") )
+setGeneric("rangeMapSave", function(object, ...)  standardGeneric("rangeMapSave") )
 setGeneric("rangeMapFetch", function(object, ...) standardGeneric("rangeMapFetch") )
-setGeneric("canvasFetch", function(object, ...) standardGeneric("canvasFetch") )
+setGeneric("canvasFetch", function(object, ...)   standardGeneric("canvasFetch") )
 
 

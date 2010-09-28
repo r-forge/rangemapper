@@ -107,7 +107,7 @@ setClass("MapImport", representation (path = "character", FUN = "function"),
 setClass("rangeMapFetch", representation(
 				tableName    = "character"), 
 				contains = "rangeMap", 
-		
+	
 				validity = function(object)	{
 					mapNam =paste(object@MAP, object@tableName, sep = "") 
 					
@@ -130,8 +130,6 @@ setClass("rangeMapFetch", representation(
 	
 
 	
-
-		
 
 		
 		
