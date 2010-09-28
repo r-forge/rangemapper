@@ -1,3 +1,6 @@
+		2010-Sep-28 22:32:27 Mihai Valcu
+		»	DESCRIPTION (Date, Version): 0.05.9
+		»	R/MapPlot-methods.R: bug correction
 	2010-Sep-28 11:43:36 Mihai Valcu
 		»	DESCRIPTION (Date, Version): 0.05.8
 		»	R/MapSave-methods.R: rangeMap.save got an overwrite argument
