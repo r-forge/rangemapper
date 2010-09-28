@@ -176,7 +176,13 @@ setMethod("rangeMapSave",
 
 	
 # user level function calling rangeMapSave
-rangeMap.save  <- function(CON, FUN = NULL, biotab = NULL, biotrait = NULL, formula = NULL, tableName = NULL, subset = list(), path = NULL, ...) {
+rangeMap.save  <- function(CON, FUN = NULL, biotab = NULL, biotrait = NULL, formula = NULL, tableName = NULL, subset = list(), path = NULL, overwrite = FALSE,...) {
+	
+	
+	if(overwrite) 
+	try(.sqlQuery(object@CON, paste("DROP TABLE", paste(object@MAP, object@tableName, sep = ""))), 
+		silent = TRUE)
+		
 	
 	#  external map
 	if(!is.null(path))  {
