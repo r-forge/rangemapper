@@ -34,7 +34,7 @@ tkMakeColorPalette(n)
 \dontrun{
 ## These cannot be run by examples() but should be OK when pasted
 ## into an interactive R session 
-pal =  c(brewer.pal.get(), list(heatcol = heat.colors (9),terraincol = terrain.colors(9), topocol = topo.colors(9) ))
+pals =  c(brewer.pal.get(), list(heatcol = heat.colors (9),terraincol = terrain.colors(9), topocol = topo.colors(9) ))
  	
 tkColorPalette(pal = pals, name  = "pal1")
 tkColorPalette(pal = pals, name  = "pal2", palette.size = 17)

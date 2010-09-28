@@ -105,7 +105,7 @@ setClass("MapImport", representation (path = "character", FUN = "function"),
 		)		
 
 setClass("rangeMapFetch", representation(
-				tableName    = "character"), 
+					tableName    = "character"), 
 				contains = "rangeMap", 
 	
 				validity = function(object)	{
@@ -114,7 +114,7 @@ setClass("rangeMapFetch", representation(
 					invalidNam = sapply(mapNam, FUN = function(x) !.dbtable.exists(object@CON, x) )
 					
 					if( any(invalidNam) )
-					  stop(paste(sQuote(names(invalidNam[invalidNam] )), "is not a valid MAP(s)!"))
+					  stop(paste(sQuote(names(invalidNam[invalidNam] )), "is not a valid MAP!\n"))
 					
 					# check if empty map
 					mapvar = sapply(mapNam, function(x)
@@ -124,16 +124,13 @@ setClass("rangeMapFetch", representation(
 					isempty = sapply(sql, function(x) .sqlQuery(object@CON,  x)[, 1] ) < 1
 					
 					if(any(isempty))
-					 stop(paste(sQuote(mapNam[isempty]), "is an empty MAP(s)!"))
+					 stop(paste(sQuote(mapNam[isempty]), "is an empty MAP!\n"))
 			}
 	)
 	
 
 	
 
-		
-		
-		
 		
 		
 		
