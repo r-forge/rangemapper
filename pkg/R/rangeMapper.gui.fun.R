@@ -383,7 +383,7 @@ gui.chooseVariable <- function() {
 	
 	VAR = tkdbBrowse(con, prefix = "BIO", tables.name.only = FALSE, info = "Choose a variable to map.")	
 		
-	gui.put.to.env("VAR", VAR)
+	gui.put.to.env("VAR", VAR[1, ])
 	
 	msg = gui.get.from.env("VAR")
 	gui.msg( paste("<ACTIVE VARIABLE>", paste(msg[2], "in table ", msg[1])), keep = TRUE )
