@@ -613,18 +613,17 @@ gui.rangeMap.rm <- function(table.type) {
 	dbcon = gui.get.from.env("con")
 	if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
 
-	table.nam = tkdbBrowse(dbcon, prefix = table.type, tables.name.only = TRUE)
+	table.nam = as.character(tkdbBrowse(dbcon, prefix = table.type, tables.name.only = TRUE)$dbtable)
 	if(exists("out")) rm(out, envir = .GlobalEnv)
 
-	if(!is.null(table.nam) && is.na(table.nam) ) {
-	rm.rangeMapper(dbcon, table.type = table.type)
-	gui.msg(paste("All", table.type, "tables deleted!"), keep = FALSE)
-	}	
-	
-	if(!is.null(table.nam) && !is.na(table.nam)) {
-	rm.rangeMapper(dbcon, table.nam =table.nam, table.type = table.type)
-	gui.msg(paste(table.nam, "delleted!"), keep = FALSE)
-	}	
+	if(all(is.na(table.nam))) {
+			if( gui.yn("Really delete all maps!") ) rm.rangeMapper(dbcon, table.type = table.type)
+			gui.msg(paste("All", table.type, "tables deleted!"), keep = FALSE)
+		} else	{
+		lapply(table.nam, function(x) rm.rangeMapper(dbcon, table.nam =x, table.type = table.type))
+		
+		gui.msg(paste(table.nam, "delleted!"), keep = FALSE)
+		}	
 
 }
 
