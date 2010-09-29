@@ -616,12 +616,12 @@ gui.rangeMap.rm <- function(table.type) {
 	table.nam = as.character(tkdbBrowse(dbcon, prefix = table.type, tables.name.only = TRUE)$dbtable)
 	if(exists("out")) rm(out, envir = .GlobalEnv)
 
-	if(all(is.na(table.nam))) {
-			if( gui.yn("Really delete all maps!") ) rm.rangeMapper(dbcon, table.type = table.type)
-			gui.msg(paste("All", table.type, "tables deleted!"), keep = FALSE)
-		} else	{
+	if(all(is.na(table.nam)) && gui.yn("Really delete all maps!") ) {
+				rm.rangeMapper(dbcon, table.type = table.type)
+				gui.msg(paste("All", table.type, "tables deleted!"), keep = FALSE)
+		} 
+	if(! all(is.na(table.nam)) ) {
 		lapply(table.nam, function(x) rm.rangeMapper(dbcon, table.nam =x, table.type = table.type))
-		
 		gui.msg(paste(table.nam, "delleted!"), keep = FALSE)
 		}	
 
