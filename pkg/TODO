@@ -1,3 +1,11 @@
+Mihai Valcu 2010-Sep-30 13:28:34
+
+* fix bug 
+		rangeMap.save(CON, path = p, tableName = 'MeanSeasonality', FUN = mean)
+		Error in exists(x, envir = envir) : object '.RangeMapper' not found
+* fix bug 
+		GUI: fix choose variable in BIO table
+
 Mihai Valcu 2010-Sep-27 11:51:22
 	* GUI script window working on .RangeMapper envir
 	* plot methods extending spplot
