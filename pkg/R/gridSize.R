@@ -3,15 +3,15 @@ gridSize.save <- function(con, gridSize) {
 	
 
 	if(!is.na(.sqlQuery(con, "SELECT gridSize from metadata")$gridSize)) 
-		stop(gui.msg("The grid size was allready set!"))
+		stop(Msg("The grid size was allready set!"))
 	
 	if(is.na(.sqlQuery(con, "SELECT xmin from metadata")$xmin)) 
-		stop(gui.msg("There is no bouding box!"))
+		stop(Msg("There is no bouding box!"))
 	
 	.sqlQuery(con, paste("UPDATE metadata SET gridSize = ", gridSize, "where rowid = 1") )
 
 	if(!is.na(.sqlQuery(con, "SELECT gridSize from metadata")$gridSize))
-		gui.msg( paste("Grid size set to", gridSize) )
+		Msg( paste("Grid size set to", gridSize) )
 	
 }
 

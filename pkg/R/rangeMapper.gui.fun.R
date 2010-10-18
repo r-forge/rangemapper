@@ -58,38 +58,6 @@ gui.yn <- function(text = "Choose!", yn = c("YES", "NO"), title) {
 	return(as.integer(tclvalue(select)))
 }
 
-gui.msg <- function(msg, tkMainWindow = "win", tkElement = "msg", eol = "\n", keep = FALSE, clearup = FALSE, getTime = FALSE) {
-
- if(getTime) msg = paste( "<", Sys.time(), ">\n", msg, sep = "")
-
- if( gui.exists.in.env(tkMainWindow) & gui.exists.in.env(tkElement) ) {
-
-    if(clearup & gui.exists.in.env("session.msg")) {
-		tkdelete(gui.get.from.env(tkElement), "0.0" , "1000.0" )
-		rm("session.msg", envir = .RangeMapper)
-		}
-	if(!clearup) {
-		if(!gui.exists.in.env("session.msg") ) gui.put.to.env("session.msg", list() ) 
-		if(keep) gui.put.to.env("session.msg", c( gui.get.from.env("session.msg"), msg )  )
-		
-		tkdelete(gui.get.from.env(tkElement), "1.0" , "100.0" )
-		
-		lapply(gui.get.from.env("session.msg") , function(x) 
-				  tkinsert(gui.get.from.env(tkElement), "end" , paste(x,eol) ) ) 
-		if(!keep) tkinsert(gui.get.from.env(tkElement), "end" , paste(msg,eol) ) 
-			
-		 tkyview.moveto(gui.get.from.env(tkElement), 1)
-		 tkfocus(gui.get.from.env(tkMainWindow))
-		 tcl("update", "idletasks") 		 
-		 }
-	 
-	 
-	 } else {
-		cat(msg, eol)
-	    flush.console() 
-		}
-} 
-
 gui.img <- function(gif, file=system.file("ico", paste(gif, "gif", sep = "."), package="rangeMapper")) {
 tkimage.create("photo",file=file)
  }
@@ -171,7 +139,7 @@ gui.tkComboEntryBox <- function(title = "", fixedTxt = c("a", "b") ,fixedTxtLab 
 gui.tkdbBrowse.active.proj <- function() {
 
 	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+		if(is.null(dbcon)) stop(Msg("There is no active project!"))
 	
 	tkdbBrowse(dbcon)
 		if(exists("out")) rm(out, envir = .GlobalEnv)
@@ -180,12 +148,12 @@ gui.tkdbBrowse.active.proj <- function() {
 
 gui.show.metadata <- function() {
 	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+		if(is.null(dbcon)) stop(Msg("There is no active project!"))
 	
 	metadata = .sqlQuery(dbcon, "select * from metadata")
 	metadata  = paste(paste(names(metadata), metadata[1,], sep = "\t"), collapse = "\n")
 
-	gui.msg(metadata)
+	Msg(metadata)
 
 }
 
@@ -203,22 +171,22 @@ gui.help <- function(what) {
 		
 	if(what == "support.files") setwd(wrens.shp)
 	
-	gui.msg(out)
+	Msg(out)
 	}
 	
 gui.dbopen <- function(new = TRUE) {
 
-	gui.msg(clearup = TRUE)
+	Msg("Starting new session....", clearup = TRUE)
 	
 	if(new) db = tclvalue(tkgetSaveFile(defaultextension = ".sqlite", filetypes = "{rangeMapper_project {.sqlite}}" ) ) else 
 			db = tclvalue(tkgetOpenFile(defaultextension = ".sqlite", filetypes = "{rangeMapper_project {.sqlite}}" ))
 
-	if (nchar(db)==0)  gui.msg("Nothing selected!") else {
+	if (nchar(db)==0)  Msg("Nothing selected!") else {
 		gui.put.to.env("con", dbConnect(dbDriver("SQLite"), dbname= db) )
 				
 		if(new) db.ini(gui.get.from.env("con"))
 		
-		gui.msg(paste("<ACTIVE PROJECT>", db), keep = TRUE, getTime = TRUE)
+		Msg(paste("<ACTIVE PROJECT>", db), keep = TRUE, getTime = TRUE)
 	}
 				
 
@@ -237,8 +205,9 @@ gui.close <- function(quitR = FALSE) {
    }
    
    tkdestroy(gui.get.from.env ("win"))
+   rm(list = ls( envir = .RangeMapper), envir = .RangeMapper, inherits = TRUE)
+   rm(.RangeMapper, envir = .GlobalEnv)
    
-    rm(list = ls( envir = .RangeMapper), envir = .RangeMapper, inherits = TRUE)
 	
  }
 
@@ -268,7 +237,7 @@ gui.selectShpFiles <- function(ogr, polygons.only) {
 
 	gui.put.to.env("ranges",ff)	
 
-	gui.msg(paste( if(ogr)nrow(ff) else length(ff), "files selected."))
+	Msg(paste( if(ogr)nrow(ff) else length(ff), "files selected."))
 		
 	
 }	
@@ -276,9 +245,9 @@ gui.selectShpFiles <- function(ogr, polygons.only) {
 gui.global.bbox.save <- function() {
 
 	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+	if(is.null(dbcon)) stop(Msg("There is no active project!"))
 	
-	gui.msg("Computing global bounding box....")
+	Msg("Computing global bounding box....")
 	
 	ff = gui.selectShpFiles(ogr = FALSE,  polygons.only = TRUE)
 	global.bbox.save(gui.get.from.env("ranges"), dbcon)
@@ -288,13 +257,13 @@ gui.gridSize.save <- function() {
 
 	dbcon = gui.get.from.env("con")
 	if(is.null(dbcon)) 
-		stop(gui.msg("There is no active project!"))
+		stop(Msg("There is no active project!"))
 	
 	if(!is.na(.sqlQuery(dbcon, "SELECT gridSize from metadata")$gridSize)) 
-		stop(gui.msg("The canvas was allready constructed, the grid size cannot be changed for this project!"))
+		stop(Msg("The canvas was allready constructed, the grid size cannot be changed for this project!"))
 
 	if(is.na(.sqlQuery(dbcon, "SELECT xmin from metadata")$xmin)) 
-		stop(gui.msg("There is no bouding box!"))
+		stop(Msg("There is no bouding box!"))
 
 	
 	bb  = global.bbox.fetch(dbcon)
@@ -313,7 +282,7 @@ gui.gridSize.save <- function() {
 		
 		gridSize.save(dbcon , val)
 		
-		if(val < WarnCellsize) gui.msg("WARNING: The canvas is going to have a high resolution, processing all ranges will be potentially time consumming.")
+		if(val < WarnCellsize) Msg("WARNING: The canvas is going to have a high resolution, processing all ranges will be potentially time consumming.")
 		
 		tkdestroy(top)
 	}
@@ -329,7 +298,7 @@ gui.gridSize.save <- function() {
  
 gui.canvas.save <- function() {
 		dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+		if(is.null(dbcon)) stop(Msg("There is no active project!"))
 		
 		canvas.save(dbcon)
 
@@ -338,7 +307,7 @@ gui.canvas.save <- function() {
 gui.processRanges <- function() {
 	
 	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+	if(is.null(dbcon)) stop(Msg("There is no active project!"))
 	
 	Files = gui.selectShpFiles(ogr = TRUE, polygons.only = TRUE)
 	
@@ -359,7 +328,7 @@ gui.processRanges <- function() {
 gui.bio.save <- function() {
 
 	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+		if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
 	f = tk_choose.files( filter = matrix(c("comma delim, sep = ';'", ".csv"), ncol = 2) )
 	dat = read.csv(f, as.is = TRUE,sep = ";", strip.white = TRUE)
@@ -369,7 +338,7 @@ gui.bio.save <- function() {
     	
 	common_id = tk_select.list(names(dat),  multiple = FALSE, title = "Select range ID")
 	
-	if(nchar(common_id) ==0) gui.msg ("Nothing selected") else 
+	if(nchar(common_id) ==0) Msg ("Nothing selected") else 
 		bio.save(dbcon, table_name = tabnam, dat = dat, common_id = common_id)
 		
 	}
@@ -377,7 +346,7 @@ gui.bio.save <- function() {
 gui.chooseVariable <- function() {
 
 	con = gui.get.from.env("con")
-	if(is.null(con)) stop(msg("There is no active project!"))
+	if(is.null(con)) stop(Msg("There is no active project!"))
 
 	if(gui.exists.in.env("VAR")) rm(list = "VAR", envir = .RangeMapper)
 	
@@ -386,7 +355,7 @@ gui.chooseVariable <- function() {
 	gui.put.to.env("VAR", VAR[1, ])
 	
 	msg = gui.get.from.env("VAR")
-	gui.msg( paste("<ACTIVE VARIABLE>", paste(msg[2], "in table ", msg[1])), keep = TRUE )
+	Msg( paste("<ACTIVE VARIABLE>", paste(msg[2], "in table ", msg[1])), keep = TRUE )
 	
 }
 
@@ -452,7 +421,7 @@ gui.chooseFunction <- function() {
 			gui.put.to.env("FUN", fun)
 			gui.put.to.env("FUN.formula", formVal)
 
-			gui.msg( paste("<ACTIVE FUNCTION>", gui.get.from.env("FUN") ), keep = TRUE )
+			Msg( paste("<ACTIVE FUNCTION>", gui.get.from.env("FUN") ), keep = TRUE )
 			
 			tkdestroy(top)
 		}
@@ -483,7 +452,7 @@ gui.chooseFunction <- function() {
 gui.chooseSubset <- function() {
 
 	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+		if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
 	if(gui.exists.in.env("SUBSET")) rm("SUBSET", envir = .RangeMapper)
 		
@@ -529,7 +498,7 @@ gui.chooseSubset <- function() {
 	gui.put.to.env("SUBSET", Res)
 		
 	
-	if( gui.exists.in.env("SUBSET") ) gui.msg( paste("<ACTIVE SUBSET>", gui.get.from.env("SUBSET") ), keep = FALSE )
+	if( gui.exists.in.env("SUBSET") ) Msg( paste("<ACTIVE SUBSET>", gui.get.from.env("SUBSET") ), keep = FALSE )
 
 	
 	
@@ -537,13 +506,13 @@ gui.chooseSubset <- function() {
 
 gui.tkColorPalette <- function() {
 
-	gui.msg("Loading color palettes...", keep = FALSE)
+	Msg("Loading color palettes...", keep = FALSE)
 
 	pal =  c(brewer.pal.get(), list(heatcol = heat.colors (9),terraincol = terrain.colors(9), topocol = topo.colors(9) ))
  	
 	tkColorPalette(pal = pal, name = "palette" , palette.size = 43, envir = .RangeMapper)
 
-	if( gui.exists.in.env("palette") ) gui.msg( paste("<ACTIVE PALETTE>", attributes(gui.get.from.env("palette")) ), keep = TRUE )
+	if( gui.exists.in.env("palette") ) Msg( paste("<ACTIVE PALETTE>", attributes(gui.get.from.env("palette")) ), keep = TRUE )
 }
 
 gui.rangeMap.save <- function() {
@@ -555,10 +524,10 @@ gui.rangeMap.save <- function() {
 	subsetSQL   =gui.get.from.env("SUBSET")
 	
 	if(is.null(subsetSQL)) subsetSQL = list()
-	if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+	if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
 	if(is.null(FUN)) {
-	gui.msg("Since no function was chosen species richness will be computed by default!")
+	Msg("Since no function was chosen species richness will be computed by default!")
 	tableName = "SPECIES_RICHNESS"
 	}
 
@@ -572,17 +541,18 @@ gui.rangeMap.save <- function() {
 	tableName =  gui.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam )
 	}
 	
-	gui.msg( paste("Please wait! Computing", tableName , ". This will take some time for computing intensive functions and/or large grids.") )
+	Msg( paste("Please wait! Computing", tableName , ". This will take some time for computing intensive functions and/or large grids.") )
 	
 
-	if(.dbtable.exists(dbcon, paste("MAP",tableName, sep = "_")) ) stop( gui.msg( paste(tableName, "allready exists!" ) ))
+	if(.dbtable.exists(dbcon, paste("MAP",tableName, sep = "_")) ) stop( Msg( paste(tableName, "allready exists!" ) ))
 	
 	t1 = Sys.time()
-	res = rangeMap.save(CON = dbcon, FUN = FUN, biotab = VAR[1], biotrait = VAR[2], 
-			formula = FUN.formula, tableName = tableName, subset = subsetSQL)
+	res = try(rangeMap.save(CON = dbcon, FUN = FUN, biotab = VAR[1], biotrait = VAR[2], 
+			formula = FUN.formula, tableName = tableName, subset = subsetSQL), silent = TRUE)
 
 	if(res)		
-		gui.msg( paste(tableName, "saved to the active project! Ellapsed time:", round(difftime(Sys.time(), t1, units = "mins"), 2), "mins" ) )
+		Msg( paste(tableName, "saved to the active project! Ellapsed time:", round(difftime(Sys.time(), t1, units = "mins"), 2), "mins" ) ) else
+		Msg( paste(tableName, "not saved:\n", res))
 			
 
 	}
@@ -590,10 +560,10 @@ gui.rangeMap.save <- function() {
 gui.rangeMap.plot <- function() {
 	
 	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+	if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
 	colorpalette = gui.get.from.env("palette")
-	if(is.null(colorpalette)) stop(gui.msg("There is no active palette!"))
+	if(is.null(colorpalette)) stop(Msg("There is no active palette!"))
 	
 	map = tkdbBrowse(dbcon, prefix = "MAP", tables.name.only = TRUE)
 
@@ -611,18 +581,18 @@ gui.rangeMap.plot <- function() {
 
 gui.rangeMap.rm <- function(table.type) {
 	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+	if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
 	table.nam = as.character(tkdbBrowse(dbcon, prefix = table.type, tables.name.only = TRUE)$dbtable)
 	if(exists("out")) rm(out, envir = .GlobalEnv)
 
 	if(all(is.na(table.nam)) && gui.yn("Really delete all maps!") ) {
 				rm.rangeMapper(dbcon, table.type = table.type)
-				gui.msg(paste("All", table.type, "tables deleted!"), keep = FALSE)
+				Msg(paste("All", table.type, "tables deleted!"), keep = FALSE)
 		} 
 	if(! all(is.na(table.nam)) ) {
 		lapply(table.nam, function(x) rm.rangeMapper(dbcon, table.nam =x, table.type = table.type))
-		gui.msg(paste(table.nam, "delleted!"), keep = FALSE)
+		Msg(paste(table.nam, "delleted!"), keep = FALSE)
 		}	
 
 }
@@ -630,7 +600,7 @@ gui.rangeMap.rm <- function(table.type) {
 gui.mapImport <- function() {
 
 	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(gui.msg("There is no active project!"))
+	if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
 
 	rangeMap.save(dbcon , path = tk_choose.files(caption = "Select file to import", multi = FALSE))

@@ -128,12 +128,12 @@ setMethod("rangeMapSave",
 	filenam = basename(object@path)
 	
 	cnv = canvas.fetch(object@CON)
-	gui.msg("Converting canvas to polygons...")
+	Msg("Converting canvas to polygons...")
 	cnv = rasterToPolygons(raster(cnv))
 	
 	if(nlayers(stack(object@path)) > 1) stop(sQuote(filenam), " contains more than one layer")
 	
-	gui.msg("Loading external MAP data")
+	Msg("Loading external MAP data")
 	rst = raster(object@path)
 
 	# is there any other way to compare CRS-s ?	
@@ -146,14 +146,14 @@ setMethod("rangeMapSave",
 	
 	rstp@data$ptid = as.numeric(rownames(rstp@data)) # add point id
 	
-	gui.msg(paste("Performing overlay: canvas polygons over", filenam) )	
+	Msg(paste("Performing overlay: canvas polygons over", filenam) )	
 	o = overlay(cnv, rstp)
 	o$ptid = as.numeric(rownames(o))
 
 	o = merge(o, rstp@data, by = "ptid")
 	o$ptid = NULL
 	
-	gui.msg("Agregating data")
+	Msg("Agregating data")
 	o = aggregate(o[, 2], list(o[,1]), FUN = object@FUN, na.rm = TRUE, ...)
 	
 	names(o) = c(object@ID, object@tableName) 
@@ -166,7 +166,7 @@ setMethod("rangeMapSave",
 	
 	res = .dbtable.exists(object@CON, tableName)
 	
-	if(res) gui.msg(paste(sQuote(basename(object@path)), "imported"))
+	if(res) Msg(paste(sQuote(basename(object@path)), "imported"))
 	
 	return(res)	
 							

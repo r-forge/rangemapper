@@ -43,7 +43,7 @@ rangeMapper <- function() {
          # window manager
          tkwm.title(win,paste("rangeMapper", packageDescription("rangeMapper")$Version))
          tkwm.resizable(win, 0, 0)
-         tcl("wm", "protocol", win, "WM_DELETE_WINDOW", quote(gui.msg("Please close the window using the lower bar button!")))
+         tcl("wm", "protocol", win, "WM_DELETE_WINDOW", quote(Msg("Please close the window using the lower bar button!")))
 
 
          top  <- function() {

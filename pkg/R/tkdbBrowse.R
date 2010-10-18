@@ -6,7 +6,7 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 	
 	
 	if(!is.null(prefix) && !.dbtable.exists(con, paste(prefix, "%", sep = "") ) ) 
-		stop(gui.msg(paste("The active project does not contain any", dQuote(prefix), "table" )))
+		stop(Msg(paste("The active project does not contain any", dQuote(prefix), "table" )))
 	
 	dbpath = dbGetInfo(con)$dbname
 	

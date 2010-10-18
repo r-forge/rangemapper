@@ -4,7 +4,7 @@
 \alias{gui.get.from.env}
 \alias{gui.put.to.env}
 \alias{gui.exists.in.env}
-\alias{gui.msg}
+\alias{Msg}
 \alias{gui.img}
 \alias{gui.tkEntryBox}
 \alias{gui.tkdbBrowse.active.proj}

@@ -3,7 +3,7 @@ processRanges <- function(Files, con, metadata = FALSE) {
 
 
 	cnv = canvas.fetch(con)
-	 if(nrow(cnv) == 0) stop(gui.msg("The canvas is empty!"))
+	 if(nrow(cnv) == 0) stop(Msg("The canvas is empty!"))
 
 	 # TODO: check on update
 	Startprocess = Sys.time()
@@ -41,16 +41,16 @@ processRanges <- function(Files, con, metadata = FALSE) {
 			
 			
 			# progress bar	
-			gui.msg( paste("Processsing ranges, please wait!...", 
+			Msg( paste("Processsing ranges, please wait!...", 
 					   paste("Range:", Files$layer[i]),	
 						 paste(round(i/length(Files$layer)*100,2), "% done"), 
 						   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n") )
 			
-			} else gui.msg(r)
+			} else Msg(r)
 	}		
 	
 	# last msg
-	gui.msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
+	Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
 							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
 	
 

@@ -13,7 +13,7 @@ global.bbox <- function(shpFiles, check.proj = FALSE) {
 	if(check.proj) {
 		p4s = .extract.p4s(ogrShpFiles) 
 		p4s = p4s[!duplicated(p4s)]
-		if(length(p4s) > 1) warning(gui.msg(paste("More than one projection found:\n", paste("  *",p4s, collapse = "\n")) ) )
+		if(length(p4s) > 1) warning(Msg(paste("More than one projection found:\n", paste("  *",p4s, collapse = "\n")) ) )
 		}	else 
 			p4s = .extract.p4s(ogrShpFiles[1, ])
 		
@@ -23,7 +23,7 @@ global.bbox <- function(shpFiles, check.proj = FALSE) {
 
 global.bbox.save <- function(shpFiles, con) { 
 
-	if(! .is.empty(con, "metadata") ) stop(gui.msg("Bounding box was allready saved for this project."))
+	if(! .is.empty(con, "metadata") ) stop(Msg("Bounding box was allready saved for this project."))
 
 		bb = global.bbox(shpFiles)
 		
@@ -31,7 +31,7 @@ global.bbox.save <- function(shpFiles, con) {
 		
 		res = dbWriteTable(con, "metadata", data.frame(t(metadata)), append = TRUE, row.names = FALSE)
 
-		if(res) gui.msg("Bounding box uploaded.")
+		if(res) Msg("Bounding box uploaded.")
 	
 }
 
