@@ -547,12 +547,12 @@ gui.rangeMap.save <- function() {
 	if(.dbtable.exists(dbcon, paste("MAP",tableName, sep = "_")) ) stop( Msg( paste(tableName, "allready exists!" ) ))
 	
 	t1 = Sys.time()
-	res = try(rangeMap.save(CON = dbcon, FUN = FUN, biotab = VAR[1], biotrait = VAR[2], 
+	res = try(rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], 
 			formula = FUN.formula, tableName = tableName, subset = subsetSQL), silent = TRUE)
 
-	if(res)		
+	if(isTRUE(res))		
 		Msg( paste(tableName, "saved to the active project! Ellapsed time:", round(difftime(Sys.time(), t1, units = "mins"), 2), "mins" ) ) else
-		Msg( paste(tableName, "not saved:\n", res))
+		Msg( paste(tableName, "*NOT* saved:\n", res))
 			
 
 	}

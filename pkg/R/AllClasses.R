@@ -1,5 +1,20 @@
 	
 # Class definitions
+setClass("rangeFiles", 
+		representation(
+		dir = "character",
+		ogr = "logical", 
+		polygons.only = "logical") , 
+		prototype(
+		dir = getwd(),
+		ogr = TRUE, 
+		polygons.only = TRUE), 
+		validity = function(object) {
+		if(!file.exists(object@dir)) stop(Msg("invalid directory"))
+		
+		}
+	)	
+
 
 setClass("rangeMap", 
 		representation(
@@ -28,6 +43,23 @@ setClass("rangeMap",
 			
 	)
 
+	
+setClass("rangeMapProcess", 
+		representation(
+		metadata = "logical"	
+			), 
+		
+		contains = c("rangeFiles", "rangeMap"), 
+		
+		validity = function(object)	{
+					return(TRUE)
+			
+		},
+		prototype(
+			metadata = TRUE)
+	)	
+	
+	
 setClass("rangeMapSave", 
 		representation(
 			biotab    = "character", 

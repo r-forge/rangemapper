@@ -33,7 +33,9 @@ setMethod("canvasFetch",
 		
 		# fetch map
 		map = .sqlQuery(object@CON, 'SELECT * FROM canvas' )
-	
+
+		if(nrow(map) == 0) stop(Msg("The canvas is empty!"))
+
 		coordinates(map) = ~ x + y
 
 		p4s = .sqlQuery(object@CON, paste("SELECT p4s FROM", object@METADATA) )[,1]
