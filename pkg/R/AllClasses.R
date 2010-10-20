@@ -13,19 +13,57 @@ setClass("rangeFiles",
 		if(!file.exists(object@dir)) stop(Msg("invalid directory"))
 		
 		}
-	)	
+	)
 
 
+setClass("rangeMapStart", 
+		representation(
+			dir = "character", 
+			file = "character", 
+			scheleton = "list",
+			overwrite = "logical"
+			), 
+		prototype(
+			dir = getwd(), 
+			file = paste("rangeMapperProj",format(Sys.time(), "%Y-%m-%d_%H-%M-%S.sqlite"), sep = "_"),
+			scheleton = 	list(
+		create = 
+		c("CREATE TABLE metadata (xmin FLOAT,xmax FLOAT,ymin FLOAT,ymax FLOAT,p4s CHAR,gridSize FLOAT)", 
+			"CREATE TABLE canvas (x FLOAT,y FLOAT,id INT)", 
+			"CREATE TABLE ranges (id INT,bioid CHAR)",
+			"CREATE TABLE metadata_ranges (bioid CHAR, Area FLOAT, Median_x FLOAT,Min_x FLOAT, Max_x FLOAT,Median_y FLOAT, Min_y FLOAT, Max_y FLOAT)")
+		,
+		index = 
+		c(  "CREATE INDEX IF NOT EXISTS   id_canvas ON canvas (id)", 
+			"CREATE INDEX IF NOT EXISTS   id_ranges ON ranges (id)", 
+			"CREATE INDEX IF NOT EXISTS   bioid_ranges ON ranges (bioid)",
+			"CREATE INDEX IF NOT EXISTS   bioid_metadata_ranges ON metadata_ranges (bioid)")
+		), 
+		overwrite = FALSE
+		), 
+		
+		validity = function(object) {
+		if(!file.exists(object@dir)) stop(Msg("invalid directory"))
+		}
+		
+		
+	)
+	
+	
+
+
+				
+	
 setClass("rangeMap", 
 		representation(
 			CON = "SQLiteConnection", 
-			ID = "character",     # the common id column
-			METADATA = "character",   #pre-defined table
-			METADATA_RANGES = "character",   #optional pre-defined table
-			CANVAS = "character",   #pre-defined table
-			RANGES = "character", # pre-defined table containing id and bioid
-			BIO = "character", # prefix for BIO tables,
-			MAP = "character" # prefix for MAP tables
+			ID = "character",         			# the common id column
+			METADATA = "character",   			#pre-defined table
+			METADATA_RANGES = "character",   	#optional pre-defined table
+			CANVAS = "character",   			#pre-defined table
+			RANGES = "character", 				# pre-defined table containing id and bioid
+			BIO = "character", 					# prefix for BIO tables,
+			MAP = "character" 					# prefix for MAP tables
 			),
 		prototype(
 			ID = "id",         
@@ -36,13 +74,49 @@ setClass("rangeMap",
 			BIO = "BIO_", 
 			MAP = "MAP_"
 			), 
-		validity = function(object) {
-		init_extensions(object@CON)
 		
+		validity = function(object) {
+		if ( ! init_extensions(object@CON)) warning(Msg("Warning: RSQLite.extfuns not available!"))
+		if ( ! all( .dbtable.exists(object@CON, object@METADATA),
+				  .dbtable.exists(object@CON, object@METADATA_RANGES),
+				  .dbtable.exists(object@CON, object@CANVAS),
+				  .dbtable.exists(object@CON, object@RANGES) ) ) stop (Msg("Corrupt rangeMapper project!"))
+		
+	
 		}	
 			
 	)
 
+setClass("rangeMapBbox", 
+		representation(
+		checkProj = "logical"	
+			), 
+		
+		contains = c("rangeFiles", "rangeMap"), 
+		
+		validity = function(object)	{
+					return(TRUE)
+			
+		},
+		prototype(
+			checkProj = TRUE)
+	)	
+
+	
+setClass("gridSize", 
+		representation(
+		gridSize = "numeric"	
+			), 
+		
+		contains = "rangeMap", 
+		
+		validity = function(object)	{
+					# gridSize should not be bigger than ......
+			invisible(TRUE)
+		},
+		prototype(
+			gridSize = 200000)	
+	)
 	
 setClass("rangeMapProcess", 
 		representation(
@@ -74,7 +148,7 @@ setClass("rangeMapSave",
 			
 		validity = function(object)	{
 		# the new table should not exist
-			if(.dbtable.exists(object@CON, paste(object@MAP, object@tableName, sep = "") ) ) stop(sQuote(object@tableName), " already exists.")	
+			if(.dbtable.exists(object@CON, paste(object@MAP, object@tableName, sep = "") ) ) stop(Msg(sQuote(object@tableName), " already exists.")	)
 			
 		}
 	)
@@ -86,11 +160,11 @@ setClass("rangeMapSaveSQL", representation (FUN = "character"),
 							biotab = paste(object@BIO, object@biotab, sep = "")
 							
 							if(!.dbtable.exists(object@CON,biotab) ) 
-								stop(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))
+								stop(Msg(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname)))
 							
 							# object@biotrait should exist as a field in biotab
 							if(!.dbfield.exists(object@CON,biotab, object@biotrait) ) 
-								stop(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))
+								stop(Msg(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab)))
 										
 							# fun should  be known by sqlite	
 							.sqlAggregate(object@FUN)
@@ -107,15 +181,14 @@ setClass("rangeMapSaveR", representation (FUN = "function", formula = "formula")
 							
 							# biotab should exist 
 							if(!.dbtable.exists(object@CON, biotab) ) 
-								stop(sQuote(biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))
+								stop(Msg(sQuote(biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname)))
 							
 							# object@biotrait should exist as a field in biotab
 							if(!.dbfield.exists(object@CON, biotab, object@biotrait) ) 
-								stop(sQuote(object@biotrait), "is not a field of", sQuote(biotab))
-							
+								stop(Msg(sQuote(object@biotrait), "is not a field of", sQuote(biotab)))
 							
 							# FUN should be of form biotab ~ ...
-							stopifnot(update(object@formula, . ~ 1 ) == as.formula( paste(object@biotrait,  " ~ 1")))
+							if(update(object@formula, . ~ 1 ) != as.formula( paste(object@biotrait,  " ~ 1"))) stop(Msg("Formula and biotrait does not match"))
 							
 							return(TRUE)
 							}
@@ -127,7 +200,7 @@ setClass("MapImport", representation (path = "character", FUN = "function"),
 							validity = function(object) {
 							
 							if(!file.exists(object@path)) stop(sQuote(object@path), "is not a valid path.")	
-							stopifnot(require("raster"))
+							if(!require("raster")) stop(Msg("package raster is not available"))
 
 							}, 
 							prototype(
@@ -138,25 +211,25 @@ setClass("MapImport", representation (path = "character", FUN = "function"),
 
 setClass("rangeMapFetch", representation(
 					tableName    = "character"), 
-				contains = "rangeMap", 
+				    contains = "rangeMap", 
 	
-				validity = function(object)	{
-					mapNam =paste(object@MAP, object@tableName, sep = "") 
-					
-					invalidNam = sapply(mapNam, FUN = function(x) !.dbtable.exists(object@CON, x) )
-					
-					if( any(invalidNam) )
-					  stop(paste(sQuote(names(invalidNam[invalidNam] )), "is not a valid MAP!\n"))
-					
-					# check if empty map
-					mapvar = sapply(mapNam, function(x)
-								setdiff(.sqlQuery(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )
-					
-					sql = paste("select count (", mapvar, ") FROM", mapNam)
-					isempty = sapply(sql, function(x) .sqlQuery(object@CON,  x)[, 1] ) < 1
-					
-					if(any(isempty))
-					 stop(paste(sQuote(mapNam[isempty]), "is an empty MAP!\n"))
+					validity = function(object)	{
+						mapNam =paste(object@MAP, object@tableName, sep = "") 
+						
+						invalidNam = sapply(mapNam, FUN = function(x) !.dbtable.exists(object@CON, x) )
+						
+						if( any(invalidNam) )
+						  stop(Msg(paste(sQuote(names(invalidNam[invalidNam] )), "is not a valid MAP!\n")))
+						
+						# check if empty map
+						mapvar = sapply(mapNam, function(x)
+									setdiff(.sqlQuery(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )
+						
+						sql = paste("select count (", mapvar, ") FROM", mapNam)
+						isempty = sapply(sql, function(x) .sqlQuery(object@CON,  x)[, 1] ) < 1
+						
+						if(any(isempty))
+						 stop(Msg(paste(sQuote(mapNam[isempty]), "is an empty MAP!\n")))
 			}
 	)
 	
