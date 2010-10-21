@@ -59,8 +59,6 @@ setMethod("rangeMapProcess",
 	
 	)
 
-
-
 # user level function
 processRanges <- function(dir, con, ...) {
 

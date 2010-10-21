@@ -1,34 +1,68 @@
 
-bio.save <- function(con, table_name = NULL, dat, common_id) {
 
-	if(!is.data.frame(dat) ) stop(Msg("'dat' is not a data.frame!"))
 
-	if(is.null(table_name)) table_name = deparse(substitute(dat))
-	
-	tab.nam =  paste("BIO", table_name, sep = "_")
-	if(dbExistsTable(con,tab.nam)) stop(Msg("Table allready exists!"))  
-	
-	if( !identical(make.db.names.default(tab.nam), tab.nam) ) {
-		tab.nam = make.db.names.default(tab.nam)
-		warning(paste("table.nam converted to", tab.nam))
-		}
+setMethod("bioSave",  
+	signature  = "bioSaveFile", 
+		definition = function(object) {
+
+		tableName = paste(object@BIO, object@tableName, sep = "")
 		
-	nam = dat[, common_id]
+		d = read.table(object@loc, sep = object@sep, header = TRUE, stringsAsFactors = FALSE)
+		
+		nam = d[, object@ID]
+		
+		ranges.nam = .sqlQuery(object@CON, "select distinct bioid from ranges")$bioid
 
-	# nam should exist in ranges
-	ranges.nam = .sqlQuery(con, "select distinct bioid from ranges")$bioid
+		d$has_range= is.element(nam, ranges.nam)
+		
+		res = dbWriteTable(object@CON ,tableName , d, row.names = FALSE)
 
-	dat$has_range= is.element(nam, ranges.nam)
+		if(res) {
+			.sqlQuery(object@CON,(paste("CREATE  INDEX", paste(tableName, object@ID, sep = "_") , "ON", tableName ,  "(", object@ID ,")")) )
+			Msg(paste("Table", object@tableName, "saved as a ", object@BIO, "table") )
+			}
+		}
+	)
+
+setMethod("bioSave",  
+	signature  = "bioSaveDataFrame", 
+		definition = function(object) {
+
+		tableName = paste(object@BIO, object@tableName, sep = "")
+		
+		d = object@loc
+		
+		nam = d[, object@ID]
+		
+		ranges.nam = .sqlQuery(object@CON, "select distinct bioid from ranges")$bioid
+
+		d$has_range= is.element(nam, ranges.nam)
+		
+		res = dbWriteTable(object@CON ,tableName , d, row.names = FALSE)
+
+		if(res) {
+			.sqlQuery(object@CON,(paste("CREATE  INDEX", paste(tableName, object@ID, sep = "_") , "ON", tableName ,  "(", object@ID ,")")) )
+			Msg(paste("Table", object@tableName, "saved as a ", object@BIO, "table") )
+			}
+		}
+	)
+
+
+# user level function calling rangeMapSave
+bio.save   <- function(CON, loc, overwrite = FALSE, ...) {
 	
-	res = dbWriteTable(con,tab.nam , dat, row.names = FALSE)
 
-	if(res) {
-	.sqlQuery(con,(paste("CREATE  INDEX", paste(table_name, common_id, sep = "_") , "ON",  tab.nam ,  "(", common_id ,")")) )
+	if(is.character(loc))
+		dat = new("bioSaveFile", CON = CON, loc = loc, ...)
 	
-	Msg(paste("Table", table_name, "saved.") )
-	}
+	if(is.data.frame(loc))				
+	dat = new("bioSaveDataFrame", CON = CON, loc = loc, ...)
 
-}
+	bioSave(dat)
+
+}	
+
+
 
 
 

@@ -15,7 +15,6 @@ setClass("rangeFiles",
 		}
 	)
 
-
 setClass("rangeMapStart", 
 		representation(
 			dir = "character", 
@@ -45,15 +44,9 @@ setClass("rangeMapStart",
 		validity = function(object) {
 		if(!file.exists(object@dir)) stop(Msg("invalid directory"))
 		}
-		
-		
 	)
 	
-	
 
-
-				
-	
 setClass("rangeMap", 
 		representation(
 			CON = "SQLiteConnection", 
@@ -84,7 +77,6 @@ setClass("rangeMap",
 		
 	
 		}	
-			
 	)
 
 setClass("rangeMapBbox", 
@@ -102,7 +94,6 @@ setClass("rangeMapBbox",
 			checkProj = TRUE)
 	)	
 
-	
 setClass("gridSize", 
 		representation(
 		gridSize = "numeric"	
@@ -111,11 +102,12 @@ setClass("gridSize",
 		contains = "rangeMap", 
 		
 		validity = function(object)	{
-					# gridSize should not be bigger than ......
 			invisible(TRUE)
 		},
 		prototype(
 			gridSize = 200000)	
+	
+	
 	)
 	
 setClass("rangeMapProcess", 
@@ -133,7 +125,6 @@ setClass("rangeMapProcess",
 			metadata = TRUE)
 	)	
 	
-	
 setClass("rangeMapSave", 
 		representation(
 			biotab    = "character", 
@@ -148,11 +139,39 @@ setClass("rangeMapSave",
 			
 		validity = function(object)	{
 		# the new table should not exist
-			if(.dbtable.exists(object@CON, paste(object@MAP, object@tableName, sep = "") ) ) stop(Msg(sQuote(object@tableName), " already exists.")	)
+			if(.dbtable.exists(object@CON, paste(object@MAP, object@tableName, sep = "") ) ) 
+				stop(Msg( paste(sQuote(object@tableName), " already exists."))	)
+			
+			if(.dbtable.exists(object@CON, paste(object@BIO, object@tableName, sep = "") ) ) 
+				stop(Msg( paste(sQuote(object@tableName), " already exists."))	)
 			
 		}
 	)
 
+	
+setClass("bioSaveFile", representation(loc = "character", sep = "character"), 
+							contains = "rangeMapSave", 
+							prototype( sep = ";", 
+									  tableName = "unknown"
+							
+							), 
+							validity = function(object) {
+							if(!file.exists(object@loc)) stop(Msg(paste(sQuote(object@loc), "is not a valid file")))
+
+
+							}
+		)	
+	
+	
+setClass("bioSaveDataFrame", representation(loc = "data.frame"), 
+							contains = "rangeMapSave", 
+							validity = function(object) {
+
+							}
+		)	
+		
+	
+	
 setClass("rangeMapSaveSQL", representation (FUN = "character"), 
 							contains = "rangeMapSave", 
 							validity = function(object) {
@@ -160,11 +179,11 @@ setClass("rangeMapSaveSQL", representation (FUN = "character"),
 							biotab = paste(object@BIO, object@biotab, sep = "")
 							
 							if(!.dbtable.exists(object@CON,biotab) ) 
-								stop(Msg(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname)))
+								stop(Msg( paste(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))))
 							
 							# object@biotrait should exist as a field in biotab
 							if(!.dbfield.exists(object@CON,biotab, object@biotrait) ) 
-								stop(Msg(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab)))
+								stop(Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))))
 										
 							# fun should  be known by sqlite	
 							.sqlAggregate(object@FUN)
@@ -181,14 +200,15 @@ setClass("rangeMapSaveR", representation (FUN = "function", formula = "formula")
 							
 							# biotab should exist 
 							if(!.dbtable.exists(object@CON, biotab) ) 
-								stop(Msg(sQuote(biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname)))
+								stop(Msg(paste(sQuote(biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))))
 							
 							# object@biotrait should exist as a field in biotab
 							if(!.dbfield.exists(object@CON, biotab, object@biotrait) ) 
-								stop(Msg(sQuote(object@biotrait), "is not a field of", sQuote(biotab)))
+								stop(Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(biotab))))
 							
 							# FUN should be of form biotab ~ ...
-							if(update(object@formula, . ~ 1 ) != as.formula( paste(object@biotrait,  " ~ 1"))) stop(Msg("Formula and biotrait does not match"))
+							if(update(object@formula, . ~ 1 ) != as.formula( paste(object@biotrait,  " ~ 1"))) 
+								stop(Msg("Formula and biotrait does not match"))
 							
 							return(TRUE)
 							}
@@ -206,7 +226,6 @@ setClass("MapImport", representation (path = "character", FUN = "function"),
 							prototype(
 							FUN = mean 
 							) 
-							
 		)		
 
 setClass("rangeMapFetch", representation(
@@ -234,23 +253,35 @@ setClass("rangeMapFetch", representation(
 	)
 	
 
+setClass("rangeMapRemove", representation(
+						tableName = "character" 
+						), 
+						 contains = "rangeMap",
+						 
+						validity = function(object)	{
+									if(object@METADATA%in%object@tableName |object@CANVAS%in%object@tableName|object@CANVAS%in%object@tableName)
+									stop(Msg( paste(object@METADATA,",", object@CANVAS, "or", object@RANGES, "table(s) cannot be removed!")) )
+
+			}
+	)
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		

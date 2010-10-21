@@ -343,7 +343,7 @@ class(funs) = "simple.list"
 if(missing(fun) )
  return(funs) else if
 	(fun%in%funs) return(TRUE) else
-			stop(sQuote(fun), "is not a known sqlite aggregate function!" )
+			stop(Msg(sQuote(fun), "is not a known sqlite aggregate function!" ))
 	}
 
 # SP

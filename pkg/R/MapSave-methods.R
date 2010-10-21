@@ -20,7 +20,6 @@ subsetSQLstring   <- function(dbcon, subset = list() ) {
 	sql	
 }
 	
-
 # method for species richness, no biotab, biotrait is given
 setMethod("rangeMapSave",  
 		signature = "rangeMapSave", 
@@ -42,7 +41,6 @@ setMethod("rangeMapSave",
 
 		 return(.dbtable.exists(object@CON, tableName))
 			} 
-	
 	)
 		
 # agggregate method using sqlite 	 	

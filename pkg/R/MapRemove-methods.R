@@ -1,30 +1,58 @@
 
 setMethod("rangeMapRemove",  
-		signature = "rangeMap", 
-		definition = function(object, table.nam, table.type){
-		if(missing(table.nam)) 
-		table.nam = .sqlQuery(object@CON, 
-			paste("select name from sqlite_master where type = 'table' and name LIKE '",slot(x, table.type) ,"%'", sep = ""))$name else
-		table.nam = paste(slot(x, table.type) , table.nam, sep = "")
-		if(length(table.nam) >0) {
-				sql = paste("DROP TABLE if exists", table.nam)
-					for (i in 1:length(sql)) .sqlQuery(object@CON , sql[i]) } else
-		Msg(paste("This project does not have any",table.type, "tables"))
+		signature = "rangeMapRemove", 
+		definition = function(object){
+		
+				sql = paste("DROP TABLE ", object@tableName)
+							for (i in 1:length(sql)) .sqlQuery(object@CON , sql[i]) 
 		
 		}
-	)
+)
 
-	
-	
 
+# user level
+rm.rangeMapper <- function(con, tableName,  tablePrefix) {
+
+	if(missing(tableName) ) 
+		tableName = .sqlQuery(con, 'select name from sqlite_master where type = "table" and (tbl_name like "MAP_%" OR tbl_name like "BIO_%")')$name
 	
-# user defined	
-rm.rangeMapper <- function(con, table.nam, table.type) {
- x =  new("rangeMap", CON = con, table.type =table.type,table.nam =table.nam)
- rangeMapRemove(x)
+	if( ! missing(tablePrefix) )
+		tableName = tableName[grep(tablePrefix, tableName)]
+	
+	 x =  new("rangeMapRemove", CON = con, tableName = tableName)
+	 rangeMapRemove(x)
+	 
+	 Msg( paste("The following tables were removed:\n", paste(tableName, collapse = "\n")) )
+	 
  }
 
 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
 
 	

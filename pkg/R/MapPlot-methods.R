@@ -1,5 +1,5 @@
 
-# TODO: add suitable methods and classes
+
 # ...arguments to pass to classIntervals (eg. n, style) and spplot
 
 rangeMap.plot  <- function(map, colorpalette= brewer.pal.get('Spectral'), ncols = 20, scales = FALSE, ...) {

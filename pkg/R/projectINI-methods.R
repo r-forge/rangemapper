@@ -6,7 +6,6 @@ setMethod("rangeMapStart",
 			f = paste(object@dir, object@file, sep = .Platform$file.sep)
 			file.exists = if(file.exists(f) )  TRUE else FALSE
 			CON = dbConnect(dbDriver("SQLite"), dbname= f)
-			
 			if(!file.exists) { 				
 				Queries = object@scheleton
 				db = unlist(Queries)
@@ -23,18 +22,18 @@ setMethod("rangeMapStart",
 		
 			if(!object@overwrite && file.exists) stop(Msg(paste("File", object@file, "allready exsits!")))
 		
-		
+		   
 			} 
 	
 	)
 
-
-# used defined function 
-
+# user level function 
 rangeMap.start <- function(overwrite = FALSE,...) {
 
-	obj = new("rangeMapStart",overwrite = overwrite, ...)
+	obj = new("rangeMapStart", ... )
 
+	obj@overwrite = overwrite
+	
 	rangeMapStart(obj)
 	
 	Msg(paste("PROJECT:", obj@file, "\nDIRECTORY:",obj@dir))
