@@ -1,4 +1,5 @@
 
+#UTILS
 gui.make.env <- function(env = ".RangeMapper") {
 
 assign(env , new.env(), env = .GlobalEnv)
@@ -146,55 +147,32 @@ gui.tkdbBrowse.active.proj <- function() {
 
 }
 
-gui.show.metadata <- function() {
-	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(Msg("There is no active project!"))
-	
-	metadata = .sqlQuery(dbcon, "select * from metadata")
-	metadata  = paste(paste(names(metadata), metadata[1,], sep = "\t"), collapse = "\n")
-
-	Msg(metadata)
-
-}
-
-gui.help <- function(what) {
-
-	wrens.shp = 	system.file(package="rangeMapper", "extdata", "wrens", "vector")
-	wrens.csv = 	system.file(package="rangeMapper", "data", "wrens.csv")
-	
-
-	out = switch(what, 
-			support.files = paste("'Wrens' breeding ranges and life hystory data:\n", wrens.shp, "\n", wrens.csv), 
-			man           = print(vignette("rangeMapper")),
-			citation      = attributes(citation("rangeMapper"))$textVersion
-			)
-		
-	if(what == "support.files") setwd(wrens.shp)
-	
-	Msg(out)
-	}
-	
+# MAIN GUI ELEMENTS 
 gui.dbopen <- function(new = TRUE) {
 
 	Msg("Starting new session....", clearup = TRUE)
+	Msg("", getTime = TRUE, keep = TRUE)
 	
-	if(new) db = tclvalue(tkgetSaveFile(defaultextension = ".sqlite", filetypes = "{rangeMapper_project {.sqlite}}" ) ) else 
-			db = tclvalue(tkgetOpenFile(defaultextension = ".sqlite", filetypes = "{rangeMapper_project {.sqlite}}" ))
+	if(new) {
+		path = tclvalue(tkgetSaveFile(defaultextension = ".sqlite", filetypes = "{rangeMapper_project {.sqlite}}" ) )
+		 if(nchar(path)==0)  stop(Msg("Nothing selected!"))
+		dbcon = rangeMap.start(file = basename(path), overwrite = TRUE, dir = dirname(path) )
+		}
+	
+	if(!new) {
+		path = tclvalue(tkgetOpenFile(defaultextension = ".sqlite", filetypes = "{rangeMapper_project {.sqlite}}" ) )
+		if(nchar(path)==0)  stop(Msg("Nothing selected!"))
+		dbcon = rangeMap.open(path, verbose = TRUE)
+		}
 
-	if (nchar(db)==0)  Msg("Nothing selected!") else {
-		gui.put.to.env("con", dbConnect(dbDriver("SQLite"), dbname= db) )
-				
-		if(new) db.ini(gui.get.from.env("con"))
+		gui.put.to.env("con", dbcon)
+		gui.put.to.env("path", path)
 		
-		Msg(paste("<ACTIVE PROJECT>", db), keep = TRUE, getTime = TRUE)
-	}
+	summary(new("rangeMap", CON = dbcon), keep = TRUE)	
+		
 				
-
-
+	}
 	
-			
-}
-
 gui.close <- function(quitR = FALSE) {
 
  if(quitR) q(save = "no") else {
@@ -213,44 +191,37 @@ gui.close <- function(quitR = FALSE) {
 
 }
 
-gui.selectShpFiles <- function(ogr, polygons.only) {
+gui.show.metadata <- function() {
+	path = gui.get.from.env("path") 
+	if(is.null(dbcon)) 
+		stop(Msg("There is no active project!"))
+	summary(new("rangeMap", CON = dbcon), keep = FALSE)	
+}
 
-	selectVal = gui.yn(yn = c("FILES", "DIRECTORY")) 
+gui.help <- function(what) {
+
+	wrens.shp = 	system.file(package="rangeMapper", "extdata", "wrens", "vector")
+	wrens.csv = 	system.file(package="rangeMapper", "data", "wrens.csv")
 	
-	if(selectVal == 0) { # directory
-		ff = selectShpFiles(tk_choose.dir(default = getwd(), caption = "Select ranges directory"), ogr = ogr, polygons.only = polygons.only)
-		} 
 
-	if(selectVal == 1) { # files
-		if(ogr) { 
-			ff = selectShpFiles(tk_choose.dir(default = getwd(), 
-				caption = "Select the upper level directory \n and then choose several files."), ogr = ogr, polygons.only = polygons.only)
-			sel = tk_select.list(ff$layer,  multiple = TRUE, title = "Select files")
-			ff = ff[ff$layer%in%sel,] }
+	out = switch(what, 
+			support.files = paste("'Wrens' breeding ranges and life hystory data:\n", wrens.shp, "\n", wrens.csv), 
+			man           = print(vignette("rangeMapper")),
+			citation      = citation("rangeMapper")$textVersion
+			)
 		
-		 if(!ogr) {
-		 	ff = selectShpFiles(tk_choose.dir(default = getwd(), 
-				caption = "Select the upper level directory \n and then choose several files."), ogr = ogr, polygons.only = polygons.only)
-			sel = tk_select.list(ff , multiple = TRUE, title = "Select files")
-			ff = ff[ff%in%sel] }
-		}	
-
-	gui.put.to.env("ranges",ff)	
-
-	Msg(paste( if(ogr)nrow(ff) else length(ff), "files selected."))
-		
+	if(what == "support.files") setwd(wrens.shp)
 	
-}	
-
+	Msg(out)
+	}
+	
 gui.global.bbox.save <- function() {
 
 	dbcon = gui.get.from.env("con")
 	if(is.null(dbcon)) stop(Msg("There is no active project!"))
+
+	global.bbox.save(Dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory"), dbcon) 
 	
-	Msg("Computing global bounding box....")
-	
-	ff = gui.selectShpFiles(ogr = FALSE,  polygons.only = TRUE)
-	global.bbox.save(gui.get.from.env("ranges"), dbcon)
 	}
 	
 gui.gridSize.save <- function() {
@@ -259,14 +230,9 @@ gui.gridSize.save <- function() {
 	if(is.null(dbcon)) 
 		stop(Msg("There is no active project!"))
 	
-	if(!is.na(.sqlQuery(dbcon, "SELECT gridSize from metadata")$gridSize)) 
-		stop(Msg("The canvas was allready constructed, the grid size cannot be changed for this project!"))
-
-	if(is.na(.sqlQuery(dbcon, "SELECT xmin from metadata")$xmin)) 
-		stop(Msg("There is no bouding box!"))
-
 	
 	bb  = global.bbox.fetch(dbcon)
+	
 	minSpan = min(diff(bbox(bb)[1, ]), diff(bbox(bb)[2, ]))
 
 	WarnCellsize = minSpan/200
@@ -280,7 +246,7 @@ gui.gridSize.save <- function() {
 	OnOK <- function() {
 		val = as.numeric(tclvalue(Res))
 		
-		gridSize.save(dbcon , val)
+		gridSize.save(dbcon ,gridSize = val)
 		
 		if(val < WarnCellsize) Msg("WARNING: The canvas is going to have a high resolution, processing all ranges will be potentially time consumming.")
 		
@@ -308,20 +274,15 @@ gui.processRanges <- function() {
 	
 	dbcon = gui.get.from.env("con")
 	if(is.null(dbcon)) stop(Msg("There is no active project!"))
-	
-	Files = gui.selectShpFiles(ogr = TRUE, polygons.only = TRUE)
-	
-	# save to 'metadata_ranges' ?
+
 	selectVal = gui.yn(text = "Save range centroid and range extent?") 
 
 	if(selectVal == 1) {
-	processRanges(gui.get.from.env("ranges"),dbcon, metadata = TRUE)	
+		processRanges(con = dbcon,dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory"), metadata = TRUE)	
 		}	
-
 	
 	if(selectVal == 0) {
-	processRanges(gui.get.from.env("ranges"),dbcon, metadata = FALSE)	
-		} 
+		processRanges(con = dbcon,dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory"), metadata = TRUE)		} 
 
 }
 
@@ -332,16 +293,14 @@ gui.bio.save <- function() {
 
 	f = tk_choose.files( filter = matrix(c("comma delim, sep = ';'", ".csv"), ncol = 2) )
 	dat = read.csv(f, as.is = TRUE,sep = ";", strip.white = TRUE)
-
 	tabnam = make.db.names.default(gsub(".csv", "", basename(f)))
 	
-    	
-	common_id = tk_select.list(names(dat),  multiple = FALSE, title = "Select range ID")
+    common_id = tk_select.list(names(dat),  multiple = FALSE, title = "Select range ID")
 	
 	if(nchar(common_id) ==0) Msg ("Nothing selected") else 
-		bio.save(dbcon, table_name = tabnam, dat = dat, common_id = common_id)
-		
-	}
+		bio.save(CON = dbcon, loc =  dat,  ID = common_id, tableName = tabnam)
+
+}
 
 gui.chooseVariable <- function() {
 

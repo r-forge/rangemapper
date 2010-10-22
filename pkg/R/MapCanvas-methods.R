@@ -51,7 +51,7 @@ global.bbox.save <- function(Dir, con) {
 
 
 setMethod("rangeMapBboxFetch",  
-	signature  = "rangeMapBbox",
+	signature  = "rangeMap",
 		definition = function(object) {
 		if(.is.empty(object@CON, object@METADATA) ) stop(Msg("Bounding box not yet constructed for this project!"))
 		md = dbReadTable(object@CON, object@METADATA)
@@ -66,7 +66,7 @@ setMethod("rangeMapBboxFetch",
 #user level
 global.bbox.fetch  <- function(con) {
  
- x = new("rangeMapBbox", CON = con)
+ x = new("rangeMap", CON = con)
  rangeMapBboxFetch(x)
 
 
@@ -79,7 +79,16 @@ setMethod("gridSizeSave",
 		
 			if(!is.na(.sqlQuery(object@CON, "SELECT gridSize from metadata")$gridSize)) stop(Msg("The grid size was allready set!"))
 			if(is.na(.sqlQuery(object@CON, "SELECT xmin from metadata")$xmin))          stop(Msg("There is no bouding box!"))
-					
+			
+
+			if( length(object@gridSize)!=1  ) {
+				bb  = global.bbox.fetch(object@CON)
+				minSpan = min(diff(bbox(bb)[1, ]), diff(bbox(bb)[2, ]))
+				object@gridSize = minSpan/100
+				Msg(paste("Default grid size used!"))
+				
+			}
+			
 			.sqlQuery(object@CON, paste("UPDATE metadata SET gridSize = ", object@gridSize, "where rowid = 1") )
 
 			if(!is.na(.sqlQuery(object@CON, "SELECT gridSize from metadata")$gridSize)) Msg( paste("Grid size set to", object@gridSize) )

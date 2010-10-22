@@ -6,11 +6,11 @@ setClass("rangeFiles",
 		ogr = "logical", 
 		polygons.only = "logical") , 
 		prototype(
-		dir = getwd(),
+		dir = "",
 		ogr = TRUE, 
 		polygons.only = TRUE), 
 		validity = function(object) {
-		if(!file.exists(object@dir)) stop(Msg("invalid directory"))
+		if(!file.exists(object@dir)) stop(Msg("'dir' should be set and point to a valid location."))
 		
 		}
 	)
@@ -23,7 +23,7 @@ setClass("rangeMapStart",
 			overwrite = "logical"
 			), 
 		prototype(
-			dir = getwd(), 
+			dir = "",
 			file = paste("rangeMapperProj",format(Sys.time(), "%Y-%m-%d_%H-%M-%S.sqlite"), sep = "_"),
 			scheleton = 	list(
 		create = 
@@ -42,7 +42,7 @@ setClass("rangeMapStart",
 		), 
 		
 		validity = function(object) {
-		if(!file.exists(object@dir)) stop(Msg("invalid directory"))
+		if(!file.exists(object@dir)) stop(Msg("'dir' should be set and point to a valid location."))
 		}
 	)
 	
@@ -104,10 +104,6 @@ setClass("gridSize",
 		validity = function(object)	{
 			invisible(TRUE)
 		},
-		prototype(
-			gridSize = 200000)	
-	
-	
 	)
 	
 setClass("rangeMapProcess", 
