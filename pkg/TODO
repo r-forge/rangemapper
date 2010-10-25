@@ -1,4 +1,7 @@
 
+Mihai Valcu 2010-Oct-25 16:48:40
+*  demo (for both cl and gui) using the wrens
+
 Mihai Valcu 2010-Oct-19 12:46:45
 * selectShpFiles should take 'type == 5' as an argument
 * add validity to rangeMap Class: check if connection points to a valid rangeMapper project
