@@ -63,7 +63,21 @@ bio.save   <- function(CON, loc, overwrite = FALSE, ...) {
 }	
 
 
+metadata2bio <-function(con, ...) {
 
+	r = new("rangeMap", CON = con)
+
+	dat = .sqlQuery(r@CON, paste("select * from",  r@METADATA_RANGES) )
+
+	if(nrow(dat) == 0) stop(Msg( paste("Empty", r@METADATA_RANGES, "table")) )
+	
+
+	b = new("bioSaveDataFrame", CON = con, loc = dat, tableName = r@METADATA_RANGES, ID = r@BIOID, ...)
+	
+	bioSave(b)
+
+
+}
 
 
 

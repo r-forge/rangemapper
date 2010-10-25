@@ -1,8 +1,12 @@
-		2010-Sep-28 22:32:27 Mihai Valcu
+	2010-Oct-25 16:25:30 Mihai Valcu
+		»	DESCRIPTION (Date, Version): 0.05.92
+		»	Lots of changes. The conversion of S4 is complete. Only the documentation is missing.
+	
+	2010-Sep-28 22:32:27 Mihai Valcu
 		»	DESCRIPTION (Date, Version): 0.05.91
 		»	R/rangeMapper.gui.fun.R changed
 		
-		2010-Sep-28 22:32:27 Mihai Valcu
+	2010-Sep-28 22:32:27 Mihai Valcu
 		»	DESCRIPTION (Date, Version): 0.05.9
 		»	R/MapPlot-methods.R: bug correction
 	2010-Sep-28 11:43:36 Mihai Valcu

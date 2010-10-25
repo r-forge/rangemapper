@@ -51,6 +51,7 @@ setClass("rangeMap",
 		representation(
 			CON = "SQLiteConnection", 
 			ID = "character",         			# the common id column
+			BIOID = "character",         		# the common id column in BIo tables
 			METADATA = "character",   			#pre-defined table
 			METADATA_RANGES = "character",   	#optional pre-defined table
 			CANVAS = "character",   			#pre-defined table
@@ -60,6 +61,7 @@ setClass("rangeMap",
 			),
 		prototype(
 			ID = "id",         
+			BIOID = "bioid",         
 			METADATA = "metadata", 
 			METADATA_RANGES = "metadata_ranges",  
 			CANVAS = "canvas",   

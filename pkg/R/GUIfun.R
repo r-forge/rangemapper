@@ -302,6 +302,17 @@ gui.bio.save <- function() {
 
 }
 
+gui.metadata2bio <-function() {
+	dbcon = gui.get.from.env("con")
+		if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	
+	metadata2bio (dbcon)
+
+		
+		
+
+}
+
 gui.chooseVariable <- function() {
 
 	con = gui.get.from.env("con")

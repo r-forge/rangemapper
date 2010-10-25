@@ -54,21 +54,25 @@ rangeMapper <- function() {
 			HelpMenu <- tkmenu(topMenu, tearoff=FALSE)
             ProjectMenu <- tkmenu(topMenu, tearoff=FALSE)
             MapMenu <- tkmenu(topMenu, tearoff=FALSE)
+            metadata_ranges2bioMenu <- tkmenu(topMenu, tearoff=FALSE)
 
-            tkadd(HelpMenu,"command",label="Get started",command = function() gui.help("man") )
-            tkadd(HelpMenu,"command",label="Example files",command = function() gui.help("support.files") )
-            tkadd(HelpMenu,"command",label="About",command = function() gui.help("citation") )
-
-            tkadd(ProjectMenu,"command",label="Browse the active project",command = function() gui.tkdbBrowse.active.proj() )
-            tkadd(ProjectMenu,"command",label="Remove MAP tables",command = function() gui.rangeMap.rm("MAP") )
-            tkadd(ProjectMenu,"command",label="Remove BIO tables",command = function() gui.rangeMap.rm("BIO") )
-          	tkadd(ProjectMenu,"command",label="show project's metadata",command = function() gui.show.metadata() )
+			tkadd(ProjectMenu,"command",label="Browse the active project", command = function() gui.tkdbBrowse.active.proj() )
+			tkadd(ProjectMenu,"command",label="Remove MAP tables", command = function() gui.rangeMap.rm("MAP") )
+			tkadd(ProjectMenu,"command",label="Remove BIO tables", command = function() gui.rangeMap.rm("BIO") )
+          	tkadd(ProjectMenu,"command",label="show project's metadata", command = function() gui.show.metadata() )
   
 			tkadd(MapMenu,"command",label="import external MAP", command = function() gui.mapImport()  )
 			
-			tkadd(topMenu, "cascade", label="Help",menu=HelpMenu)
-            tkadd(topMenu, "cascade", label="Project",menu=ProjectMenu)
-            tkadd(topMenu, "cascade", label="Maps",menu=MapMenu)
+			tkadd(metadata_ranges2bioMenu,"command", label= "convert metadata_ranges to BIO table", command = function() gui.metadata2bio()  )
+			
+			tkadd(HelpMenu,"command",label= "Get started",command = function() gui.help("man") )
+			tkadd(HelpMenu,"command",label= "Example files",command = function() gui.help("support.files") )
+			tkadd(HelpMenu,"command",label= "About",command = function() gui.help("citation") )
+
+			tkadd(topMenu, "cascade", label= "Project",menu=ProjectMenu)
+			tkadd(topMenu, "cascade", label= "Maps",menu=MapMenu)
+			tkadd(topMenu, "cascade", label= "Tables", menu = metadata_ranges2bioMenu)
+			tkadd(topMenu, "cascade", label= "Help",menu=HelpMenu)
 
          }
 

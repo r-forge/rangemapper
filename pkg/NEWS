@@ -1,12 +1,9 @@
 
 		 *************************************************
-		 			rangeMapper VERSION 0.0-5.1
+		 			rangeMapper VERSION 0.0-5.92
 		 *************************************************
-rangeMapSave, rangeMapFetch converted to S4	(2010-Sep-06 13:58:28)
+		The conversion to S4 is done. 0.0-6 should be soon submitted to CRAN.
 
-		 *************************************************
-		 			rangeMapper VERSION 0.0-5
-		 *************************************************
-Package moved to R-forge	2010-Aug-10 10:10:51
+
 
 
