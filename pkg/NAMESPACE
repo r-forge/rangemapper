@@ -6,6 +6,8 @@ exportClasses(rangeFiles, rangeMapStart, rangeMap, rangeMapBbox, gridSize, range
 
 exportMethods(bioSave, rangeMapBbox, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapStart )
 
+export(bioSave, rangeMapBbox, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapStart )
+
 export(bio.save, metadata2bio, global.bbox.save, global.bbox.fetch, canvas.fetch, canvas.save, gridSize.save ,gridSize.fetch, rm.rangeMapper,  selectShpFiles, rangeMap.fetch, processRanges, rangeMap.save, subsetSQLstring, rangeMap.start, rangeMap.open )
 
 export(rangeMapper)

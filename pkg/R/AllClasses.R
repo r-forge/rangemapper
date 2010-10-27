@@ -1,19 +1,5 @@
 	
 # Class definitions
-setClass("rangeFiles", 
-		representation(
-		dir = "character",
-		ogr = "logical", 
-		polygons.only = "logical") , 
-		prototype(
-		dir = "",
-		ogr = TRUE, 
-		polygons.only = TRUE), 
-		validity = function(object) {
-		if(!file.exists(object@dir)) stop(Msg("'dir' should be set and point to a valid location."))
-		
-		}
-	)
 
 setClass("rangeMapStart", 
 		representation(
@@ -50,14 +36,14 @@ setClass("rangeMapStart",
 setClass("rangeMap", 
 		representation(
 			CON = "SQLiteConnection", 
-			ID = "character",         			# the common id column
-			BIOID = "character",         		# the common id column in BIo tables
-			METADATA = "character",   			#pre-defined table
-			METADATA_RANGES = "character",   	#optional pre-defined table
-			CANVAS = "character",   			#pre-defined table
-			RANGES = "character", 				# pre-defined table containing id and bioid
-			BIO = "character", 					# prefix for BIO tables,
-			MAP = "character" 					# prefix for MAP tables
+			ID = "character",         			
+			BIOID = "character",         		
+			METADATA = "character",   			
+			METADATA_RANGES = "character",   	
+			CANVAS = "character",   			
+			RANGES = "character", 				
+			BIO = "character", 					
+			MAP = "character" 					
 			),
 		prototype(
 			ID = "id",         
@@ -81,6 +67,22 @@ setClass("rangeMap",
 		}	
 	)
 
+setClass("rangeFiles", 
+		representation(
+		dir = "character",
+		ogr = "logical", 
+		polygons.only = "logical") , 
+		prototype(
+		dir = "",
+		ogr = TRUE, 
+		polygons.only = TRUE), 
+		validity = function(object) {
+		if(!file.exists(object@dir)) stop(Msg("'dir' should be set and point to a valid location."))
+		
+		}
+	)
+	
+	
 setClass("rangeMapBbox", 
 		representation(
 		checkProj = "logical"	

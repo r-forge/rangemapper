@@ -14,12 +14,8 @@ setMethod("rangeFiles",
 		res = data.frame(dsn = dirname(dir.list), layer = gsub(".shp", "", basename(dir.list)), stringsAsFactors = FALSE) else
 		res = dir.list
 		res
-	
-	
-	
-			} 
-	
-	)
+	} 
+)
 
 
 

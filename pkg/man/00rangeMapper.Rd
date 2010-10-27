@@ -39,6 +39,11 @@
 		\item  Extract, save and/or plot the MAP.
   }
 }  
+
+\section{Class structure}{
+who extends whom
+
+}
  
 
  \references{

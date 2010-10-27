@@ -24,7 +24,6 @@ setMethod("rangeMapStart",
 		
 		   
 			} 
-	
 	)
 
 # user level functions 
@@ -46,47 +45,13 @@ rangeMap.start <- function(overwrite = FALSE,...) {
 }
 	
 
-rangeMap.open <- function(path, verbose = FALSE, ...) {
+rangeMap.open <- function(path, verbose = FALSE) {
 # ... to pass to summary
 	dbcon = dbConnect(dbDriver("SQLite"), dbname= path)
 	o = new("rangeMap", CON = dbcon)
-	if(verbose) summary(o, ...)
+	if(verbose) summary(o)
 	invisible(dbcon)
 }
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
