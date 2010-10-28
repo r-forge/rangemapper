@@ -1,0 +1,52 @@
+
+\name{rangeMap.plot}
+\alias{rangeMap.plot}
+
+\title{Plots a rangeMap}
+\description{
+
+\arguments{
+
+	  \item{map}{Quoted name of the map table (without the \sQuote{MAP} prefix) to fetch from the sqlite database.} 
+	  
+	  \item{colorpalette}{A vector of colors; see also \code{\link{tkColorPalette}} which allows for interactive choice of color palettes}
+	  
+	  \item{ncols}{	number of color classes required; argument to be passed to \code{\link{classIntervals}} }
+	  \item{style}{class interval style; see \code{\link{classIntervals}} for more details}
+	  \item{scales}{If \sQuote{TRUE}, axes scale are drawn. This is an argument to be passed to \code{\link{spplot}} }
+	}
+
+
+\usage{
+rangeMap.plot(dbcon xxxxx)
+}
+	
+
+
+\seealso{
+\code{\link{rangeMapper}} for a complete example.
+
+}
+
+
+\author{Mihai Valcu \email{valcu@orn.mpg.de}}
+\keyword{spatial}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

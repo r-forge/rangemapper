@@ -1,6 +1,5 @@
 
 
-
 setMethod("bioSave",  
 	signature  = "bioSaveFile", 
 		definition = function(object) {
@@ -49,15 +48,19 @@ setMethod("bioSave",
 
 
 # user level function calling rangeMapSave
-bio.save   <- function(CON, loc, overwrite = FALSE, ...) {
+bio.save   <- function(con, loc, overwrite = FALSE, tableName, ...) {
 	
 
-	if(is.character(loc))
-		dat = new("bioSaveFile", CON = CON, loc = loc, ...)
+	if(is.character(loc)) {
+		if(missing(tableName)) tableName = gsub("\\.", "_", basename(loc))
+		dat = new("bioSaveFile", CON = con, loc = loc, tableName = tableName, ...)
+	}
 	
-	if(is.data.frame(loc))				
-	dat = new("bioSaveDataFrame", CON = CON, loc = loc, ...)
-
+	if(is.data.frame(loc)) {			
+		if(missing(tableName)) tableName = deparse(substitute(loc))
+		dat = new("bioSaveDataFrame", CON = con, loc = loc, tableName = tableName, ...)
+	}
+	
 	bioSave(dat)
 
 }	

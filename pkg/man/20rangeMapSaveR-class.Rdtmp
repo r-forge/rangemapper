@@ -1,0 +1,62 @@
+\name{rangeMapSaveR-class}
+\Rdversion{1.1}
+\docType{class}
+\alias{rangeMapSaveR-class}
+\alias{rangeMapSave,rangeMapSaveR-method}
+
+\title{Class "rangeMapSaveR"}
+\description{
+%%  ~~ A concise (1-5 lines) description of what the class is. ~~
+}
+\section{Objects from the Class}{
+Objects can be created by calls of the form \code{new("rangeMapSaveR", ...)}.
+%%  ~~ describe objects here ~~ 
+}
+\section{Slots}{
+  \describe{
+    \item{\code{FUN}:}{Object of class \code{"function"} ~~ }
+    \item{\code{formula}:}{Object of class \code{"formula"} ~~ }
+    \item{\code{biotab}:}{Object of class \code{"character"} ~~ }
+    \item{\code{biotrait}:}{Object of class \code{"character"} ~~ }
+    \item{\code{tableName}:}{Object of class \code{"character"} ~~ }
+    \item{\code{subset}:}{Object of class \code{"list"} ~~ }
+    \item{\code{CON}:}{Object of class \code{"SQLiteConnection"} ~~ }
+    \item{\code{ID}:}{Object of class \code{"character"} ~~ }
+    \item{\code{BIOID}:}{Object of class \code{"character"} ~~ }
+    \item{\code{METADATA}:}{Object of class \code{"character"} ~~ }
+    \item{\code{METADATA_RANGES}:}{Object of class \code{"character"} ~~ }
+    \item{\code{CANVAS}:}{Object of class \code{"character"} ~~ }
+    \item{\code{RANGES}:}{Object of class \code{"character"} ~~ }
+    \item{\code{BIO}:}{Object of class \code{"character"} ~~ }
+    \item{\code{MAP}:}{Object of class \code{"character"} ~~ }
+  }
+}
+\section{Extends}{
+Class \code{"\linkS4class{rangeMapSave}"}, directly.
+Class \code{"\linkS4class{rangeMap}"}, by class "rangeMapSave", distance 2.
+}
+\section{Methods}{
+  \describe{
+    \item{rangeMapSave}{\code{signature(object = "rangeMapSaveR")}: ... }
+	 }
+}
+\references{
+%%  ~~put references to the literature/web site here~~
+}
+\author{
+%%  ~~who you are~~
+}
+\note{
+%%  ~~further notes~~
+}
+
+%% ~Make other sections like Warning with \section{Warning }{....} ~
+
+\seealso{
+%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
+%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
+}
+\examples{
+showClass("rangeMapSaveR")
+}
+\keyword{classes}

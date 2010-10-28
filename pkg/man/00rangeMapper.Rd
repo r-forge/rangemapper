@@ -59,85 +59,8 @@ Orme, CDL; Davies, RG; Burgess, M; et al.(2005) Global hotspots of species richn
 \dontrun{
 ## These cannot be run by examples() but should be OK when pasted
 ## into an interactive R session 
-
-	require(rangeMapper)
-# INITIATE A NEW PROJECT
-	setwd(tempdir())
-	dbcon = dbConnect(dbDriver("SQLite"), dbname= "test.sqlite")
-	db.ini(dbcon) 
-
-# GET DATA
-	# Range data
-	f= system.file(package="rangeMapper", "extdata", "wrens", "vector")
-	ranges = selectShpFiles(f, ogr = FALSE, polygons.only = TRUE)
-	# Life-history data
-	data(wrens)
-
-# PREPARE PROJECT
-	# upload bounding box to database
-	global.bbox.save(ranges, dbcon) 
-	# upload grid size
-	gridSize.save(dbcon, gridSize = 200000)  
-	#  save canvas to database
-	canvas.save(dbcon) 
-
-# PROCESS RANGES
-	ranges = selectShpFiles(f, ogr = TRUE, polygons.only = TRUE)
-	processRanges(ranges, dbcon, metadata = TRUE)
-
-# SAVE BIO TABLE
-	bio.save(dbcon, dat = wrens, common_id = "species_name") 
-
-# MAKE MAPS
-	#species richness.
-	rangeMap.save(dbcon, table.nam = "richness",  biotrait = richness~1 , show.sql = FALSE)
-
-	# Body mass map; no subset
-	# mean
-	rangeMap.save(dbcon, FUN = mean, biotab = "wrens", biotrait = body_mass~1, table.nam = "mean_body_mass")
-	# cv
-	rangeMap.save(dbcon, FUN = function(x) sd(x)/mean(x), biotab = "wrens", biotrait = body_mass~1, table.nam = "cv_body_mass")
+require(rangeMapper)
 	
-	# Clutch size map; subsseting by BIO table field
-	rangeMap.save(dbcon, FUN = mean, biotab = "wrens", biotrait = clutch_size ~1, table.nam = "mean_clutch_size_bm15", 
-				subset =  list(BIO_wrens = "body_mass > 15") )
-	
-	# Body mass map; subsseting by BIO table field AND MAP table
-	rangeMap.save(dbcon, FUN = mean, biotab = "wrens", biotrait = body_mass ~1, table.nam = "mean_body_mass_subset1", 
-						subset = list(BIO_wrens   = "body_mass > 10", 
-						             MAP_richness =  "species_richness BETWEEN 2 AND 5") )
-
-	# Body mass map; subsseting by a BIO table, a MAP table AND  the metadata_ranges table
-	rangeMap.save(dbcon, FUN = mean, biotab = "wrens", biotrait = body_mass ~ 1, table.nam = "mean_body_mass_subset2", 
-						subset = list(BIO_wrens = "body_mass > 10", 
-						              MAP_richness = "species_richness BETWEEN 2 AND 5",
-						              metadata_ranges = "Area > 55000000000") )
-	
-# FETCH MAPS
-	richness          = rangeMap.fetch(dbcon, "richness")
-	bodyMass          = rangeMap.fetch(dbcon, "mean_body_mass")
-	bodyMassSubset1   = rangeMap.fetch(dbcon, "mean_body_mass_subset1")
-	bodyMassSubset2   = rangeMap.fetch(dbcon, "mean_body_mass_subset2")
-	clutchSize        = rangeMap.fetch(dbcon, "mean_clutch_size_bm15")
-	
-	summary(richness)
-	summary(clutchSize)
-	
-# PLOT MAPS
-	# choose a brewer pal palette
-	tkColorPalette(pal = brewer.pal.get(), name  = "SpectralPalette")
-
-	# plot species richness
-	rangeMap.plot(richness, SpectralPalette, ncols = 6, style = "equal")
-	
-	# plot body mass maps
-	rangeMap.plot(bodyMass, SpectralPalette, ncols = 20, style = "fisher")
-	rangeMap.plot(bodyMassSubset1, SpectralPalette, ncols = 20, style = "fisher")
-	rangeMap.plot(bodyMassSubset2, SpectralPalette, ncols = 20, style = "fisher")
-	
-# plot clutch size subset for body_mass
-	rangeMap.plot(clutchSize, SpectralPalette, ncols = 20, style = "fisher")
-		
 	
 
 }

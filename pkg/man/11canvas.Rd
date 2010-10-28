@@ -7,7 +7,7 @@
 \title{Project's canvas}
 
 \description{
-	The canvas is a  regular grid of a given resolution used to perform grid interpolation.}
+	The canvas is a  regular grid of a given resolution. Each range map is overlayed onto the canvas and the results saved to project.}
 
 \usage{
 canvas.save(con)
@@ -16,9 +16,7 @@ canvas.fetch(con)
 
 \arguments{
 	  \item{con}{An sqlite connection pointing to a valid \code{rangeMapper} project. }
-
-\value{
-\item{\code{canvas.fetch}}{Returns a \code{\link{SpatialPixelsDataFrame}} object}  
+	  \item{\code{canvas.fetch}}{Returns a \code{\link[sp]{SpatialPixelsDataFrame}} object.}  
 }  
 
 	

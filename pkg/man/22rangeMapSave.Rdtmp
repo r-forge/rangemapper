@@ -1,0 +1,90 @@
+
+\name{rangeMap.save}
+\alias{rangeMap.save}
+
+\title{Save a rangeMap}
+\description{
+Compute a chosen statistic (e.g. richness (count), average, median or any user-defined statistic) at each grid cell.}
+
+\arguments{
+	  \item{dbcon}{An sqlite connection pointing to a valid \code{rangeMapper} project. }
+	  \item{FUN}{the function to be applied to each pixel. 
+				If \code{FUN} is missing then species richness (species count) is computed.}
+	  \item{biotab}{character string indentifying the \sQuote{BIO} table to use.}
+	  \item{biotrait}{character string indentifying the ID of the \sQuote{BIO} table. see xxxxxxx}
+	  \item{formula}{A two sided formula to be passed to an \code{\link{assemblage.stat}} function. 
+					The left side of the formula identifies the \sQuote{y} \sQuote{BIO} repsonse (i.e. the biotrait). }
+	  \item{table.nam}{Name of the table (quoted) to be added to the sqlite database. 
+			The prefix \sQuote{MAP} will be appended to \code{table.nam} prior to saving.}
+	 \item{subset}{A named \code{\link{list}}. Names reffers to \sQuote{BIO}, \sQuote{MAP} and \sQuote{metadata_rages} 
+			table names while the objects in the list are character strings containing the SQL  
+			\code{WHERE} clause; see details} 
+}
+
+
+\usage{
+rangeMap.save(dbcon, FUN, biotab, biotrait, tableName, subset, overwrite)
+}
+	
+
+\value{
+Returns \code{TRUE} if the table was saved.
+}	
+
+\details{
+TODO: describe subset
+}
+
+\note{
+TODO: sql vs R functions
+}
+
+
+\examples{
+	dbcon = rangeMap.start(file = "temp.sqlite", overwrite = TRUE, dir = tempdir() )
+	f= system.file(package="rangeMapper", "extdata", "wrens", "vector")
+	global.bbox.save(f, dbcon) 
+	gridSize.save(dbcon)  
+	canvas.save(dbcon) 
+	processRanges(dir = f, con =  dbcon, metadata = TRUE)
+	bio.save(con = dbcon, loc =  system.file(package="rangeMapper", "data", "wrens.csv"),  ID = "species_name")
+	
+	# A call to rangeMap.save without any arguments computes species richness:
+	rangeMap.save(dbcon)
+	
+	# mean body mass computed by the sqlite engine:
+	rangeMap.save(dbcon, FUN = "avg" , biotab = "wrens", biotrait = "body_mass", tableName = "mean_body_mass", overwrite = TRUE)
+
+	# using subsets
+	## TODO ##
+	} 
+
+
+\seealso{
+\code{\link{rangeMapper}} for a complete example.
+\code{\link{rangeMapSave-class}} 
+\code{\link{rangeMapSave,rangeMapSave-method}} 
+}
+
+
+\author{Mihai Valcu \email{valcu@orn.mpg.de}}
+\keyword{spatial}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -15,8 +15,8 @@ Objects can be created by calls of the form \code{new("rangeFiles", ...)}.
     \item{\code{dir}:}{
 		Object of class \code{"character"}; directory containing the range files; one for each unit (e.g. species) }
 	\item{\code{ogr}:}{
-		Object of class \code{"logical"} if \code{TRUE} a \code{data.frame} with two columns is returned 
-		(see \code{\link{selectShpFiles} for details)  }
+		Object of class \code{"logical"} if \code{TRUE} a \code{data.frame} with two columns is returned
+		(see \code{\link{selectShpFiles} for details)  } }
     \item{\code{polygons.only}:}{Object of class \code{"logical"} If \code{TRUE} only polygon file paths are returned, else the location to all shape files regardless their type is returned. }
   }
 }
