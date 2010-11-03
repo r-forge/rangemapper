@@ -3,13 +3,13 @@ setMethod("rangeMapProcess",
 		signature = "rangeMapProcess", 
 		definition = function(object){
 		
-		Startprocess = Sys.time()
-		
-		Files = rangeFiles(object)
-		
-		cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
-		
-	for( i in 1:length(Files$layer) ) {
+	Startprocess = Sys.time()
+	
+	Files = rangeFiles(object)
+	
+	cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
+
+	processRangei = function(i) {
 		
 	r = try(readOGR(Files$dsn[i], Files$layer[i], verbose = FALSE), silent = TRUE)
 	
@@ -49,6 +49,13 @@ setMethod("rangeMapProcess",
 		} else Msg(r)
 	}		
 	
+      	#if(object@parallel)
+	  #mclapply (1:length(Files$layer) ,FUN = processRangei) else  lapply (1:length(Files$layer) ,FUN = processRangei)
+
+	  
+	  lapply (1:length(Files$layer), FUN = processRangei) 
+
+
 	# last msg
 	Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
 							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )

@@ -112,7 +112,8 @@ setClass("gridSize",
 	
 setClass("rangeMapProcess", 
 		representation(
-		metadata = "logical"	
+		metadata = "logical",
+		parallel = "logical"
 			), 
 		
 		contains = c("rangeFiles", "rangeMap"), 
@@ -122,7 +123,9 @@ setClass("rangeMapProcess",
 			
 		},
 		prototype(
-			metadata = TRUE)
+			metadata = TRUE, 
+			parallel = FALSE # "multicore"%in%basename(searchpaths()) 
+			)
 	)	
 	
 setClass("rangeMapSave", 
@@ -254,13 +257,18 @@ setClass("rangeMapFetch", representation(
 	
 
 setClass("rangeMapRemove", representation(
-						tableName = "character" 
+						tableName = "character", 
+						tablePrefix = "character"						 
 						), 
 						 contains = "rangeMap",
 						 
 						validity = function(object)	{
-									if(object@METADATA%in%object@tableName |object@CANVAS%in%object@tableName|object@CANVAS%in%object@tableName)
-									stop(Msg( paste(object@METADATA,",", object@CANVAS, "or", object@RANGES, "table(s) cannot be removed!")) )
+									if(object@METADATA%in%object@tableName |
+									   object@CANVAS%in%object@tableName|
+									   object@CANVAS%in%object@tableName)
+						stop(Msg( paste(object@METADATA,",", 
+										object@CANVAS, "or", 
+										object@RANGES, "table(s) cannot be removed!")) )
 
 			}
 	)

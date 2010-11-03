@@ -150,8 +150,8 @@ gui.tkdbBrowse.active.proj <- function() {
 # MAIN GUI ELEMENTS 
 gui.dbopen <- function(new = TRUE) {
 
-	Msg("Starting new session....", clearup = TRUE)
 	Msg("", getTime = TRUE, keep = TRUE)
+	Msg("Starting new session....", clearup = TRUE)
 	
 	if(new) {
 		path = tclvalue(tkgetSaveFile(defaultextension = ".sqlite", filetypes = "{rangeMapper_project {.sqlite}}" ) )
@@ -553,17 +553,17 @@ gui.rangeMap.rm <- function(table.type) {
 	dbcon = gui.get.from.env("con")
 	if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
-	table.nam = as.character(tkdbBrowse(dbcon, prefix = table.type, tables.name.only = TRUE)$dbtable)
+	nam = as.character(tkdbBrowse(dbcon, prefix = table.type, tables.name.only = TRUE)$dbtable)
 	if(exists("out")) rm(out, envir = .GlobalEnv)
 
-	if(all(is.na(table.nam)) && gui.yn("Really delete all maps!") ) {
-				rm.rangeMapper(dbcon, table.type = table.type)
-				Msg(paste("All", table.type, "tables deleted!"), keep = FALSE)
-		} 
-	if(! all(is.na(table.nam)) ) {
-		lapply(table.nam, function(x) rm.rangeMapper(dbcon, table.nam =x, table.type = table.type))
-		Msg(paste(table.nam, "delleted!"), keep = FALSE)
-		}	
+	table.nam = paste(table.type, nam, sep = "_")
+	
+	if(all(is.na(nam)) && gui.yn("Really delete all ?") )
+				rm.rangeMapper(dbcon, tablePrefix = table.type)
+
+	if(! all(is.na(nam)) ) 
+		rm.rangeMapper(dbcon, tableName = table.nam, tablePrefix = table.type)
+	
 
 }
 

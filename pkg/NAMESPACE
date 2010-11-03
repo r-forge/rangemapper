@@ -10,6 +10,8 @@ export(bioSave, rangeMapBbox, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave,
 
 export(bio.save, metadata2bio, global.bbox.save, global.bbox.fetch, canvas.fetch, canvas.save, gridSize.save ,gridSize.fetch, rm.rangeMapper,  selectShpFiles, rangeMap.fetch, processRanges, rangeMap.save, subsetSQLstring, rangeMap.start, rangeMap.open )
 
+ exportPattern("*.")
+
 export(rangeMapper)
 
 export(lmer_mean)
