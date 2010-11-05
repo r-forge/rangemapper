@@ -1,5 +1,11 @@
 
 
+rect2spp <- function(xmin, xmax, ymin, ymax) {
+		bb = cbind(c(xmin, xmax, xmax, xmin, xmin), c(ymin, ymin, ymax, ymax, ymin) )
+		SpatialPolygons(Srl = list(Polygons(list(Polygon(bb)), "bb")) )
+}
+
+
 #### BBOX ###
 setMethod("rangeMapBbox",  
 	signature  = "rangeMapBbox", 
@@ -23,7 +29,7 @@ setMethod("rangeMapBbox",
 			}	else 
 				p4s = .extract.p4s(ogrShpFiles[1, ])
 			
-		attributes(bb)$p4s = p4s
+		attributes(bb)$p4s = as.character(p4s)
 		Msg("Done!")
 		
 		bb
@@ -33,20 +39,31 @@ setMethod("rangeMapBbox",
 
 setMethod("rangeMapBboxSave",  
 	signature  = "rangeMapBbox",
-		definition = function(object) {
+		definition = function(object, p4s) {
 		if(! .is.empty(object@CON, object@METADATA) ) stop(Msg("Bounding box was allready saved for this project."))
+		
 		bb = rangeMapBbox(object)
-		metadata = c(bb, p4s= as.character(attributes(bb)$p4s), gridSize = NA)
+		if(!missing(p4s) ) { 
+		Msg(paste("Converting to", p4s) )
+			bbnew = rect2spp(bb[1], bb[2], bb[3], bb[4])
+			proj4string(bbnew) = attributes(bb)$p4s
+			bbnew = spTransform(bbnew , CRS(p4s) )
+			bb = c(bbox(bbnew )[1, ], bbox(bbnew )[2, ] )
+			attributes(bb)$p4s = p4s
+			}
+		
+		metadata = c(bb, p4s= attributes(bb)$p4s , gridSize = NA)
+				
 		res = dbWriteTable(object@CON, object@METADATA, data.frame(t(metadata)), append = TRUE, row.names = FALSE)
-		if(! .is.empty(object@CON, object@METADATA)) Msg("Bounding box uploaded.")
+		if(! .is.empty(object@CON, object@METADATA)) Msg("Bounding box uploaded.") else Msg("Bounding box upload failed.")
 	 
 	 }
 	)
 
 #user level
-global.bbox.save <- function(Dir, con) { 
+global.bbox.save <- function(Dir, con, ...) { 
 	x = new("rangeMapBbox", CON = con, dir = Dir, ogr = FALSE)
-	rangeMapBboxSave(x)
+	rangeMapBboxSave(x, ...)
 }
 
 
@@ -55,8 +72,7 @@ setMethod("rangeMapBboxFetch",
 		definition = function(object) {
 		if(.is.empty(object@CON, object@METADATA) ) stop(Msg("Bounding box not yet constructed for this project!"))
 		md = dbReadTable(object@CON, object@METADATA)
-		bb = cbind(c(md$xmin, md$xmax, md$xmax, md$xmin, md$xmin), c(md$ymin, md$ymin, md$ymax, md$ymax, md$ymin) )
-		bb = SpatialPolygons(Srl = list(Polygons(list(Polygon(bb)), "bb")) )
+		bb = rect2spp(md$xmin, md$xmax, md$ymin, md$ymax)
 		proj4string(bb) = md$p4s
 		return(bb)
 		 
@@ -182,33 +198,6 @@ canvas.save  <- function(con) {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

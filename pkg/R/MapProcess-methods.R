@@ -13,6 +13,12 @@ setMethod("rangeMapProcess",
 		
 	r = try(readOGR(Files$dsn[i], Files$layer[i], verbose = FALSE), silent = TRUE)
 	
+	
+	#  reproject
+	p4s = .sqlQuery(object@CON, "SELECT p4s from metadata")$p4s
+	if(!identical(gsub(" ", "", proj4string(r)), gsub(" ", "", p4s) ) ) r = spTransform( r , CRS(p4s) )
+	
+	
 	if(!inherits(r, "try-error") ) {
 			 
 		# progress report	
@@ -20,7 +26,10 @@ setMethod("rangeMapProcess",
 				   paste("Range:", Files$layer[i]),	
 					 paste(round(i/length(Files$layer)*100,2), "% done"), 
 					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n") )
-		 
+		
+		
+
+		
 			overlayRes = overlay(r, cnv) 
 			overlayRes = which(!is.na(overlayRes[, 1]))
 			
