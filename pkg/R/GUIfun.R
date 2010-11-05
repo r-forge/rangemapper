@@ -150,13 +150,14 @@ gui.tkdbBrowse.active.proj <- function() {
 # MAIN GUI ELEMENTS 
 gui.dbopen <- function(new = TRUE) {
 
-	Msg("", getTime = TRUE, keep = TRUE)
 	Msg("Starting new session....", clearup = TRUE)
+	Msg("", getTime = TRUE, keep = TRUE)
 	
 	if(new) {
 		path = tclvalue(tkgetSaveFile(defaultextension = ".sqlite", filetypes = "{rangeMapper_project {.sqlite}}" ) )
 		 if(nchar(path)==0)  stop(Msg("Nothing selected!"))
 		dbcon = rangeMap.start(file = basename(path), overwrite = TRUE, dir = dirname(path) )
+		
 		}
 	
 	if(!new) {
@@ -164,12 +165,12 @@ gui.dbopen <- function(new = TRUE) {
 		if(nchar(path)==0)  stop(Msg("Nothing selected!"))
 		dbcon = rangeMap.open(path, verbose = TRUE)
 		}
-
+		
 		gui.put.to.env("con", dbcon)
 		gui.put.to.env("path", path)
 		
-	summary(new("rangeMap", CON = dbcon), keep = TRUE)	
-		
+		print(summary(new("rangeMap", CON = gui.get.from.env("con"))))
+
 				
 	}
 	
@@ -192,10 +193,11 @@ gui.close <- function(quitR = FALSE) {
 }
 
 gui.show.metadata <- function() {
-	path = gui.get.from.env("path") 
-	if(is.null(dbcon)) 
-		stop(Msg("There is no active project!"))
-	summary(new("rangeMap", CON = dbcon), keep = FALSE)	
+	dbcon = gui.get.from.env("con")
+	if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	
+	print(summary(new("rangeMap", CON = gui.get.from.env("con"))))
+
 }
 
 gui.help <- function(what) {
@@ -292,13 +294,15 @@ gui.bio.save <- function() {
 		if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
 	f = tk_choose.files( filter = matrix(c("comma delim, sep = ';'", ".csv"), ncol = 2) )
+	
 	dat = read.csv(f, as.is = TRUE,sep = ";", strip.white = TRUE)
+	
 	tabnam = make.db.names.default(gsub(".csv", "", basename(f)))
 	
     common_id = tk_select.list(names(dat),  multiple = FALSE, title = "Select range ID")
 	
 	if(nchar(common_id) ==0) Msg ("Nothing selected") else 
-		bio.save(CON = dbcon, loc =  dat,  ID = common_id, tableName = tabnam)
+		bio.save(con = dbcon, loc =  dat,  ID = common_id, tableName = tabnam)
 
 }
 

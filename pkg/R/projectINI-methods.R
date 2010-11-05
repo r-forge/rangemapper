@@ -35,7 +35,7 @@ rangeMap.start <- function(overwrite = FALSE,...) {
 	
 	rangeMapStart(obj)
 	
-	Msg(paste("PROJECT:", obj@file, "\nDIRECTORY:",obj@dir), keep = TRUE, getTime = TRUE)
+	Msg(paste("PROJECT:", obj@file, "\nDIRECTORY:",obj@dir), getTime = TRUE)
 	
 	f = paste(obj@dir, obj@file, sep = .Platform$file.sep)
 	
@@ -46,12 +46,29 @@ rangeMap.start <- function(overwrite = FALSE,...) {
 	
 
 rangeMap.open <- function(path, verbose = FALSE) {
-# ... to pass to summary
 	dbcon = dbConnect(dbDriver("SQLite"), dbname= path)
+	
 	o = new("rangeMap", CON = dbcon)
+	
 	if(verbose) summary(o)
+	
 	invisible(dbcon)
 }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 
