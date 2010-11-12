@@ -21,7 +21,7 @@ setMethod("rangeMapFetch",
 	
 		coordinates(map) = ~ x + y
 
-		p4s = .sqlQuery(object@CON, paste("SELECT p4s FROM", object@METADATA) )[,1]
+		p4s = dbReadTable(object@CON, object@PROJ4STRING)[1,1]
 		
 		proj4string(map) = CRS(p4s)
 		

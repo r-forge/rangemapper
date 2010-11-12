@@ -15,7 +15,7 @@ setMethod("rangeMapProcess",
 	
 	
 	#  reproject
-	p4s = .sqlQuery(object@CON, "SELECT p4s from metadata")$p4s
+	p4s =  dbReadTable(object@CON, object@PROJ4STRING)[1,1]
 	if(!identical(gsub(" ", "", proj4string(r)), gsub(" ", "", p4s) ) ) r = spTransform( r , CRS(p4s) )
 	
 	

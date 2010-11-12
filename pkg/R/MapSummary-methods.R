@@ -13,9 +13,9 @@ summary.rangeMap = function(object, ...) {
 	if( nrow(.sqlQuery(object@CON, paste("select", object@ID, "from", object@CANVAS, "limit 1") )) == 0)
 	out[["empty_project"]] = "Empty rangeMapper project." else {
 	
-		mtd = .sqlQuery(object@CON, paste("select * from", object@METADATA))
-		out[["Proj4"]] = mtd$p4s
-		out[["CellSize"]] = mtd$gridSize
+		out[["Proj4"]] = dbReadTable(object@CON, object@PROJ4STRING)[1,1]
+		out[["CellSize"]] = dbReadTable(object@CON, object@GRIDSIZE)[1,1]
+		out[["Extent"]] = dbReadTable(object@CON, object@BBOX)
 	
 		tbs = .sqlQuery(object@CON, "select name from sqlite_master where type = 'table' ")$name
 		

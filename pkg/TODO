@@ -4,28 +4,13 @@ Mihai Valcu 2010-Oct-25 16:48:40
 
 Mihai Valcu 2010-Oct-19 12:46:45
 * selectShpFiles should take 'type == 5' as an argument
-* add validity to rangeMap Class: check if connection points to a valid rangeMapper project
 
-Mihai Valcu 2010-Sep-30 13:28:34
-* fix bug 
-		rangeMap.save(CON, path = p, tableName = 'MeanSeasonality', FUN = mean)
-		Error in exists(x, envir = envir) : object '.RangeMapper' not found
-* fix bug 
-		GUI: fix choose variable in BIO table
-
-Mihai Valcu 2010-Sep-27 11:51:22
-	* GUI script window working on .RangeMapper envir
-	* plot methods extending spplot
-
-	Mihai Valcu 2010-Sep-23 15:08:43
+Mihai Valcu 2010-Sep-23 15:08:43
 	* summary methods; extend summary spatial to include info on map creation (i.e. underlining function)
 
-Mihai Valcu 2010-Sep-14 16:18:17
-	* show method for canvas
-	
 
 Mihai Valcu 2010-Sep-07 16:03:37
-	* save R function called by rangeMapSave/rangeMapSaveR to a table similar "to SELECT sql FROM sqlite_master where type = 'table'"
+	* save R function called by rangeMapSave/rangeMapSaveR to a table similar to sqlite_master "to SELECT sql FROM sqlite_master where type = 'table'"
 	* add version info to metadata and check when the project is oppened
 
 

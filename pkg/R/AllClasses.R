@@ -9,15 +9,24 @@ setClass("rangeMapStart",
 			overwrite = "logical"
 			), 
 		prototype(
-			dir = "",
 			file = paste("rangeMapperProj",format(Sys.time(), "%Y-%m-%d_%H-%M-%S.sqlite"), sep = "_"),
 			scheleton = 	list(
 		create = 
-		c("CREATE TABLE metadata (xmin FLOAT,xmax FLOAT,ymin FLOAT,ymax FLOAT,p4s CHAR,gridSize FLOAT)", 
+		c(	"CREATE TABLE proj4string (p4s CHAR)", 
+			"CREATE TABLE gridSize(gridSize FLOAT)", 
+			"CREATE TABLE bbox(xmin FLOAT,xmax FLOAT,ymin FLOAT,ymax FLOAT)", 
 			"CREATE TABLE canvas (x FLOAT,y FLOAT,id INT)", 
 			"CREATE TABLE ranges (id INT,bioid CHAR)",
-			"CREATE TABLE metadata_ranges (bioid CHAR, Area FLOAT, Median_x FLOAT,Min_x FLOAT, Max_x FLOAT,Median_y FLOAT, Min_y FLOAT, Max_y FLOAT)")
-		,
+			"CREATE TABLE metadata_ranges (bioid CHAR, 
+										   Area FLOAT, 
+										   Median_x FLOAT, 
+										   Median_y FLOAT, 
+										   Min_x FLOAT, 
+										   Max_x FLOAT,
+										   Min_y FLOAT, 
+										   Max_y FLOAT)"
+
+		),
 		index = 
 		c(  "CREATE INDEX IF NOT EXISTS   id_canvas ON canvas (id)", 
 			"CREATE INDEX IF NOT EXISTS   id_ranges ON ranges (id)", 
@@ -38,7 +47,9 @@ setClass("rangeMap",
 			CON = "SQLiteConnection", 
 			ID = "character",         			
 			BIOID = "character",         		
-			METADATA = "character",   			
+			PROJ4STRING = "character",   			
+			GRIDSIZE = "character",   			
+			BBOX = "character",   			
 			METADATA_RANGES = "character",   	
 			CANVAS = "character",   			
 			RANGES = "character", 				
@@ -48,7 +59,9 @@ setClass("rangeMap",
 		prototype(
 			ID = "id",         
 			BIOID = "bioid",         
-			METADATA = "metadata", 
+			PROJ4STRING = "proj4string",   			
+			GRIDSIZE = "gridsize",   			
+			BBOX = "bbox", 
 			METADATA_RANGES = "metadata_ranges",  
 			CANVAS = "canvas",   
 			RANGES = "ranges", 
@@ -58,8 +71,10 @@ setClass("rangeMap",
 		
 		validity = function(object) {
 		if ( ! init_extensions(object@CON)) warning(Msg("Warning: RSQLite.extfuns not available!"))
-		if ( ! all( .dbtable.exists(object@CON, object@METADATA),
+		if ( ! all( .dbtable.exists(object@CON, object@PROJ4STRING),
 				  .dbtable.exists(object@CON, object@METADATA_RANGES),
+				  .dbtable.exists(object@CON, object@GRIDSIZE),
+				  .dbtable.exists(object@CON, object@BBOX),
 				  .dbtable.exists(object@CON, object@CANVAS),
 				  .dbtable.exists(object@CON, object@RANGES) ) ) stop (Msg("Corrupt rangeMapper project!"))
 		
@@ -83,21 +98,6 @@ setClass("rangeFiles",
 	)
 	
 	
-setClass("rangeMapBbox", 
-		representation(
-		checkProj = "logical"	
-			), 
-		
-		contains = c("rangeFiles", "rangeMap"), 
-		
-		validity = function(object)	{
-					return(TRUE)
-			
-		},
-		prototype(
-			checkProj = TRUE)
-	)	
-
 setClass("gridSize", 
 		representation(
 		gridSize = "numeric"	
@@ -263,10 +263,12 @@ setClass("rangeMapRemove", representation(
 						 contains = "rangeMap",
 						 
 						validity = function(object)	{
-									if(object@METADATA%in%object@tableName |
+									if(object@PROJ4STRING%in%object@tableName |
+									   object@BBOX%in%object@tableName|
+									   object@GRIDSIZE%in%object@tableName|
 									   object@CANVAS%in%object@tableName|
 									   object@CANVAS%in%object@tableName)
-						stop(Msg( paste(object@METADATA,",", 
+						stop(Msg( paste(object@PROJ4STRING,",", object@BBOX, ",",object@GRIDSIZE,",",
 										object@CANVAS, "or", 
 										object@RANGES, "table(s) cannot be removed!")) )
 
