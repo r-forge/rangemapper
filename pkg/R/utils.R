@@ -28,7 +28,7 @@ brewer.pal.get <- function(palette = NULL) {
 
 
 # tclttk	
-Msg <- function(msg, tkMainWindow = "win", tkElement = "msg", eol = "\n", keep = TRUE, clearup = FALSE, getTime = FALSE, envir = ".RangeMapper") {
+Msg <- function(msg=Sys.time(), tkMainWindow = "win", tkElement = "msg", eol = "\n", keep = TRUE, clearup = FALSE, getTime = FALSE, envir = ".RangeMapper") {
 
    msg	= paste(msg, collapse = eol)
 
