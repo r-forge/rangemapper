@@ -25,7 +25,8 @@ setMethod("rangeMapProcess",
 		Msg( paste("Processsing ranges, please wait!...", 
 				   paste("Range:", Files$layer[i]),	
 					 paste(round(i/length(Files$layer)*100,2), "% done"), 
-					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n") )
+					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n"), 
+					 keep = FALSE)
 		
 		
 

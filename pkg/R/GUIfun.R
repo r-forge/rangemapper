@@ -222,9 +222,11 @@ gui.global.bbox.save <- function() {
 	dbcon = gui.get.from.env("con")
 	if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
-	global.bbox.save(Dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory"), dbcon) 
+	Dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory")
 	
-	}
+	global.bbox.save(con = dbcon, bbox = Dir)
+	
+}
 	
 gui.gridSize.save <- function() {
 
