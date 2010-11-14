@@ -254,6 +254,19 @@ setClass("rangeMapFetch", representation(
 						 stop(Msg(paste(sQuote(mapNam[isempty]), "is an empty MAP!\n")))
 			}
 	)
+
+setClass("SpatialPixelsRangeMap", representation(
+					mapvar    = "character"), 
+				    contains  = "SpatialPixelsDataFrame",
+	
+					validity = function(object)	{
+					return(TRUE)
+					}
+	)
+
+
+
+	
 	
 
 setClass("rangeMapRemove", representation(

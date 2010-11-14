@@ -1,12 +1,14 @@
 
+#### set method plot for  "SpatialPixelsRangeMap"
+
 
 # ...arguments to pass to classIntervals (eg. n, style) and spplot
 
-rangeMap.plot  <- function(map, colorpalette= brewer.pal.get('Spectral'), ncols = 20, scales = FALSE, ...) {
+rangeMap.plot  <- function(map, colorpalette= brewer.pal.get('Spectral')[11:1], ncols = 20, scales = FALSE, ...) {
 
 	trellis.par.set("regions", list(col= colorRampPalette(colorpalette, space = "Lab")(ncols) ) , warn = FALSE)
 	
-	mapVars = names(map)[!names(map)=="id"]
+	mapVars = names(map)
 	
 	 nr <- nc <- ceiling(sqrt(length(mapVars )))
 

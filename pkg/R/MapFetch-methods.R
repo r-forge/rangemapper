@@ -27,8 +27,8 @@ setMethod("rangeMapFetch",
 		
 		gridded(map) = TRUE
 		
-		map
-		
+		map = new("SpatialPixelsRangeMap", map, mapvar    = mapvar)
+		return(map)
 		}
 	)	
 

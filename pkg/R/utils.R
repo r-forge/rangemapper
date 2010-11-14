@@ -1,5 +1,3 @@
-##################### UNDOCUMENTED  #####################
-
 # ...
 force.formula <- function(f) {
 # force a function, taking a vector argument, to take a data.frame argument using formula, data.	
@@ -376,7 +374,6 @@ if(missing(fun) )
 	
 	}
 
-##################### UNDOCUMENTED  #####################
 
 
 
