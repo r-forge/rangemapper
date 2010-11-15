@@ -1,22 +1,24 @@
 
 import(methods)
 import(utils) 
+import(sp) 
 
 exportClasses(rangeFiles, rangeMapStart, rangeMap, gridSize, rangeMapProcess, rangeMapSave, bioSaveFile, bioSaveDataFrame, rangeMapSaveSQL, rangeMapSaveR, MapImport, rangeMapFetch, rangeMapRemove)
 
-exportMethods(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapStart, summary )
+exportMethods(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapStart, summary, plot )
 
 export(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapStart )
 
 export(bio.save, metadata2bio, global.bbox.save, global.bbox.fetch, canvas.fetch, canvas.save, gridSize.save ,gridSize.fetch, rm.rangeMapper,  selectShpFiles, rangeMap.fetch, processRanges, rangeMap.save, subsetSQLstring, rangeMap.start, rangeMap.open )
 
- exportPattern("*.")
+# exportPattern("^[^\\.]")
+exportPattern("*.")
 
 export(rangeMapper)
 
 export(lmer_mean)
 
-export(rangeMap.plot)
+
 
 
 

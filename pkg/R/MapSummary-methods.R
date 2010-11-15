@@ -1,6 +1,4 @@
 
-if (!isGeneric("summary"))
-	setGeneric("summary", function(object, ...) standardGeneric("summary"))
 
 summary.rangeMap = function(object, ...) {
     out = list()
