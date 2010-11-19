@@ -3,11 +3,11 @@ import(methods)
 import(utils) 
 import(sp) 
 
-exportClasses(rangeFiles, rangeMapStart, rangeMap, gridSize, rangeMapProcess, rangeMapSave, bioSaveFile, bioSaveDataFrame, rangeMapSaveSQL, rangeMapSaveR, MapImport, rangeMapFetch, rangeMapRemove)
+exportClasses(rangeFiles, rangeMapStart, rangeMap, gridSize, rangeMapProcess, rangeMapSave, rangeMapIntersect, bioSaveFile, bioSaveDataFrame, rangeMapSaveSQL, rangeMapSaveR, MapImport, rangeMapFetch, rangeMapRemove)
 
-exportMethods(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapStart, summary, plot )
+exportMethods(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapIntersect, rangeMapStart, summary, plot )
 
-export(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapStart )
+export(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapIntersect, rangeMapStart )
 
 export(bio.save, metadata2bio, global.bbox.save, global.bbox.fetch, canvas.fetch, canvas.save, gridSize.save ,gridSize.fetch, rm.rangeMapper,  selectShpFiles, rangeMap.fetch, processRanges, rangeMap.save, subsetSQLstring, rangeMap.start, rangeMap.open )
 

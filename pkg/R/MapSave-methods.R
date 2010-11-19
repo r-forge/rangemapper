@@ -176,6 +176,7 @@ setMethod("rangeMapSave",
 		}
 	)
 
+
 	
 # user level function calling rangeMapSave
 rangeMap.save  <- function(CON, FUN = NULL, biotab = NULL, biotrait = NULL, formula = NULL, tableName = NULL, subset = list(), path = NULL, overwrite = FALSE,...) {

@@ -214,19 +214,39 @@ setClass("rangeMapSaveR", representation (FUN = "function", formula = "formula")
 							}
 		)						
 	
-setClass("MapImport", representation (path = "character", FUN = "function"), 
+setClass("MapImport", representation(path = "character", FUN = "function"), 
 							contains = "rangeMapSave", 
  
 							validity = function(object) {
 							
-							if(!file.exists(object@path)) stop(sQuote(object@path), "is not a valid path.")	
+							if(!file.exists(object@path)) stop( Msg( paste(sQuote(object@path), "is not a valid path.") ) )	
 							if(!require("raster")) stop(Msg("package raster is not available"))
 
 							}, 
 							prototype(
 							FUN = mean 
 							) 
-		)		
+		)
+
+
+setClass("rangeMapIntersect", representation (MAPS = "character"), 
+							contains = "rangeMapSave", 
+ 
+					validity = function(object) {
+					if( length(object@MAPS) < 2) stop( Msg( paste(sQuote(class(object)), "require at least two MAPS") ) )	
+					
+					mapNam =paste(object@MAP, object@MAPS, sep = "") 
+					invalidNam = sapply(mapNam, FUN = function(x) !.dbtable.exists(object@CON, x) )
+					if( any(invalidNam) )
+						stop(Msg(paste(sQuote(names(invalidNam[invalidNam] )), "is not a valid MAP!\n")))
+
+
+					}
+
+		)
+
+
+		
 
 setClass("rangeMapFetch", representation(
 					tableName    = "character"), 
