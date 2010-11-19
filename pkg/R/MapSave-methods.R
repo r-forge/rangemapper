@@ -132,10 +132,11 @@ setMethod("rangeMapSave",
 	Msg("Converting canvas to polygons...")
 	cnv = rasterToPolygons(raster(cnv))
 	
-	if(nlayers(stack(object@path)) > 1) stop(sQuote(filenam), " contains more than one layer")
-	
 	Msg("Loading external MAP data")
 	rst = raster(object@path)
+	
+	if(nlayers(stack(rst)) > 1) stop(sQuote(filenam), " contains more than one layer")
+	
 
 	# is there any other way to compare CRS-s ?	
 	if(!CRSargs(CRS(proj4string(cnv))) == CRSargs(projection(rst, FALSE))) 
