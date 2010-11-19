@@ -29,7 +29,9 @@ brewer.pal.get <- function(palette = NULL) {
 Msg <- function(msg=Sys.time(), tkMainWindow = "win", tkElement = "msg", eol = "\n", keep = TRUE, clearup = FALSE, getTime = FALSE, envir = ".RangeMapper") {
 
    msg	= paste(msg, collapse = eol)
-
+   msg	= paste("\xBB\xBB", msg, collapse = " ")
+   
+   
   if(getTime) msg = paste( "<", Sys.time(), ">\n", msg, sep = "")
   
   if(exists(envir)) env = eval(parse(text = envir)) else env = NULL

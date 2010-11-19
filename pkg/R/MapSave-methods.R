@@ -24,6 +24,9 @@ subsetSQLstring   <- function(dbcon, subset = list() ) {
 setMethod("rangeMapSave",  
 		signature = "rangeMapSave", 
 		definition = function(object){
+			
+			if(length(object@tableName) == 0) object@tableName = "species_richness"
+			
 			#build tableName
 			tableName = paste(object@MAP, object@tableName, sep = "")
 			
@@ -188,7 +191,7 @@ rangeMap.save  <- function(CON, FUN = NULL, biotab = NULL, biotrait = NULL, form
 	
 	# species richness
 	if(is.null(FUN))  {
-		rmap = new("rangeMapSave", CON = CON, subset = subset) } else
+		rmap = new("rangeMapSave", CON = CON, tableName  = as.character(tableName), subset = subset) } else
 	
 	# sqlite aggregate
 	if(is.character(FUN)) {

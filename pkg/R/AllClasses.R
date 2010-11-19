@@ -137,9 +137,6 @@ setClass("rangeMapSave",
 			
 		contains = "rangeMap", 
 		
-		prototype(
-			tableName = "species_richness"), 
-			
 		validity = function(object)	{
 		# the new table should not exist
 			if(.dbtable.exists(object@CON, paste(object@MAP, object@tableName, sep = "") ) ) 

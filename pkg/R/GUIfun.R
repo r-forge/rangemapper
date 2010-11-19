@@ -551,8 +551,8 @@ gui.rangeMap.plot <- function() {
 	
 	classint = gui.get.from.env("CLASSINT")	
 	
-	rangeMap.plot(rangeMap, colorpalette, ncols = as.numeric(classint[2]) , style = classint[1]) 
-	
+	plot(rangeMap, colorpalette = colorpalette, ncols = as.numeric(classint[2]) , style = classint[1]) 
+
 }
 
 gui.rangeMap.rm <- function(table.type) {

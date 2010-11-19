@@ -34,8 +34,8 @@ rangeMap.start <- function(overwrite = FALSE,...) {
 	obj@overwrite = overwrite
 	
 	rangeMapStart(obj)
+	Msg( paste("New session", Sys.time() ) , clearup = TRUE)
 	
-	Msg(clearup = TRUE)
 	
 	Msg(paste("PROJECT:", obj@file, "\nDIRECTORY:",obj@dir) )
 	
