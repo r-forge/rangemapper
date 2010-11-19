@@ -133,10 +133,10 @@ setMethod("rangeMapSave",
 	cnv = rasterToPolygons(raster(cnv))
 	
 	Msg("Loading external MAP data")
-	rst = raster(object@path)
+	if(raster::nlayers(stack(object@path)) > 1) stop(sQuote(filenam), " contains more than one layer")
 	
-	if(nlayers(stack(rst)) > 1) stop(sQuote(filenam), " contains more than one layer")
-	
+	rst = raster::raster(object@path)
+		
 
 	# is there any other way to compare CRS-s ?	
 	if(!CRSargs(CRS(proj4string(cnv))) == CRSargs(projection(rst, FALSE))) 
