@@ -20,10 +20,10 @@ subsetSQLstring   <- function(dbcon, subset = list() ) {
 	sql	
 }
 	
-# method for species richness, no biotab, biotrait is given
+# method for species richness,
 setMethod("rangeMapSave",  
-		signature = "rangeMapSave", 
-		definition = function(object){
+		signature = c(object = "rangeMapSave", FUN = "missing", formula = "missing"), 
+		definition = function(object, FUN, formula){
 			
 			if(length(object@tableName) == 0) object@tableName = "species_richness"
 			
@@ -48,8 +48,19 @@ setMethod("rangeMapSave",
 		
 # agggregate method using sqlite 	 	
 setMethod("rangeMapSave",  
-	signature  = "rangeMapSaveSQL", 
-		definition = function(object) {
+	signature  = c(object = "rangeMapSave", FUN = "character", formula = "missing"),
+		definition = function(object, FUN, formula) {
+		
+		# CHECKS
+		biotab = paste(object@BIO, object@biotab, sep = "")
+			if(!.dbtable.exists(object@CON,biotab) ) 
+			stop(Msg( paste(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))))
+		# object@biotrait should exist as a field in biotab
+		if(!.dbfield.exists(object@CON,biotab, object@biotrait) ) 
+			stop(Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))))
+		# fun should  be known by sqlite	
+		.sqlAggregate(FUN)
+		
 		
 		# BIO_tab name
 		biotab = paste(object@BIO, object@biotab, sep = "")
@@ -63,7 +74,7 @@ setMethod("rangeMapSave",
 		sql = paste("SELECT r.id, b.",object@biotrait,"FROM ranges r left join ", 
 				biotab, " b WHERE r.bioid = b.", .extract.indexed(object@CON, biotab), 
 				  if(!is.null(sset)) paste("AND", sset) )
-		sql = paste("SELECT id,", object@FUN ,"(", object@biotrait, ") as", object@biotrait, "from (",sql,") group by id")	
+		sql = paste("SELECT id,", FUN ,"(", object@biotrait, ") as", object@biotrait, "from (",sql,") group by id")	
 
 		# build table and index
 		.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@biotrait, "NUMERIC)"))
@@ -78,10 +89,14 @@ setMethod("rangeMapSave",
 		}
 	)						
 
-# agggregate method using R functions 
-setMethod("rangeMapSave",  
-	signature  = "rangeMapSaveR", 
-		definition = function(object, ...) {
+.rangeMapSaveData <-function(object) {
+		# CHECKS
+		biotab = paste(object@BIO, object@biotab, sep = "")
+			if(!.dbtable.exists(object@CON,biotab) ) 
+			stop(Msg( paste(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))))
+		# object@biotrait should exist as a field in biotab
+		if(!.dbfield.exists(object@CON,biotab, object@biotrait) ) 
+			stop(Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))))
 		
 		# BIO_tab name
 		biotab = paste(object@BIO, object@biotab, sep = "")
@@ -99,9 +114,21 @@ setMethod("rangeMapSave",
 		# fetch table
 		d = .sqlQuery(object@CON, sql)
 		
-		# apply R function (FUN has  a formula method)
-		dl = split(d, d[, object@ID])
-		X = sapply(dl, FUN = function(x) object@FUN(formula = object@formula, data = x, ...) )
+		# return list
+		split(d, d[, object@ID])
+}
+	
+	
+# agggregate method using R functions called directly on the data 
+setMethod("rangeMapSave",  
+	signature  = c(object = "rangeMapSave", FUN = "function", formula = "missing"), 
+		definition = function(object, FUN, formula, ...) {
+		
+		# get data afer checking
+		dl = .rangeMapSaveData (object)
+		
+		# apply R function
+		X = sapply(dl, FUN = function(x) FUN(x[, object@biotrait], ...) )
 				
 		X = data.frame(id = names(X), X)
 		names(X) = c(object@ID, object@biotrait)
@@ -115,18 +142,54 @@ setMethod("rangeMapSave",
 		#out msg
 		return(.dbtable.exists(object@CON, tableName))
 			
-		#cat(strwrap(sql, width = 100))
 		}
-	)						
+	)
+
+# agggregate method using R functions called directly using formula, data interface
+setMethod("rangeMapSave",  
+	signature  = c(object = "rangeMapSave", FUN = "function", formula = "formula"), 
+		definition = function(object, FUN, formula, ...) {
+		
+		# get data afer checking
+		dl = .rangeMapSaveData (object)
+		
+		# apply R function
+		X = sapply(dl, FUN = function(x) FUN(formula = formula, data = x, ...) )
+				
+		X = data.frame(id = names(X), X)
+		names(X) = c(object@ID, object@biotrait)
+		row.names(X) = NULL
+				
+		# build table and index
+		.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@biotrait, "NUMERIC)"))
+		.sqlQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
+		dbWriteTable(object@CON, tableName, X, row.names = FALSE, append = TRUE)
+		
+		#out msg
+		return(.dbtable.exists(object@CON, tableName))
+			
+		}
+	)
+
+
+
+
+
+
+
+	
 
 # method for  importing external files
 setMethod("rangeMapSave",  
-	signature  = "MapImport", 
-		definition = function(object, ...) {
+	signature  = c(object = "MapImport", FUN = "function"),
+		definition = function(object,FUN, ...) {
 
+	filenam = basename(object@path)
+	
+	if(length(object@tableName)== 0) tableName = make.db.names.default(filenam)
+	
 	tableName = paste(object@MAP, object@tableName, sep = "")		
 	
-	filenam = basename(object@path)
 	
 	cnv = canvas.fetch(object@CON)
 	Msg("Converting canvas to polygons...")
@@ -156,7 +219,7 @@ setMethod("rangeMapSave",
 	o$ptid = NULL
 	
 	Msg("Agregating data")
-	o = aggregate(o[, 2], list(o[,1]), FUN = object@FUN, na.rm = TRUE, ...)
+	o = aggregate(o[, 2], list(o[,1]), FUN = FUN, na.rm = TRUE, ...)
 	
 	names(o) = c(object@ID, object@tableName) 
 
@@ -177,35 +240,23 @@ setMethod("rangeMapSave",
 	)
 
 
+	# TODO .........................
 	
 # user level function calling rangeMapSave
-rangeMap.save  <- function(CON, FUN = NULL, biotab = NULL, biotrait = NULL, formula = NULL, tableName = NULL, subset = list(), path = NULL, overwrite = FALSE,...) {
+rangeMap.save  <- function(CON, tableName, subset = list(), path , overwrite = FALSE,...) {
 	
 	if(overwrite) 
 	try(.sqlQuery(CON, paste("DROP TABLE", paste("MAP", tableName, sep = "_"))), silent = TRUE)
 		
 	#  external map
-	if(!is.null(path))  {
-			if(is.null(tableName)) tableName = make.db.names.default(basename(path))
+	if(!missing(path)) {
 			rmap = new("MapImport", CON = CON, path = path, tableName = tableName) 
-			if(!is.null(FUN)) rmap@FUN = FUN
 			} else
 	
-	# species richness
-	if(is.null(FUN))  {
-		rmap = new("rangeMapSave", CON = CON, tableName  = as.character(tableName), subset = subset) } else
-	
-	# sqlite aggregate
-	if(is.character(FUN)) {
-		rmap = new("rangeMapSaveSQL", CON = CON, 
-					biotab = biotab, biotrait = biotrait, FUN = FUN, tableName = tableName, subset = subset) } else
-	if(is.function(FUN)) {				
-	# R aggregate		
-	rmap = new("rangeMapSaveR", CON = CON,
-			  biotab = biotab, biotrait = biotrait, FUN = FUN, formula = formula, tableName = tableName, subset = subset) }
+		rmap = new("rangeMapSave", CON = CON, tableName  = tableName, subset = subset)
 
 		  
-	rangeMapSave(rmap, ...)
+	rangeMapSave(rmap, ....)
 
 }				
 

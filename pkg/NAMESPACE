@@ -3,7 +3,7 @@ import(methods)
 import(utils) 
 import(sp) 
 
-exportClasses(rangeFiles, rangeMapStart, rangeMap, gridSize, rangeMapProcess, rangeMapSave, rangeMapIntersect, bioSaveFile, bioSaveDataFrame, rangeMapSaveSQL, rangeMapSaveR, MapImport, rangeMapFetch, rangeMapRemove)
+exportClasses(rangeFiles, rangeMapStart, rangeMap, gridSize, rangeMapProcess, rangeMapSave, rangeMapIntersect, bioSaveFile, bioSaveDataFrame, MapImport, rangeMapFetch, rangeMapRemove)
 
 exportMethods(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapIntersect, rangeMapStart, summary, plot )
 

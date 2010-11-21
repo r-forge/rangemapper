@@ -172,49 +172,8 @@ setClass("bioSaveDataFrame", representation(loc = "data.frame"),
 		
 	
 	
-setClass("rangeMapSaveSQL", representation (FUN = "character"), 
-							contains = "rangeMapSave", 
-							validity = function(object) {
-							
-							biotab = paste(object@BIO, object@biotab, sep = "")
-							
-							if(!.dbtable.exists(object@CON,biotab) ) 
-								stop(Msg( paste(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))))
-							
-							# object@biotrait should exist as a field in biotab
-							if(!.dbfield.exists(object@CON,biotab, object@biotrait) ) 
-								stop(Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))))
-										
-							# fun should  be known by sqlite	
-							.sqlAggregate(object@FUN)
 
-								}
-		)
-
-setClass("rangeMapSaveR", representation (FUN = "function", formula = "formula"), 
-							contains = "rangeMapSave", 
- 
-							validity = function(object) {
-							
-							biotab = paste(object@BIO, object@biotab, sep = "")
-							
-							# biotab should exist 
-							if(!.dbtable.exists(object@CON, biotab) ) 
-								stop(Msg(paste(sQuote(biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))))
-							
-							# object@biotrait should exist as a field in biotab
-							if(!.dbfield.exists(object@CON, biotab, object@biotrait) ) 
-								stop(Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(biotab))))
-							
-							# FUN should be of form biotab ~ ...
-							if(update(object@formula, . ~ 1 ) != as.formula( paste(object@biotrait,  " ~ 1"))) 
-								stop(Msg("Formula and biotrait does not match"))
-							
-							return(TRUE)
-							}
-		)						
-	
-setClass("MapImport", representation(path = "character", FUN = "function"), 
+setClass("MapImport", representation(path = "character"), 
 							contains = "rangeMapSave", 
  
 							validity = function(object) {
@@ -222,10 +181,8 @@ setClass("MapImport", representation(path = "character", FUN = "function"),
 							if(!file.exists(object@path)) stop( Msg( paste(sQuote(object@path), "is not a valid path.") ) )	
 							if(!require("raster")) stop(Msg("package raster is not available"))
 
-							}, 
-							prototype(
-							FUN = mean 
-							) 
+							} 
+
 		)
 
 

@@ -40,7 +40,7 @@ setMethod("rangeMapBbox",
 # bbox  the path to the range file(s) directory, pass to new("rangeFiles" ....
 	setMethod("rangeMapBboxSave",  
 		signature  = c(object = "rangeMap", bbox = "character", p4s = "missing"),
-		definition = function(object,bbox, p4s...) {
+		definition = function(object,bbox, p4s, ...) {
 		if(! .is.empty(object@CON, object@BBOX) ) stop(Msg("Bounding box was allready saved for this project."))
 		
 		bb = rangeMapBbox( new("rangeFiles", dir = bbox, ogr = FALSE) )
@@ -59,7 +59,7 @@ setMethod("rangeMapBbox",
 
 	setMethod("rangeMapBboxSave",  
 		signature  = c(object = "rangeMap", bbox = "missing", p4s = "missing"),
-		definition = function(object,bbox, p4s...) {
+		definition = function(object,bbox, p4s, ...) {
 	if(! .is.empty(object@CON, object@BBOX) ) stop(Msg("Bounding box was allready saved for this project."))
 	
 	bb = structure(c(-180, 180, -90,90), 

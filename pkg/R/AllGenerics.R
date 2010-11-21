@@ -4,7 +4,7 @@ if (!isGeneric("summary")) { setGeneric("summary", function(object, ...) standar
 
 
 setGeneric("rangeMapIntersect", function(object, FUN, ...) 			standardGeneric("rangeMapIntersect") )
-setGeneric("rangeMapSave", function(object, ...)  					standardGeneric("rangeMapSave") )
+setGeneric("rangeMapSave", function(object,FUN,formula, ...)  	    standardGeneric("rangeMapSave") )
 setGeneric("rangeMapFetch", function(object, ...) 					standardGeneric("rangeMapFetch") )
 setGeneric("canvasFetch", function(object, ...)   					standardGeneric("canvasFetch") )
 setGeneric("canvasSave", function(object, ...)   					standardGeneric("canvasSave") )
