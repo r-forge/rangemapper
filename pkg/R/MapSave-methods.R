@@ -23,7 +23,7 @@ subsetSQLstring   <- function(dbcon, subset = list() ) {
 # method for species richness,
 setMethod("rangeMapSave",  
 		signature = c(object = "rangeMapSave", FUN = "missing", formula = "missing"), 
-		definition = function(object, FUN, formula){
+		definition = function(object, FUN, formula, ...){
 			
 			if(length(object@tableName) == 0) object@tableName = "species_richness"
 			
@@ -49,7 +49,7 @@ setMethod("rangeMapSave",
 # agggregate method using sqlite 	 	
 setMethod("rangeMapSave",  
 	signature  = c(object = "rangeMapSave", FUN = "character", formula = "missing"),
-		definition = function(object, FUN, formula) {
+		definition = function(object, FUN, formula, ...) {
 		
 		# CHECKS
 		biotab = paste(object@BIO, object@biotab, sep = "")
@@ -101,12 +101,9 @@ setMethod("rangeMapSave",
 		# BIO_tab name
 		biotab = paste(object@BIO, object@biotab, sep = "")
 		
-		#build tableName
-		tableName = paste(object@MAP, object@tableName, sep = "")
-
-		# build sql subset
+		#  sql subset
 		sset = subsetSQLstring(object@CON, object@subset)
-		# build sql string
+		#  sql string
 		sql = paste("SELECT r.id, b.* FROM ranges r left join ", 
 				biotab, " b WHERE r.bioid = b.", .extract.indexed(object@CON, biotab), 
 				  if(!is.null(sset)) paste("AND", sset) )
@@ -123,6 +120,9 @@ setMethod("rangeMapSave",
 setMethod("rangeMapSave",  
 	signature  = c(object = "rangeMapSave", FUN = "function", formula = "missing"), 
 		definition = function(object, FUN, formula, ...) {
+		
+		# tableName
+		tableName = paste(object@MAP, object@tableName, sep = "")
 		
 		# get data afer checking
 		dl = .rangeMapSaveData (object)
@@ -150,6 +150,9 @@ setMethod("rangeMapSave",
 	signature  = c(object = "rangeMapSave", FUN = "function", formula = "formula"), 
 		definition = function(object, FUN, formula, ...) {
 		
+		# tableName
+		tableName = paste(object@MAP, object@tableName, sep = "")
+				
 		# get data afer checking
 		dl = .rangeMapSaveData (object)
 		
@@ -171,13 +174,6 @@ setMethod("rangeMapSave",
 		}
 	)
 
-
-
-
-
-
-
-	
 
 # method for  importing external files
 setMethod("rangeMapSave",  
@@ -239,24 +235,34 @@ setMethod("rangeMapSave",
 		}
 	)
 
-
-	# TODO .........................
 	
 # user level function calling rangeMapSave
-rangeMap.save  <- function(CON, tableName, subset = list(), path , overwrite = FALSE,...) {
+rangeMap.save  <- function(CON, tableName, FUN, biotab, biotrait, subset = list(), path , overwrite = FALSE, ...) {
 	
 	if(overwrite) 
 	try(.sqlQuery(CON, paste("DROP TABLE", paste("MAP", tableName, sep = "_"))), silent = TRUE)
 		
-	#  external map
-	if(!missing(path)) {
-			rmap = new("MapImport", CON = CON, path = path, tableName = tableName) 
+	if(!missing(path)) { #  external map
+			if(missing(tableName))
+				rmap = new("MapImport", CON = CON, path = path) else
+				rmap = new("MapImport", CON = CON, path = path, tableName = tableName)
+			 rangeMapSave(rmap)
 			} else
 	
-		rmap = new("rangeMapSave", CON = CON, tableName  = tableName, subset = subset)
+	if(missing(FUN) ) { #species richness
+			if(missing(tableName))
+				rmap = new("rangeMapSave", CON = CON) else
+				rmap = new("rangeMapSave", CON = CON, tableName = tableName) 
+			 rmap
+			 rangeMapSave(rmap)	
+			} else
+	
+	if(!missing(FUN) ) { # SLQ or R function
+			rmap = new("rangeMapSave", CON = CON,  biotab = biotab, biotrait = biotrait, tableName = tableName)
+			 rangeMapSave(rmap, FUN = FUN, ...)		
+			}
+	
 
-		  
-	rangeMapSave(rmap, ....)
 
 }				
 
