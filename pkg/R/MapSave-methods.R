@@ -251,14 +251,14 @@ rangeMap.save  <- function(CON, tableName, FUN, biotab, biotrait, subset = list(
 	
 	if(missing(FUN) ) { #species richness
 			if(missing(tableName))
-				rmap = new("rangeMapSave", CON = CON) else
-				rmap = new("rangeMapSave", CON = CON, tableName = tableName) 
+				rmap = new("rangeMapSave", CON = CON, subset = subset) else
+				rmap = new("rangeMapSave", CON = CON, tableName = tableName, subset = subset)
 			 rmap
 			 rangeMapSave(rmap)	
 			} else
 	
-	if(!missing(FUN) ) { # SLQ or R function
-			rmap = new("rangeMapSave", CON = CON,  biotab = biotab, biotrait = biotrait, tableName = tableName)
+	if(!missing(FUN) ) { # SQL or R function
+			rmap = new("rangeMapSave", CON = CON,  biotab = biotab, biotrait = biotrait, tableName = tableName, subset = subset)
 			 rangeMapSave(rmap, FUN = FUN, ...)		
 			}
 	

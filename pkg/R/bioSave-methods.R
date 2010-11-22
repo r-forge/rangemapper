@@ -50,7 +50,10 @@ setMethod("bioSave",
 # user level function calling rangeMapSave
 bio.save   <- function(con, loc, overwrite = FALSE, tableName, ...) {
 	
-
+		
+	if(overwrite) 
+	try(.sqlQuery(CON, paste("DROP TABLE", paste("BIO", tableName, sep = "_"))), silent = TRUE)
+		
 	if(is.character(loc)) {
 		if(missing(tableName)) tableName = gsub("\\.", "_", basename(loc))
 		dat = new("bioSaveFile", CON = con, loc = loc, tableName = tableName, ...)

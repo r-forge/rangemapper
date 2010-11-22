@@ -2,8 +2,6 @@
 if (!isGeneric("plot"))    { setGeneric("plot", function(x,y,...) standardGeneric("plot")) }	
 if (!isGeneric("summary")) { setGeneric("summary", function(object, ...) standardGeneric("summary")) }
 
-
-setGeneric("rangeMapIntersect", function(object, FUN, ...) 			standardGeneric("rangeMapIntersect") )
 setGeneric("rangeMapSave", function(object,FUN,formula, ...)  	    standardGeneric("rangeMapSave") )
 setGeneric("rangeMapFetch", function(object, ...) 					standardGeneric("rangeMapFetch") )
 setGeneric("canvasFetch", function(object, ...)   					standardGeneric("canvasFetch") )
