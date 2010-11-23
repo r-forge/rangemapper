@@ -176,7 +176,7 @@ setMethod("rangeMapSave",
 
 
 # method for  importing external files
-setMethod("rangeMapSave",  
+setMethod("rangeMapImport",  
 	signature  = c(object = "MapImport", FUN = "function"),
 		definition = function(object,FUN, ...) {
 
@@ -246,20 +246,19 @@ rangeMap.save  <- function(CON, tableName, FUN, biotab, biotrait, subset = list(
 			if(missing(tableName))
 				rmap = new("MapImport", CON = CON, path = path) else
 				rmap = new("MapImport", CON = CON, path = path, tableName = tableName)
-			 rangeMapSave(rmap)
-			} else
+			 rangeMapImport(rmap)
+			} 
 	
 	if(missing(FUN) ) { #species richness
 			if(missing(tableName))
 				rmap = new("rangeMapSave", CON = CON, subset = subset) else
 				rmap = new("rangeMapSave", CON = CON, tableName = tableName, subset = subset)
-			 rmap
 			 rangeMapSave(rmap)	
-			} else
+			} 
 	
-	if(!missing(FUN) ) { # SQL or R function
+	if(!missing(FUN) & missing(path)) { # SQL or R function
 			rmap = new("rangeMapSave", CON = CON,  biotab = biotab, biotrait = biotrait, tableName = tableName, subset = subset)
-			 rangeMapSave(rmap, FUN = FUN, ...)		
+			 rangeMapSave(rmap, FUN = FUN, ...)	
 			}
 	
 

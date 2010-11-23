@@ -3,6 +3,7 @@ if (!isGeneric("plot"))    { setGeneric("plot", function(x,y,...) standardGeneri
 if (!isGeneric("summary")) { setGeneric("summary", function(object, ...) standardGeneric("summary")) }
 
 setGeneric("rangeMapSave", function(object,FUN,formula, ...)  	    standardGeneric("rangeMapSave") )
+setGeneric("rangeMapImport", function(object,FUN, ...)  	        standardGeneric("rangeMapImport") )
 setGeneric("rangeMapFetch", function(object, ...) 					standardGeneric("rangeMapFetch") )
 setGeneric("canvasFetch", function(object, ...)   					standardGeneric("canvasFetch") )
 setGeneric("canvasSave", function(object, ...)   					standardGeneric("canvasSave") )

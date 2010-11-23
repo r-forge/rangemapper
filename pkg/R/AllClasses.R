@@ -186,22 +186,6 @@ setClass("MapImport", representation(path = "character"),
 		)
 
 
-setClass("rangeMapIntersect", representation (MAPS = "character"), 
-							contains = "rangeMapSave", 
- 
-					validity = function(object) {
-					if( length(object@MAPS) < 2) stop( Msg( paste(sQuote(class(object)), "require at least two MAPS") ) )	
-					
-					mapNam =paste(object@MAP, object@MAPS, sep = "") 
-					invalidNam = sapply(mapNam, FUN = function(x) !.dbtable.exists(object@CON, x) )
-					if( any(invalidNam) )
-						stop(Msg(paste(sQuote(names(invalidNam[invalidNam] )), "is not a valid MAP!\n")))
-
-
-					}
-
-		)
-
 
 		
 
