@@ -185,41 +185,38 @@ setMethod("rangeMapImport",
 	if(length(object@tableName)== 0) tableName = make.db.names.default(filenam)
 	
 	tableName = paste(object@MAP, object@tableName, sep = "")		
-	
-	
+		
 	cnv = canvas.fetch(object@CON)
 	Msg("Converting canvas to polygons...")
 	cnv = rasterToPolygons(raster(cnv))
 	
-	Msg("Loading external MAP data")
-	if(raster::nlayers(stack(object@path)) > 1) stop(sQuote(filenam), " contains more than one layer")
-	
-	rst = raster::raster(object@path)
+	Msg("Loading external MAP data...")
+	rst = raster(object@path)
 		
-
 	# is there any other way to compare CRS-s ?	
 	if(!CRSargs(CRS(proj4string(cnv))) == CRSargs(projection(rst, FALSE))) 
 		warning(sQuote(filenam), " may have a different PROJ4 string;\n", "canvas:", CRSargs(CRS(proj4string(cnv))), "\n", filenam, ":", CRSargs(projection(rst, FALSE)) )
-
 	
 	rstp = as(as(rst, "SpatialGridDataFrame"), "SpatialPointsDataFrame") 
+	Msg("Extracting Layer 1...")
 	rstp = rstp[which(!is.na(rstp@data[,1])), ]
 	
 	rstp@data$ptid = as.numeric(rownames(rstp@data)) # add point id
 	
-	Msg(paste("Performing overlay: canvas polygons over", filenam) )	
+	Msg(paste("Performing overlay: canvas polygons over", filenam, "...") )	
 	o = overlay(cnv, rstp)
 	o$ptid = as.numeric(rownames(o))
 
 	o = merge(o, rstp@data, by = "ptid")
 	o$ptid = NULL
 	
-	Msg("Agregating data")
+	Msg("Agregating data..")
 	o = aggregate(o[, 2], list(o[,1]), FUN = FUN, na.rm = TRUE, ...)
 	
 	names(o) = c(object@ID, object@tableName) 
 
 	# build table and index
+	Msg("Creating table and indexes...")
 	.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@tableName, "NUMERIC)"))
 	.sqlQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
 	dbWriteTable(object@CON, tableName, o, row.names = FALSE, append = TRUE)
@@ -246,7 +243,8 @@ rangeMap.save  <- function(CON, tableName, FUN, biotab, biotrait, subset = list(
 			if(missing(tableName))
 				rmap = new("MapImport", CON = CON, path = path) else
 				rmap = new("MapImport", CON = CON, path = path, tableName = tableName)
-			 rangeMapImport(rmap)
+			 
+			 rangeMapImport(rmap, FUN = FUN)
 			} 
 	
 	if(missing(FUN) ) { #species richness
