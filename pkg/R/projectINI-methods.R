@@ -9,15 +9,15 @@ setMethod("rangeMapStart",
 			if(!file.exists) { 				
 				Queries = object@scheleton
 				db = unlist(Queries)
-					for (i in 1:length(db)) .sqlQuery(CON , db[i])
+					for (i in 1:length(db)) RMQuery(CON , db[i])
 			}
 			
 			if(object@overwrite && file.exists) {
-				dropAll = .sqlQuery(CON, "select 'drop table if exists ' || name from sqlite_master where type = 'table';")
+				dropAll = RMQuery(CON, "select 'drop table if exists ' || name from sqlite_master where type = 'table';")
 				if(nrow(dropAll) == 0) dropAll = NULL else dropAll = dropAll[,1 ]
 				Queries = c(dropAll, "vacuum", object@scheleton )
 				db = unlist(Queries)
-					for (i in 1:length(db)) .sqlQuery(CON , db[i])
+					for (i in 1:length(db)) RMQuery(CON , db[i])
 				}
 		
 			if(!object@overwrite && file.exists) stop(Msg(paste("File", object@file, "allready exsits!")))

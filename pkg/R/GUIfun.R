@@ -220,11 +220,11 @@ gui.help <- function(what) {
 gui.global.bbox.save <- function() {
 
 	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(Msg("There is no active project!"))
+		if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
 	Dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory")
 	
-	global.bbox.save(con = dbcon, bbox = Dir)
+	global.bbox.save(con = dbcon , bbox = Dir)
 	
 }
 	
@@ -362,13 +362,13 @@ gui.chooseFunction <- function() {
 	# formula
 	depvar = paste(gui.get.from.env("VAR")[2], "~")
 	depvarLab = tklabel(Frame1, text = depvar)
-	Formula =  tclVar("1")
+	Formula =  tclVar("")
 	pred  = tkentry(Frame1, width = "50" , textvariable= Formula)
 
 		onOK  =  function() {
 			#formula
 			formVal = try(formula( paste(depvar, tclvalue(Formula) ) )	, silent = TRUE)
-				if(inherits(formVal, "try-error" )) 
+				if(nchar(tclvalue(Formula) )> 0 && inherits(formVal, "try-error" )) 
 					stop(tkmessageBox(message = "invalid R formula!", icon = "error", type = "ok") )
 					
 			# pre-defined function
@@ -387,17 +387,18 @@ gui.chooseFunction <- function() {
 				
 				if(inherits(fun, "try-error" )) 
 					stop(tkmessageBox(message = "invalid R function!", icon = "error", type = "ok") )
-				
-				# convert  fun to accept a formula argument
 			
-			fun <- force.formula(fun)
 			}
 			
 			# save output	
 			gui.put.to.env("FUN", fun)
 			gui.put.to.env("FUN.formula", formVal)
 
-			Msg( paste("<ACTIVE FUNCTION>", gui.get.from.env("FUN") ), keep = TRUE )
+			funStr = gui.get.from.env("FUN")
+			funStr = gsub(" ", "", paste(deparse(funStr), collapse = "" ) )
+			
+			
+			Msg( paste("<ACTIVE FUNCTION>", funStr ), keep = TRUE )
 			
 			tkdestroy(top)
 		}
@@ -432,8 +433,8 @@ gui.chooseSubset <- function() {
 
 	if(gui.exists.in.env("SUBSET")) rm("SUBSET", envir = .RangeMapper)
 		
-	tabs = .sqlQuery(dbcon, "select name from sqlite_master where type = 'table' and (name like 'BIO_%' or name like 'MAP_%' or name = 'metadata_ranges')")$name
-	tabs = lapply(split(tabs, tabs), function(x) .sqlQuery(dbcon, paste("PRAGMA table_info(", x, ");"))$name)
+	tabs = RMQuery(dbcon, "select name from sqlite_master where type = 'table' and (name like 'BIO_%' or name like 'MAP_%' or name = 'metadata_ranges')")$name
+	tabs = lapply(split(tabs, tabs), function(x) RMQuery(dbcon, paste("PRAGMA table_info(", x, ");"))$name)
 	
 	SQL  = lapply(tabs , function(x) paste(x, collapse  = "\n") )
 	
@@ -492,7 +493,7 @@ gui.tkColorPalette <- function() {
 }
 
 gui.rangeMap.save <- function() {
-	
+	t1 = Sys.time()
 	dbcon       =gui.get.from.env("con")
 	FUN         =gui.get.from.env("FUN")
 	VAR         =gui.get.from.env("VAR")
@@ -503,33 +504,29 @@ gui.rangeMap.save <- function() {
 	if(is.null(dbcon)) stop(Msg("There is no active project!"))
 
 	if(is.null(FUN)) {
-	Msg("Since no function was chosen species richness will be computed by default!")
-	tableName = "SPECIES_RICHNESS"
-	}
-
+		Msg("Since no function was chosen SPECIES RICHNESS will be computed by default!")
+		tableName = "species_richness"
+		rangeMap.save(dbcon, tableName = tableName)
+		} 
+	
+	
 	if(is.character(FUN)) {
-	suggested.tab.nam = paste( c(VAR[1], VAR[2], FUN), collapse  = "_")
-	tableName =  gui.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam )
-	}
+		suggested.tab.nam = paste( c(VAR[1], VAR[2], FUN), collapse  = "_")
+		tableName =  gui.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam )
+		rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], tableName = tableName, subset = subsetSQL)
+		}
 	
+
 	if(is.function(FUN)) {
-	suggested.tab.nam = paste( c(VAR[1], VAR[2], "aggregate_R_function"), collapse  = "_")
-	tableName =  gui.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam )
-	}
-	
-	Msg( paste("Please wait! Computing", tableName , ". This will take some time for computing intensive functions and/or large grids.") )
-	
-
-	if(.dbtable.exists(dbcon, paste("MAP",tableName, sep = "_")) ) stop( Msg( paste(tableName, "allready exists!" ) ))
-	
-	t1 = Sys.time()
-	res = try(rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], 
-			formula = FUN.formula, tableName = tableName, subset = subsetSQL), silent = TRUE)
-
-	if(isTRUE(res))		
-		Msg( paste(tableName, "saved to the active project! Ellapsed time:", round(difftime(Sys.time(), t1, units = "mins"), 2), "mins" ) ) else
-		Msg( paste(tableName, "*NOT* saved:\n", res))
-			
+		suggested.tab.nam = paste( c(VAR[1], VAR[2], "aggregate_R_function"), collapse  = "_")
+		tableName =  gui.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam )
+		if(is.null(FUN.formula) )
+		rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], tableName = tableName, subset = subsetSQL) else
+		rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], formula = FUN.formula, tableName = tableName, subset = subsetSQL)
+		
+		
+		}
+		
 
 	}
 
@@ -586,8 +583,6 @@ gui.mapImport <- function() {
 
 
 }
-
-
 
 
 

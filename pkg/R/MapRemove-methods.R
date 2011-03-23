@@ -4,7 +4,7 @@ setMethod("rangeMapRemove",
 		definition = function(object){
 		
 		if(length(object@tableName) == 0 ) 
-			object@tableName = .sqlQuery(object@CON, 
+			object@tableName = RMQuery(object@CON, 
 				'select name from sqlite_master where type = "table" and 
 				(tbl_name like "MAP_%" OR tbl_name like "BIO_%")')$name
 
@@ -13,7 +13,7 @@ setMethod("rangeMapRemove",
 				
 			sql = paste("DROP TABLE ", object@tableName )
 			
-		for (i in 1:length(sql)) .sqlQuery(object@CON , sql[i]) 
+		for (i in 1:length(sql)) RMQuery(object@CON , sql[i]) 
 		
 	Msg(paste( paste(object@tableName, collapse = "; "), "removed" , collapse = " ") )
 

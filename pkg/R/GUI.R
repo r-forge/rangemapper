@@ -28,8 +28,6 @@ rangeMapper <- function() {
 
    tclRequire("BWidget"); tclRequire("Tktable")
    
-   
-
    font = "helvetica 10"; fg = "#08306B" ; bg = "#F7FBFF"; relief = "flat"; borderwidth = 0
 
    if( !is.null (gui.get.from.env ("win")) ) stop (tkmessageBox(message = "rangeMapper is allready open!", icon = "error", type = "ok") )
@@ -41,6 +39,7 @@ rangeMapper <- function() {
          win = gui.get.from.env("win")
 
          # window manager
+		 tkwm.iconbitmap(win, system.file("ico", "favicon.ico", package="rangeMapper"))
          tkwm.title(win,paste("rangeMapper", packageDescription("rangeMapper")$Version))
          tkwm.resizable(win, 0, 0)
          tcl("wm", "protocol", win, "WM_DELETE_WINDOW", quote(Msg("Please close the window using the lower bar button!")))
@@ -85,13 +84,13 @@ rangeMapper <- function() {
             arrow2    =  tklabel(bar1, image=gui.img("arrow"),foreground = fg, background = bg )
             arrow3    =  tklabel(bar1, image=gui.img("arrow"),foreground = fg, background = bg )
             # BUTTONS
-            Create    =   tkbutton(bar1,image    = gui.img("new") ,command          = function() gui.dbopen(new= TRUE)  )
-            Open      =   tkbutton(bar1,image    = gui.img("open")   ,command       = function() gui.dbopen(new= FALSE)  )
-            Bbox      =   tkbutton(bar1,image    = gui.img("bbox") , command        = function() gui.global.bbox.save() )
-            gridSize  =   tkbutton(bar1,image    = gui.img("resolution") , command  = function() gui.gridSize.save() )
-            canvasUpload  =   tkbutton(bar1,image= gui.img("uploadCanvas") , command= function() gui.canvas.save() )
+			Create    =   tkbutton(bar1,image    = gui.img("new") ,command           = function() gui.dbopen(new= TRUE)  )
+			Open      =   tkbutton(bar1,image    = gui.img("open")   ,command        = function() gui.dbopen(new= FALSE)  )
+			Bbox      =   tkbutton(bar1,image    = gui.img("bbox") , command         = function() gui.global.bbox.save() )
+			gridSize  =   tkbutton(bar1,image    = gui.img("resolution") , command   = function() gui.gridSize.save() )
+			canvasUpload  =   tkbutton(bar1,image= gui.img("uploadCanvas") , command = function() gui.canvas.save() )
             Ranges     =   tkbutton(bar1,image= gui.img("intersectRange") , command  = function() gui.processRanges() )
-            Bio        =   tkbutton(bar1,image= gui.img("uploadBio") ,command  = function() gui.bio.save()  )
+			Bio        =   tkbutton(bar1,image= gui.img("uploadBio") ,command        = function() gui.bio.save()  )
 			
 			
             # TIPS
@@ -111,14 +110,14 @@ rangeMapper <- function() {
             tkgrid(tklabel(bar1,text = "Upload ranges",   font = font, foreground = fg, background = bg),sticky="ns",columnspan = 1, column  = 8, row = 0)
             tkgrid(tklabel(bar1,text = "Upload Bio table",font = font, foreground = fg, background = bg),sticky="ns",columnspan = 1, column  = 10, row = 0)
 			
-			tkgrid(tklabel(bar1, image=gui.img("logo"), background= bg), sticky="ns",columnspan = 1, column  = 11, row = 0)
+			tkgrid(tklabel(bar1, image=gui.img("wren"), background= bg), sticky="ns",columnspan = 1, column  = 11, row = 0)
             
 			# BUTTONS
             tkgrid(Create,     column  = 1, row = 1, sticky= "e")
             tkgrid(Open,       column  = 2, row = 1, sticky= "w")
             tkgrid(arrow1,     column  = 3, row = 1, sticky= "n")
-            tkgrid(Bbox,     column    = 4, row = 1, sticky= "w")
-            tkgrid(gridSize, column    = 5, row = 1, sticky= "w")
+			tkgrid(Bbox,       column  = 4, row = 1, sticky= "w")
+			tkgrid(gridSize,   column  = 5, row = 1, sticky= "w")
             tkgrid(canvasUpload, column= 6, row = 1, sticky= "w")
             tkgrid(arrow2,     column  = 7, row = 1, sticky= "n")
             tkgrid(Ranges,     column  = 8, row = 1, sticky= "ns")

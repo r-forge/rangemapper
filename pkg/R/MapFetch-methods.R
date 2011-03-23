@@ -8,7 +8,7 @@ setMethod("rangeMapFetch",
 
 		# map variable
 		mapvar = sapply(mapNam, function(x)
-					setdiff(.sqlQuery(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )		
+					setdiff(RMQuery(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )		
 		# sql string
 		dotid = paste('x', 1:length(mapNam), sep = "")
 		mapdat = paste(paste(paste(dotid,mapvar, sep = "."), object@tableName, sep = " as "), collapse = ",")
@@ -17,7 +17,7 @@ setMethod("rangeMapFetch",
 		"from canvas as c LEFT JOIN",paste(paste(mapNam, dotid, "on c.id = ", dotid, ".id"), collapse = " LEFT JOIN "))
 
 		
-		map = .sqlQuery(object@CON, sql)
+		map = RMQuery(object@CON, sql)
 	
 		coordinates(map) = ~ x + y
 
@@ -36,7 +36,7 @@ setMethod("rangeMapFetch",
 # user level functions 
 rangeMap.fetch <- function(dbcon, maps) { 
 	
-	if(missing(maps)) maps = .sqlQuery(dbcon, 'select name from sqlite_master where type = "table" and tbl_name like "MAP_%"')$name
+	if(missing(maps)) maps = RMQuery(dbcon, 'select name from sqlite_master where type = "table" and tbl_name like "MAP_%"')$name
 
 	maps = gsub("MAP_", "", maps)
 	

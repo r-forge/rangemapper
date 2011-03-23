@@ -186,9 +186,9 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 	
 	dbpath = dbGetInfo(con)$dbname
 	
-	tabs = .sqlQuery(con, "select name from sqlite_master where type = 'table';")$name
+	tabs = RMQuery(con, "select name from sqlite_master where type = 'table';")$name
 	
-	fields = lapply(split(tabs, tabs), function(x) .sqlQuery(con, paste("PRAGMA table_info(", x, ");"))$name)
+	fields = lapply(split(tabs, tabs), function(x) RMQuery(con, paste("PRAGMA table_info(", x, ");"))$name)
 	
 
 	if(!is.null(prefix)) { 
@@ -268,25 +268,25 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 }
 
 # DB
-.sqlQuery <- function (con, statement) {
+RMQuery <- function (con, statement) {
 	
-	dat = sqliteQuickSQL(con, statement)
-	dat
+	sqliteQuickSQL(con, statement)
+
 
 }
 
 .extract.indexed <-function(con,table.name) {
 	# extract name of indexed colum
-	indx = .sqlQuery(con, 
+	indx = RMQuery(con, 
 		paste("select * from sqlite_master where type = 'index' and tbl_name = '", 
 				table.name, "'", sep = ""))$name
 				
-	.sqlQuery(con, paste("PRAGMA index_info(",indx, ")" ))$name
+	RMQuery(con, paste("PRAGMA index_info(",indx, ")" ))$name
 }
 
 .dbtable.exists <- function(con, table.name) {
 	# returns TRUE if the table exists on channel 
-	x = .sqlQuery(con,paste('select name from sqlite_master where type = "table" and tbl_name like', shQuote(table.name) ) )
+	x = RMQuery(con,paste('select name from sqlite_master where type = "table" and tbl_name like', shQuote(table.name) ) )
 	if(nrow(x)>0) TRUE else FALSE
 	
 	}
@@ -295,7 +295,7 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 	# returns TRUE if the column is part of table
 	stopifnot(.dbtable.exists(con, table.name))
 	
-	ans = length(intersect(.sqlQuery(con, paste("pragma table_info(", table.name, ")") )$name, col.name)) > 0
+	ans = length(intersect(RMQuery(con, paste("pragma table_info(", table.name, ")") )$name, col.name)) > 0
 	ans
 }	
 	
@@ -303,7 +303,7 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 # returns TRUE if table is  empty FALSE otherwise
 # performs a SELECT * from table limit 1;
 
-res = .sqlQuery(con, paste("SELECT * from", table.name, "limit 1") )
+res = RMQuery(con, paste("SELECT * from", table.name, "limit 1") )
 if(nrow(res) == 0) TRUE else 
 	FALSE
 

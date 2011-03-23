@@ -28,7 +28,7 @@
 \section{The rangeMapper pipeline}{
 	 \itemize{
 		\item Initiate a new project (an empty sqlite database) using a pre-defined template. 
-		\item Extract the global bounding box of all selected range maps.
+		\item Extract/define the global bounding box of all selected range maps.
 		\item Generate a regular grid (the canvas) onto the previously constructed global bounding box.  
 		\item Perform polygon-grid overlay of all selected range maps.
 		\item Optionally import non-spatial data to be mapped at each grid cell 

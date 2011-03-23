@@ -1,7 +1,7 @@
 Package: rangeMapper
-Version: 0.0-5.983
-Date: 2010-Nov-25
-Title: A package for easy generation of biodiversity (species richness) or life-history traits maps using species geographical ranges
+Version: 0.0-5.985
+Date: 2011-Mar-23
+Title: rangeMapper: A platform for the study of macroecology of life history traits
 Author: Mihai Valcu  <valcu@orn.mpg.de>, James Dale  <J.Dale@massey.ac.nz> 
 Maintainer: Mihai Valcu  <valcu@orn.mpg.de>
 Depends: R (>= 2.10.0), methods, utils,  RSQLite, RSQLite.extfuns, sp, rgdal, maptools, lattice, RColorBrewer, tcltk, tcltk2, pixmap, classInt

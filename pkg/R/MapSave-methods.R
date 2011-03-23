@@ -38,9 +38,9 @@ setMethod("rangeMapSave",
 							if(!is.null(sset)) paste("WHERE", sset), "group by r.id")
 			
 			# build table and index	
-			.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@tableName, "NUMERIC)"))
-			.sqlQuery(object@CON,paste("CREATE  INDEX", paste(object@tableName, object@ID, sep = "_") ,"ON", tableName, "(id)") )
-			.sqlQuery(object@CON, paste("INSERT INTO" ,tableName, richnessSQL) )
+			RMQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@tableName, "NUMERIC)"))
+			RMQuery(object@CON,paste("CREATE  INDEX", paste(object@tableName, object@ID, sep = "_") ,"ON", tableName, "(id)") )
+			RMQuery(object@CON, paste("INSERT INTO" ,tableName, richnessSQL) )
 
 		 return(.dbtable.exists(object@CON, tableName))
 			} 
@@ -77,9 +77,9 @@ setMethod("rangeMapSave",
 		sql = paste("SELECT id,", FUN ,"(", object@biotrait, ") as", object@biotrait, "from (",sql,") group by id")	
 
 		# build table and index
-		.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@biotrait, "NUMERIC)"))
-		.sqlQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
-		.sqlQuery(object@CON, paste("INSERT INTO" ,tableName, sql) )
+		RMQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@biotrait, "NUMERIC)"))
+		RMQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
+		RMQuery(object@CON, paste("INSERT INTO" ,tableName, sql) )
 		
 		# out msg
 		return(.dbtable.exists(object@CON, tableName))
@@ -109,7 +109,7 @@ setMethod("rangeMapSave",
 				  if(!is.null(sset)) paste("AND", sset) )
 
 		# fetch table
-		d = .sqlQuery(object@CON, sql)
+		d = RMQuery(object@CON, sql)
 		
 		# return list
 		split(d, d[, object@ID])
@@ -135,8 +135,8 @@ setMethod("rangeMapSave",
 		row.names(X) = NULL
 				
 		# build table and index
-		.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@biotrait, "NUMERIC)"))
-		.sqlQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
+		RMQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@biotrait, "NUMERIC)"))
+		RMQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
 		dbWriteTable(object@CON, tableName, X, row.names = FALSE, append = TRUE)
 		
 		#out msg
@@ -164,8 +164,8 @@ setMethod("rangeMapSave",
 		row.names(X) = NULL
 				
 		# build table and index
-		.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@biotrait, "NUMERIC)"))
-		.sqlQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
+		RMQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@biotrait, "NUMERIC)"))
+		RMQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
 		dbWriteTable(object@CON, tableName, X, row.names = FALSE, append = TRUE)
 		
 		#out msg
@@ -217,8 +217,8 @@ setMethod("rangeMapImport",
 
 	# build table and index
 	Msg("Creating table and indexes...")
-	.sqlQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@tableName, "NUMERIC)"))
-	.sqlQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
+	RMQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@tableName, "NUMERIC)"))
+	RMQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
 	dbWriteTable(object@CON, tableName, o, row.names = FALSE, append = TRUE)
 	
 	
@@ -237,7 +237,7 @@ setMethod("rangeMapImport",
 rangeMap.save  <- function(CON, tableName, FUN, biotab, biotrait, subset = list(), path , overwrite = FALSE, ...) {
 	
 	if(overwrite) 
-	try(.sqlQuery(CON, paste("DROP TABLE", paste("MAP", tableName, sep = "_"))), silent = TRUE)
+	try(RMQuery(CON, paste("DROP TABLE", paste("MAP", tableName, sep = "_"))), silent = TRUE)
 		
 	if(!missing(path)) { #  external map
 			if(missing(tableName))

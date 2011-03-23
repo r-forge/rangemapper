@@ -119,8 +119,7 @@ setClass("rangeMapProcess",
 		contains = c("rangeFiles", "rangeMap"), 
 		
 		validity = function(object)	{
-					return(TRUE)
-			
+					if(!.is.empty(object@CON, object@RANGES)) stop(Msg("ranges table is not empty!"))
 		},
 		prototype(
 			metadata = TRUE, 
@@ -203,10 +202,10 @@ setClass("rangeMapFetch", representation(
 						
 						# check if empty map
 						mapvar = sapply(mapNam, function(x)
-									setdiff(.sqlQuery(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )
+									setdiff(RMQuery(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )
 						
 						sql = paste("select count (", mapvar, ") FROM", mapNam)
-						isempty = sapply(sql, function(x) .sqlQuery(object@CON,  x)[, 1] ) < 1
+						isempty = sapply(sql, function(x) RMQuery(object@CON,  x)[, 1] ) < 1
 						
 						if(any(isempty))
 						 stop(Msg(paste(sQuote(mapNam[isempty]), "is an empty MAP!\n")))

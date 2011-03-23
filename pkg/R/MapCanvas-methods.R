@@ -165,7 +165,7 @@ setMethod("rangeMapBboxSave",
 
 #user level
 global.bbox.save <- function(con, ...) { 
-	x = new("rangeMap", CON = dbcon)
+	x = new("rangeMap", CON = con)
 	rangeMapBboxSave(x, ... )
 
 }
@@ -271,7 +271,7 @@ setMethod("canvasFetch",
 	signature  = "rangeMap", 
 		definition = function(object) {
 		
-		cnv = .sqlQuery(object@CON, 'SELECT * FROM canvas' )
+		cnv = RMQuery(object@CON, 'SELECT * FROM canvas' )
 
 		if(nrow(cnv) == 0) stop(Msg("The canvas is empty!"))
 
