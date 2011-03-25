@@ -48,12 +48,9 @@ setMethod("bioSave",
 
 
 # user level function calling rangeMapSave
-bio.save   <- function(con, loc, overwrite = FALSE, tableName, ...) {
+bio.save   <- function(con, loc, tableName, ...) {
 	
-		
-	if(overwrite) 
-	try(RMQuery(CON, paste("DROP TABLE", paste("BIO", tableName, sep = "_"))), silent = TRUE)
-		
+	
 	if(is.character(loc)) {
 		if(missing(tableName)) tableName = gsub("\\.", "_", basename(loc))
 		dat = new("bioSaveFile", CON = con, loc = loc, tableName = tableName, ...)
@@ -68,6 +65,16 @@ bio.save   <- function(con, loc, overwrite = FALSE, tableName, ...) {
 
 }	
 
+bio.merge <- function(con, ...) {
+
+# merge 2 or more BIO tables
+dots = list(...)
+
+# to do only within sql
+#  query -> BIO_table -> add index
+
+
+}
 
 metadata2bio <-function(con, ...) {
 
@@ -84,6 +91,8 @@ metadata2bio <-function(con, ...) {
 
 
 }
+
+
 
 
 

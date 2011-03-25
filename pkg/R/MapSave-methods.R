@@ -60,8 +60,7 @@ setMethod("rangeMapSave",
 			stop(Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))))
 		# fun should  be known by sqlite	
 		.sqlAggregate(FUN)
-		
-		
+				
 		# BIO_tab name
 		biotab = paste(object@BIO, object@biotab, sep = "")
 		
@@ -252,6 +251,7 @@ rangeMap.save  <- function(CON, tableName, FUN, biotab, biotrait, subset = list(
 				rmap = new("rangeMapSave", CON = CON, subset = subset) else
 				rmap = new("rangeMapSave", CON = CON, tableName = tableName, subset = subset)
 			 rangeMapSave(rmap)	
+			
 			} 
 	
 	if(!missing(FUN) & missing(path)) { # SQL or R function

@@ -1,10 +1,50 @@
 
+
+rangeTraits <- function(spdf, ...) {
+# ... must be functions
+# if functions in ... return a named numeric vector then the name is used else names T1, T2, Tn are used.
+
+	dots = list(...)
+
+	if( ! all(sapply(dots, is.function)) ) stop (Msg("All extra arguments must be functions"))
+
+
+	Area = sum(sapply(slot(spdf, "polygons"), function(x) slot(x, "area") ))
+
+	midExt = apply(coordinates(spdf), 2, FUN = function(x) data.frame(Median = median(x), Min = min(x), Max = max(x) ) )
+
+	names(midExt[[1]]) = paste(names(midExt[[1]]), "x", sep = "_")
+	names(midExt[[2]]) = paste(names(midExt[[2]]), "y", sep = "_")
+
+	default = cbind(Area, midExt[[1]], midExt[[2]])
+
+	if(length(dots) > 0) {
+		
+		userdef = sapply(dots, function(x) x(spdf))	
+
+		if( !is.numeric(userdef) ) stop(Msg("User defined functions should return numeric vectors"))
+		
+		if(is.null(names(userdef))) names(userdef) = paste("V", 1:length(userdef), sep = "")
+		
+		if( any(nchar(names(userdef)) == 0 )) {
+			nonam = which(nchar(names(userdef)) == 0)
+			names(userdef)[nonam]  = paste("V", 1:length(nonam), sep = "")
+			}
+		names(userdef) =   make.db.names.default(names(userdef))	
+
+		res = cbind(default,  data.frame( t(userdef )) )
+		} else 
+		res = default
+	
+	res
+}
+
 setMethod("rangeMapProcess",  
 		signature = "rangeMapProcess", 
-		definition = function(object){
-		
+		definition = function(object, ...){
+	# . . . pass to rangeTraits	
 	Startprocess = Sys.time()
-	
+
 	Files = rangeFiles(object)
 	
 	cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
@@ -12,7 +52,6 @@ setMethod("rangeMapProcess",
 	processRangei = function(i) {
 		
 	r = try(readOGR(Files$dsn[i], Files$layer[i], verbose = FALSE), silent = TRUE)
-	
 	
 	#  reproject
 	p4s =  dbReadTable(object@CON, object@PROJ4STRING)[1,1]
@@ -28,9 +67,7 @@ setMethod("rangeMapProcess",
 					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n"), 
 					 keep = FALSE)
 		
-		
 
-		
 			overlayRes = overlay(r, cnv) 
 			overlayRes = which(!is.na(overlayRes[, 1]))
 			
@@ -51,7 +88,11 @@ setMethod("rangeMapProcess",
 		dbWriteTable(object@CON, "ranges", o, append = TRUE, row.names = FALSE) 
 		
 		if(object@metadata) {
-			md = data.frame(bioid =Files$layer[i], .sp.metadata(r) )
+			rtr =rangeTraits(r, ...)
+			if( i == 1 && ncol(rtr) > 7 )# reshape metadata_ranges table
+			 lapply( paste("ALTER TABLE metadata_ranges ADD COLUMN", names(rtr[, 8:ncol(rtr), drop = FALSE]), "FLOAT"), function(x)  RMQuery(object@CON, x))
+	
+			md = data.frame(bioid =Files$layer[i],  rtr)
 			dbWriteTable(object@CON, "metadata_ranges", md, append = TRUE, row.names = FALSE) 
 			}
 			
@@ -59,12 +100,9 @@ setMethod("rangeMapProcess",
 		} else Msg(r)
 	}		
 	
-      	#if(object@parallel)
-	  #mclapply (1:length(Files$layer) ,FUN = processRangei) else  lapply (1:length(Files$layer) ,FUN = processRangei)
-
-	  
-	  lapply (1:length(Files$layer), FUN = processRangei) 
-
+     #if(object@parallel)
+	 #mclapply (1:length(Files$layer) ,FUN = processRangei) else  lapply (1:length(Files$layer) ,FUN = processRangei)
+		lapply (1:length(Files$layer), FUN = processRangei) 
 
 	# last msg
 	Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
@@ -77,11 +115,11 @@ setMethod("rangeMapProcess",
 	)
 
 # user level function
-processRanges <- function(dir, con, ...) {
+processRanges <- function(dir, con, metadata = TRUE, ...) {
 
-	x = new("rangeMapProcess", CON = con, dir = dir, ...)
+	x = new("rangeMapProcess", CON = con, dir = dir, metadata = metadata)
 
-	rangeMapProcess(x)	
+	rangeMapProcess(x, ...)	
 		
 }
 

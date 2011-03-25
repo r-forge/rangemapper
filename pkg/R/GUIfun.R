@@ -512,7 +512,8 @@ gui.rangeMap.save <- function() {
 	
 	if(is.character(FUN)) {
 		suggested.tab.nam = paste( c(VAR[1], VAR[2], FUN), collapse  = "_")
-		tableName =  gui.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam )
+		tableName =  gui.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam, default.output = "." )
+		if(tableName!="_")
 		rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], tableName = tableName, subset = subsetSQL)
 		}
 	
@@ -520,9 +521,12 @@ gui.rangeMap.save <- function() {
 	if(is.function(FUN)) {
 		suggested.tab.nam = paste( c(VAR[1], VAR[2], "aggregate_R_function"), collapse  = "_")
 		tableName =  gui.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam )
-		if(is.null(FUN.formula) )
-		rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], tableName = tableName, subset = subsetSQL) else
-		rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], formula = FUN.formula, tableName = tableName, subset = subsetSQL)
+		
+		if(tableName!="_") {
+			if(is.null(FUN.formula) )
+			rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], tableName = tableName, subset = subsetSQL) else
+				rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], formula = FUN.formula, tableName = tableName, subset = subsetSQL)
+		}
 		
 		
 		}

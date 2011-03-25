@@ -1,10 +1,19 @@
 
+.extract.p4s <- function(ShpFiles) {
+#  extract proj4 string
+# EXAMPLE
+#  Dir  = choose.dir(paste(system.file(package="rangeMapper"), "extdata", "wrens", "vector", sep = .Platform$file.sep))
+#  ShpFiles = selectShpFiles(Dir)
+
+	fl = split(ShpFiles, ShpFiles$layer)
+	unlist(lapply(fl, FUN = function(x) .Call("ogrP4S", x[,1], x[,2], PACKAGE = "rgdal") ))
+
+}
 
 rect2spp <- function(xmin, xmax, ymin, ymax) {
 		bb = cbind(c(xmin, xmax, xmax, xmin, xmin), c(ymin, ymin, ymax, ymax, ymin) )
 		SpatialPolygons(Srl = list(Polygons(list(Polygon(bb)), "bb")) )
 }
-
 
 #### BBOX ###
 setMethod("rangeMapBbox",  
@@ -73,7 +82,7 @@ setMethod("rangeMapBboxSave",
 	
 		Msg(paste("Converting to", p4s@projargs) )
 			bbnew = rect2spp(bb[1], bb[2], bb[3], bb[4])
-			bbnew =  spsample(bbnew, n = 50, type = "regular" )
+			bbnew =  spsample(bbnew, n = 1000, type = "regular", offset = c(0,0))
 			proj4string(bbnew) = attributes(bb)$p4s
 			bbnew = spTransform(bbnew , p4s )
 			bb = c(sp::bbox(bbnew )[1, ], sp::bbox(bbnew )[2, ] )
@@ -122,7 +131,7 @@ setMethod("rangeMapBboxSave",
 
 		Msg(paste("Converting to", p4s@projargs) )
 			bbnew = rect2spp(bb[1], bb[2], bb[3], bb[4])
-			bbnew =  spsample(bbnew, n = 50, type = "regular" )
+			bbnew =  spsample(bbnew, n = 1000, type = "regular", offset = c(0,0) )
 			proj4string(bbnew) = attributes(bb)$p4s
 			bbnew = spTransform(bbnew , p4s )
 			bb = c(bbox(bbnew )[1, ], bbox(bbnew )[2, ] )
@@ -302,23 +311,4 @@ canvas.save  <- function(con) {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

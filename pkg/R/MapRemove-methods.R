@@ -22,6 +22,8 @@ setMethod("rangeMapRemove",
 )
 
 
+
+
 # user level
 rm.rangeMapper <- function(con, ...) {
 
