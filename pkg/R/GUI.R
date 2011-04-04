@@ -39,6 +39,7 @@ rangeMapper <- function() {
          win = gui.get.from.env("win")
 
          # window manager
+		if(.Platform$OS.type == "windows") 
 		 tkwm.iconbitmap(win, system.file("ico", "favicon.ico", package="rangeMapper"))
          tkwm.title(win,paste("rangeMapper", packageDescription("rangeMapper")$Version))
          tkwm.resizable(win, 0, 0)
@@ -61,8 +62,10 @@ rangeMapper <- function() {
           	tkadd(ProjectMenu,"command",label="show project's metadata", command = function() gui.show.metadata() )
   
 			tkadd(MapMenu,"command",label="import external MAP", command = function() gui.mapImport()  )
+			tkadd(MapMenu,"command",label="export MAPs to geotiff", command = function() gui.rangeMap.export()  )
 			
 			tkadd(metadata_ranges2bioMenu,"command", label= "convert metadata_ranges to BIO table", command = function() gui.metadata2bio()  )
+			tkadd(metadata_ranges2bioMenu,"command", label= "merge all BIO tables", command = function() gui.bio.merge()  )
 			
 			tkadd(HelpMenu,"command",label= "Get started",command = function() gui.help("man") )
 			tkadd(HelpMenu,"command",label= "Example files",command = function() gui.help("support.files") )

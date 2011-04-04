@@ -48,7 +48,4 @@ Mihai Valcu \email{valcu@orn.mpg.de}
 \code{\link{bio.save}}
 }
 
-\examples{
-showClass("bioSaveDataFrame")
-}
 \keyword{classes}

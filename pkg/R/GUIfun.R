@@ -308,17 +308,6 @@ gui.bio.save <- function() {
 
 }
 
-gui.metadata2bio <-function() {
-	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(Msg("There is no active project!"))
-	
-	metadata2bio (dbcon)
-
-		
-		
-
-}
-
 gui.chooseVariable <- function() {
 
 	con = gui.get.from.env("con")
@@ -588,11 +577,36 @@ gui.mapImport <- function() {
 
 }
 
+gui.metadata2bio <-function() {
+	dbcon = gui.get.from.env("con")
+		if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	
+	metadata2bio (dbcon)
+
+}
+
+gui.rangeMap.export <-function() {
+
+	dbcon = gui.get.from.env("con")
+		if(is.null(dbcon)) stop(Msg("There is no active project!"))
+		
+	path = tkchooseDirectory()
+
+	rangeMap.export(con = dbcon, tclvalue(path))
 
 
 
+}
 
 
+gui.bio.merge <- function() {
+	dbcon = gui.get.from.env("con")
+	if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	tableName = gui.tkEntryBox("Name of the merged BIO table")
+	bio.merge(con = dbcon, tableName = tableName)
+	
+	
+}
 
 
 

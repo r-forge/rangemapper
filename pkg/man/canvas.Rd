@@ -19,28 +19,22 @@ canvas.fetch(con)
 	  \item{\code{canvas.fetch}}{Returns a \code{\link[sp]{SpatialPixelsDataFrame}} object.}  
 }  
 
-	
-
-\examples{
-	dbcon = rangeMap.start(file = "temp.sqlite", overwrite = TRUE, dir = tempdir() )
-	f= system.file(package="rangeMapper", "extdata", "wrens", "vector")
-	global.bbox.save(f, dbcon) 
-	gridSize.save(dbcon)  
-	
-	#  save canvas to database
-	canvas.save(dbcon) 
-	#... and check 
-	summary(canvas.fetch(dbcon) )
+\note{
+The method canvasSave() fails if \code{\link{grid.size}} was not set.
+The method canvasSave() fails if the canvas was allready constructed for the given project.
 }
-	
-	
-	
+
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}
 
 \seealso{
 	\code{\link{rangeMapper}} for a complete example.\cr
 	\code{\link{gridSize}} 
 	}
+	
+\references{
+Valcu, M., Dale, J. and Kempenaers, B. (in prep) rangeMapper: A platform for the study of macroecology of life history traits.
+}
+	
 
 \keyword{spatial}
 \keyword{sqlite}

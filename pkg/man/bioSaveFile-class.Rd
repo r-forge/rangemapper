@@ -49,7 +49,5 @@ Mihai Valcu \email{valcu@orn.mpg.de}
 \code{\link{bio.save}}
 }
 
-\examples{
-showClass("bioSaveFile")
-}
+
 \keyword{classes}

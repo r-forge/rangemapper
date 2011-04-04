@@ -31,10 +31,11 @@ Mihai Valcu, \email{valcu@orn.mpg.de}
 
 
 \seealso{
+  \code{\link{rangeMapper}} for a complete example.\cr
   \code{\link{rangeMap.start}} \cr
   \code{\link{rangeMap.open}}
-}
-\examples{
-showClass("rangeMapStart")
-}
+
+  
+  }
+
 \keyword{classes}

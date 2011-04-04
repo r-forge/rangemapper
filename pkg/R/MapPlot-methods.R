@@ -1,9 +1,9 @@
 
-# ...arguments to pass to classIntervals (eg. n, style) and spplot
+# ...arguments to pass to classIntervals (eg. n) and spplot
 
 setMethod("plot", signature(x='SpatialPixelsRangeMap', y='missing'), 
 
-	function(x, colorpalette= brewer.pal.get('Spectral')[11:1], ncols = 20, scales = FALSE, ...) {
+	function(x, colorpalette = brewer.pal.get('Spectral')[11:1], ncols = 20, scales = FALSE, style = "equal",  ...) {
 
 		trellis.par.set("regions", list(col= colorRampPalette(colorpalette, space = "Lab")(ncols) ) , warn = FALSE)
 		
@@ -18,7 +18,7 @@ setMethod("plot", signature(x='SpatialPixelsRangeMap', y='missing'),
 
 		for(i in seq(along = mapVars)) {
 		
-		Int = classIntervals(as.numeric(na.omit(x@data[,mapVars[i]])), n = ncols, ...)
+		Int = classIntervals(as.numeric(na.omit(x@data[,mapVars[i]])), n = ncols, style = style, ...)
 		printMore = if(i<length(mapVars)) TRUE else FALSE
 		
 		print(spplot(x, mapVars[i] ,scales = list(draw = scales), cuts = ncols, checkEmptyRC = FALSE, 

@@ -21,22 +21,15 @@ gridSize.fetch(con)
 	\item{\code{gridSize.fetch}}{Returns a numeric vector of one unit length containing the grid size previously saved by \code{gridSize.save}}
 }	
 
-\examples{
-	dbcon = rangeMap.start(file = "temp.sqlite", overwrite = TRUE, dir = tempdir() )
-	f= system.file(package="rangeMapper", "extdata", "wrens", "vector")
-	global.bbox.save(f, dbcon) 
-
-	# upload grid size using the default
-	gridSize.save(dbcon)  
-	gridSize.fetch(dbcon)
-}
-
 
 \seealso{
 \code{\link[rangeMapper]{rangeMapper}} for a complete example.
 \code{\link[rangeMapper]{global.bbox}}
 }
 
+\references{
+Valcu, M., Dale, J. and Kempenaers, B. (in prep) rangeMapper: A platform for the study of macroecology of life history traits.
+}
 
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}
 \keyword{spatial}

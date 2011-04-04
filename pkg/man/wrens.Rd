@@ -33,9 +33,18 @@ Londono, G.A. (2009) Eggs, Nests, and Incubation Behavior of the Moustached Wren
 Ridgely, R.S., T. F. Allnutt, T. Brooks, D. K. McNicol, D. W. Mehlman, B. E. & Young, a.J.R.Z. (2007) Digital Distribution Maps of the Birds of the Western Hemisphere, version 3.0. NatureServe, Arlington, Virginia, USA.\cr
 Vargas-Soriano, J., Ortiz, J.S. & Segura, G.E. (2010) Breeding Phenology and Nesting Success of the Yucatan Wren in the Yucatan Peninsula, Mexico. Wilson Journal of Ornithology, 122, 439-446.\cr
 }
+
+\seealso{
+\code{\link{rangeMapper}} for a complete example.
+}
+
+
 \examples{
 data(d)
 plot(body_size ~ body_mass, d)
 plot(clutch_size ~ log(body_mass), d)
 }
 \keyword{datasets}
+
+
+

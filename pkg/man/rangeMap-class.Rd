@@ -8,7 +8,7 @@
 
 \title{Class "rangeMap"}
 \description{
-A class to formally define a rangeMapper project (a sqlite database).
+A class to formally define a rangeMapper project.
 }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("rangeMap", ...)}.
@@ -50,9 +50,6 @@ Objects can be created by calls of the form \code{new("rangeMap", ...)}.
 \author{ Mihai Valcu, \email{valcu@orn.mpg.de}
 }
 
-\examples{
-showClass("rangeMap")
-}
 
 \seealso{
   \code{\link{rangeMapStart-class}},

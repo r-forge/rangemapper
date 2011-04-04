@@ -26,14 +26,6 @@ Computes, sets or retrives the global spatial bounding box.
 	global.bbox.fetch(con)
 	}
 
-
-\examples{
-dbcon = rangeMap.start(file = "temp.sqlite", overwrite = TRUE, dir = tempdir() )
-f= system.file(package="rangeMapper", "extdata", "wrens", "vector")
-global.bbox.save(f, dbcon) 
-summary(global.bbox.fetch(dbcon))
-}
-	
 	
 \seealso{
 	\code{\link{rangeMapper}} for a complete example.
@@ -42,6 +34,11 @@ summary(global.bbox.fetch(dbcon))
 	\code{\link{bbox}} 
 	}
 
+\references{
+Valcu, M., Dale, J. and Kempenaers, B. (in prep) rangeMapper: A platform for the study of macroecology of life history traits.
+}
+	
+	
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}
 
 \keyword{spatial}

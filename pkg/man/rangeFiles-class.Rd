@@ -13,7 +13,7 @@ Objects can be created by calls of the form \code{new("rangeFiles", ...)}.
 \section{Slots}{
   \describe{
     \item{\code{dir}:}{
-		Object of class \code{"character"}; directory containing the range files; one for each unit (e.g. species) }
+		Object of class \code{"character"}; directory containing the range files; one for each taxon (e.g. species) }
 	\item{\code{ogr}:}{
 		Object of class \code{"logical"} if \code{TRUE} a \code{data.frame} with two columns is returned
 		(see \code{\link{selectShpFiles} for details)  } }
@@ -31,9 +31,7 @@ Objects can be created by calls of the form \code{new("rangeFiles", ...)}.
 \seealso{
   \code{\link{selectShpFiles}}
 }
-\examples{
-showClass("rangeFiles")
-}
+
 \keyword{classes}
 
 

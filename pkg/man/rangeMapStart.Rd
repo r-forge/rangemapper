@@ -32,13 +32,6 @@ An sqlite connection is returned.
 	\code{\link{rangeMapStart-class}} 
 }
 
-\examples{
-dbcon = rangeMap.start(file = "temp.sqlite", overwrite = T, dir = tempdir() )
-dbcon = rangeMap.open(path = paste(tempdir(), "temp.sqlite", sep = .Platform$file.sep), verbose = TRUE )
-summary(new("rangeMap", CON = dbcon) )
-summary(dbcon)
-}
-
 
 \keyword{spatial}
 

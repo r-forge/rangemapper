@@ -23,30 +23,20 @@ processRanges(dir,con,metadata)
 
 
  \section{Warning}{
-If thousands of range map polygons are processed, their geometries are complex and/or the canvas resolution is relatively high this step can be time consuming. For example processing all amphibians of the world (5816 ranges, total 252 MB) using a grid of 0.25 deg (\emph{unnecessary high}) resolution takes 544 minutes on a 64-bit machine with 4 GB of RAM running Windows Vista and R 2.10.0. However, once this step has been performed and the results saved to the database, the other operations are very fast.
+If thousands of range map polygons are processed, their geometries are complex and/or the canvas resolution is relatively high this step can be time consuming. However, once this step has been performed and the results saved to the database, the other operations are very fast.
  }
 
 
-\examples{
-	dbcon = rangeMap.start(file = "temp.sqlite", overwrite = TRUE, dir = tempdir() )
-	f= system.file(package="rangeMapper", "extdata", "wrens", "vector")
-	global.bbox.save(f, dbcon) 
-	gridSize.save(dbcon)  
-	canvas.save(dbcon) 
-	# process ranges
-	processRanges(dir = f, con =  dbcon, metadata = TRUE)
-} 
- 
- 
 \seealso{
 	\code{\link{rangeMapper}} for a complete example.
 	}
 
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}
 
- \references{
-Hurlbert, AH; Jetz, W (2007) Species richness, hotspots, and the scale dependence of range maps in ecology and conservation, PNAS, 13384-13389
+\references{
+Valcu, M., Dale, J. and Kempenaers, B. (in prep) rangeMapper: A platform for the study of macroecology of life history traits.
 }
+
  
 \keyword{spatial}
 

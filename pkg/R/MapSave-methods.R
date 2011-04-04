@@ -209,7 +209,7 @@ setMethod("rangeMapImport",
 	o = merge(o, rstp@data, by = "ptid")
 	o$ptid = NULL
 	
-	Msg("Agregating data..")
+	Msg("Agregating data...")
 	o = aggregate(o[, 2], list(o[,1]), FUN = FUN, na.rm = TRUE, ...)
 	
 	names(o) = c(object@ID, object@tableName) 

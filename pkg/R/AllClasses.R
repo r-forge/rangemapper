@@ -12,7 +12,8 @@ setClass("rangeMapStart",
 			file = paste("rangeMapperProj",format(Sys.time(), "%Y-%m-%d_%H-%M-%S.sqlite"), sep = "_"),
 			scheleton = 	list(
 		create = 
-		c(	"CREATE TABLE proj4string (p4s CHAR)", 
+		c(	"CREATE TABLE version (ver CHAR)", 
+			"CREATE TABLE proj4string (p4s CHAR)", 
 			"CREATE TABLE gridSize(gridSize FLOAT)", 
 			"CREATE TABLE bbox(xmin FLOAT,xmax FLOAT,ymin FLOAT,ymax FLOAT)", 
 			"CREATE TABLE canvas (x FLOAT,y FLOAT,id INT)", 
@@ -45,6 +46,7 @@ setClass("rangeMapStart",
 setClass("rangeMap", 
 		representation(
 			CON = "SQLiteConnection", 
+			VERSION = "character",   			
 			ID = "character",         			
 			BIOID = "character",         		
 			PROJ4STRING = "character",   			
@@ -57,6 +59,7 @@ setClass("rangeMap",
 			MAP = "character" 					
 			),
 		prototype(
+			VERSION = "version",         
 			ID = "id",         
 			BIOID = "bioid",         
 			PROJ4STRING = "proj4string",   			
@@ -70,7 +73,9 @@ setClass("rangeMap",
 			), 
 		
 		validity = function(object) {
-		if ( ! init_extensions(object@CON)) warning(Msg("Warning: RSQLite.extfuns not available!"))
+		
+		if ( ! init_extensions(object@CON)) warning(Msg("Warning: Aggregate functions provided by RSQLite.extfuns packages not available!"))
+		
 		if ( ! all( .dbtable.exists(object@CON, object@PROJ4STRING),
 				  .dbtable.exists(object@CON, object@METADATA_RANGES),
 				  .dbtable.exists(object@CON, object@GRIDSIZE),
@@ -78,7 +83,13 @@ setClass("rangeMap",
 				  .dbtable.exists(object@CON, object@CANVAS),
 				  .dbtable.exists(object@CON, object@RANGES) ) ) stop (Msg("Corrupt rangeMapper project!"))
 		
-	
+		projVer = try(RMQuery(object@CON, paste("SELECT * FROM", object@VERSION) )$ver, silent = TRUE)
+		if(inherits(projVer, "try-error")) projVer = "0.0-0"
+		
+		curVer  = packageDescription("rangeMapper")$Version 		
+		if(compareVersion(curVer,  projVer) == 1)
+			Msg("The project was created with a previous version of rangeMapper, some functions may not work!")
+		
 		}	
 	)
 

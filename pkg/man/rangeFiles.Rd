@@ -1,5 +1,4 @@
 
-
 \name{selectShpFiles}
 \alias{selectShpFiles}
 
@@ -32,6 +31,11 @@ Either a \code{\link{data.frame}} or a character vector is returned.
 	\code{\link{rangeMapper}} for a complete example.\cr
 	\code{\link{rangeFiles-class}} 
 }
+
+\references{
+Valcu, M., Dale, J. and Kempenaers, B. (in prep) rangeMapper: A platform for the study of macroecology of life history traits.
+}
+	
 	
 \examples{
 f= system.file(package="rangeMapper", "extdata", "wrens", "vector")

@@ -1,14 +1,4 @@
 
-Mihai Valcu 2010-Oct-25 16:48:40
-*  demo (for both cl and gui) using the wrens
-
-Mihai Valcu 2010-Oct-19 12:46:45
-* selectShpFiles should take 'type == 5' as an argument
-
-Mihai Valcu 2010-Sep-23 15:08:43
-	* summary methods; extend summary spatial to include info on map creation (i.e. underlining function)
-
-
 Mihai Valcu 2010-Sep-07 16:03:37
 	* save R function called by rangeMapSave/rangeMapSaveR to a table similar to sqlite_master "to SELECT sql FROM sqlite_master where type = 'table'"
 	* add version info to metadata and check when the project is oppened

@@ -49,9 +49,7 @@ Mihai Valcu \email{valcu@orn.mpg.de}
 \seealso{
 	\code{\link{global.bbox}}
 }
-\examples{
-showClass("rangeMapBbox")
-}
+
 \keyword{classes}
 
 

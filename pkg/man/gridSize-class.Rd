@@ -41,9 +41,7 @@ Mihai Valcu \email{valcu@orn.mpg.de}
 \seealso{
 	\code{\link[rangeMapper]{global.bbox}}
 }
-\examples{
-showClass("gridSize")
-}
+
 \keyword{classes}
 
 

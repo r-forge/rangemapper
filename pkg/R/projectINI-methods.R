@@ -6,10 +6,14 @@ setMethod("rangeMapStart",
 			f = paste(object@dir, object@file, sep = .Platform$file.sep)
 			file.exists = if(file.exists(f) )  TRUE else FALSE
 			CON = dbConnect(dbDriver("SQLite"), dbname= f)
+			verSql = paste("INSERT INTO version VALUES (" ,shQuote(packageDescription("rangeMapper")$Version) , ")")
+			
 			if(!file.exists) { 				
 				Queries = object@scheleton
 				db = unlist(Queries)
 					for (i in 1:length(db)) RMQuery(CON , db[i])
+			
+			RMQuery(CON, verSql)
 			}
 			
 			if(object@overwrite && file.exists) {
@@ -18,6 +22,8 @@ setMethod("rangeMapStart",
 				Queries = c(dropAll, "vacuum", object@scheleton )
 				db = unlist(Queries)
 					for (i in 1:length(db)) RMQuery(CON , db[i])
+				
+				RMQuery(CON, verSql)
 				}
 		
 			if(!object@overwrite && file.exists) stop(Msg(paste("File", object@file, "allready exsits!")))

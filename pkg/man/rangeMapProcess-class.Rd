@@ -49,7 +49,5 @@ Mihai Valcu \email{valcu@orn.mpg.de}
 
 }
 
-\examples{
-showClass("rangeMapProcess")
-}
+
 \keyword{classes}
