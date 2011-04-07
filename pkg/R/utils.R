@@ -6,56 +6,10 @@ brewer.pal.get <- function(palette = NULL) {
 	bp = lapply(split(pal, row.names(pal)), FUN = function(x) brewer.pal(x$maxcolors, row.names(x)))
 	if(!is.null(palette) && palette%in%names(bp) ) bp = bp[palette][[1]]
 	bp 		   
-	}
+}
 
 
 # tclttk	
-Msg <- function(msg=Sys.time(), tkMainWindow = "win", tkElement = "msg", eol = "\n", keep = TRUE, clearup = FALSE, getTime = FALSE, envir = ".RangeMapper") {
-
-   msg	= paste(msg, collapse = eol)
-   msg	= paste("\xBB\xBB", msg, collapse = " ")
-   
-   
-  if(getTime) msg = paste( "<", Sys.time(), ">\n", msg, sep = "")
-  
-  if(exists(envir)) env = eval(parse(text = envir)) else env = NULL
-  
-  # if  tcltk envir is set
-  if(is.environment(env) && exists(tkMainWindow, envir = env) && exists(tkElement, envir = env) ) {
-
-	  msgWindow = get(tkElement, envir = env)
-	  mainWindow = get(tkMainWindow, envir = env)
-	  
-	# prepare  message container 
-	 if(! exists("session.msg", envir = env) ) assign("session.msg", list(), envir = env)
-	 
-	# clearup any existing messages from env	
-		if(clearup) {
-			tkdelete(msgWindow, "0.0" , "1000.0" )
-			assign("session.msg", list(), envir = env)
-			}
-	# if msg is to be kept then append it to session.msg 
-		if(keep) assign("session.msg", c( get("session.msg", envir = env), msg ) , envir = env )
-			
-	#  print to GUI element
-		tkdelete(msgWindow, "1.0" , "100.0" ) 
-		msgList = get("session.msg", envir = env)
-		
-		lapply(msgList , function(x) tkinsert(msgWindow, "end" , paste(x,eol) ) )
-		
-		if(!keep) tkinsert(msgWindow, "end" , paste(msg,eol) ) 
-		
-		tkyview.moveto(get(tkElement, envir = env), 1)
-		tkfocus(get(tkMainWindow, envir = env ))
-		
-		tcl("update", "idletasks") 		 
-
-}	else   cat(msg, eol)
-	
-    invisible(flush.console() )
-	
-} 
-
 tkMakeColorPalette <- function(n) {
 top  =  tktoplevel()
 tkwm.title(top,"Choose one or more colors")
@@ -182,7 +136,7 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 	
 	
 	if(!is.null(prefix) && !.dbtable.exists(con, paste(prefix, "%", sep = "") ) ) 
-		stop(Msg(paste("The active project does not contain any", dQuote(prefix), "table" )))
+		stop(.X.Msg(paste("The active project does not contain any", dQuote(prefix), "table" )))
 	
 	dbpath = dbGetInfo(con)$dbname
 	
@@ -332,7 +286,7 @@ class(funs) = "simple.list"
 if(missing(fun) )
  return(funs) else if
 	(fun%in%funs) return(TRUE) else
-			stop(Msg(sQuote(fun), "is not a known sqlite aggregate function!" ))
+			stop(.X.Msg(sQuote(fun), "is not a known sqlite aggregate function!" ))
 	}
 
 

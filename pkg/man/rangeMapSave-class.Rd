@@ -1,13 +1,27 @@
-\name{rangeMapSave-class}
-\Rdversion{1.1}
-\docType{class}
+
+\name{rangeMapSave}
+\alias{rangeMapSave}
+\alias{rangeMapSave-methods}
 \alias{rangeMapSave-class}
+\alias{rangeMapSave,rangeMapSave-method}
 \alias{rangeMapSave,rangeMapSave,character,missing-method}
 \alias{rangeMapSave,rangeMapSave,function,formula-method}
 \alias{rangeMapSave,rangeMapSave,function,missing-method}
 \alias{rangeMapSave,rangeMapSave,missing,missing-method}
+
+\alias{MapImport}
+\alias{MapImport-methods}
 \alias{MapImport-class}
-\alias{rangeMapSave,MapImport-method}
+\alias{MapImport,MapImport-method}
+
+\alias{rangeMapImport}
+\alias{rangeMapImport-methods}
+\alias{rangeMapImport,rangeMapImport-method}
+\alias{rangeMapImport,MapImport,function-method}
+
+
+\Rdversion{1.1}
+\docType{class}
 
 \title{Class "rangeMapSave"}
 \description{
@@ -24,20 +38,8 @@ Objects can be created by calls of the form \code{new("rangeMapSave", ...)}.
     \item{\code{biotrait}:}{Object of class \code{"character"}  }
     \item{\code{tableName}:}{Object of class \code{"character"}  }
     \item{\code{subset}:}{Object of class \code{"list"}  }
-    \item{\code{CON}:}{Object of class \code{"SQLiteConnection"}  }
-    \item{\code{VERSION}:}{Object of class \code{"character"}  }
-    \item{\code{ID}:}{Object of class \code{"character"}  }
-    \item{\code{BIOID}:}{Object of class \code{"character"}  }
-    \item{\code{PROJ4STRING}:}{Object of class \code{"character"}  }
-    \item{\code{GRIDSIZE}:}{Object of class \code{"character"}  }
-    \item{\code{BBOX}:}{Object of class \code{"character"}  }
-    \item{\code{METADATA_RANGES}:}{Object of class \code{"character"}  }
-    \item{\code{CANVAS}:}{Object of class \code{"character"}  }
-    \item{\code{RANGES}:}{Object of class \code{"character"}  }
-    \item{\code{BIO}:}{Object of class \code{"character"}  }
-    \item{\code{MAP}:}{Object of class \code{"character"}  }
 	
-	\item{\code{path}:}{Object of class \code{"character"}  }
+	\item{\code{path}:}{Object of class \code{"character"} Path to the file to be imported }
   }
 }
 \section{Extends}{
@@ -62,7 +64,7 @@ Mihai Valcu \email{valcu@orn.mpg.de}
 }
 
 \seealso{
-\code{\link{rangeMapSave}}
+\code{\link{rangeMap.save}}
 }
 
 \keyword{classes}

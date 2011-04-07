@@ -1,6 +1,6 @@
 
 # accessor functions for methods
-subsetSQLstring   <- function(dbcon, subset = list() ) {
+.subsetSQLstring   <- function(dbcon, subset = list() ) {
 
 	if(length(subset) == 0) sql = NULL else {
 	if(is.null(names(subset))) stop(sQuote('subset'), " must be a named list!")
@@ -19,7 +19,10 @@ subsetSQLstring   <- function(dbcon, subset = list() ) {
 	}
 	sql	
 }
-	
+
+
+setGeneric("rangeMapSave", function(object,FUN,formula, ...)  standardGeneric("rangeMapSave") )
+
 # method for species richness,
 setMethod("rangeMapSave",  
 		signature = c(object = "rangeMapSave", FUN = "missing", formula = "missing"), 
@@ -31,7 +34,7 @@ setMethod("rangeMapSave",
 			tableName = paste(object@MAP, object@tableName, sep = "")
 			
 			# build sql subset
-			sset = subsetSQLstring(object@CON, object@subset)
+			sset = .subsetSQLstring(object@CON, object@subset)
 			
 			# build sql string
 			richnessSQL = paste("SELECT id, count(r.id) as", object@tableName ,"from ranges as r", 
@@ -54,10 +57,10 @@ setMethod("rangeMapSave",
 		# CHECKS
 		biotab = paste(object@BIO, object@biotab, sep = "")
 			if(!.dbtable.exists(object@CON,biotab) ) 
-			stop(Msg( paste(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))))
+			stop(.X.Msg( paste(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))))
 		# object@biotrait should exist as a field in biotab
 		if(!.dbfield.exists(object@CON,biotab, object@biotrait) ) 
-			stop(Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))))
+			stop(.X.Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))))
 		# fun should  be known by sqlite	
 		.sqlAggregate(FUN)
 				
@@ -68,7 +71,7 @@ setMethod("rangeMapSave",
 		tableName = paste(object@MAP, object@tableName, sep = "")
 	
 		# build sql subset
-		sset = subsetSQLstring(object@CON, object@subset)
+		sset = .subsetSQLstring(object@CON, object@subset)
 		# build sql string
 		sql = paste("SELECT r.id, b.",object@biotrait,"FROM ranges r left join ", 
 				biotab, " b WHERE r.bioid = b.", .extract.indexed(object@CON, biotab), 
@@ -80,7 +83,7 @@ setMethod("rangeMapSave",
 		RMQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
 		RMQuery(object@CON, paste("INSERT INTO" ,tableName, sql) )
 		
-		# out msg
+		# out .X.Msg
 		return(.dbtable.exists(object@CON, tableName))
 			
 		
@@ -92,16 +95,16 @@ setMethod("rangeMapSave",
 		# CHECKS
 		biotab = paste(object@BIO, object@biotab, sep = "")
 			if(!.dbtable.exists(object@CON,biotab) ) 
-			stop(Msg( paste(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))))
+			stop(.X.Msg( paste(sQuote(object@biotab), "is not a table of", sQuote(dbGetInfo(object@CON)$dbname))))
 		# object@biotrait should exist as a field in biotab
 		if(!.dbfield.exists(object@CON,biotab, object@biotrait) ) 
-			stop(Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))))
+			stop(.X.Msg(paste(sQuote(object@biotrait), "is not a field of", sQuote(object@biotab))))
 		
 		# BIO_tab name
 		biotab = paste(object@BIO, object@biotab, sep = "")
 		
 		#  sql subset
-		sset = subsetSQLstring(object@CON, object@subset)
+		sset = .subsetSQLstring(object@CON, object@subset)
 		#  sql string
 		sql = paste("SELECT r.id, b.* FROM ranges r left join ", 
 				biotab, " b WHERE r.bioid = b.", .extract.indexed(object@CON, biotab), 
@@ -138,7 +141,7 @@ setMethod("rangeMapSave",
 		RMQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
 		dbWriteTable(object@CON, tableName, X, row.names = FALSE, append = TRUE)
 		
-		#out msg
+		#out .X.Msg
 		return(.dbtable.exists(object@CON, tableName))
 			
 		}
@@ -167,13 +170,16 @@ setMethod("rangeMapSave",
 		RMQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
 		dbWriteTable(object@CON, tableName, X, row.names = FALSE, append = TRUE)
 		
-		#out msg
+		#out .X.Msg
 		return(.dbtable.exists(object@CON, tableName))
 			
 		}
 	)
 
-
+# IMPORT RASTER	
+	
+setGeneric("rangeMapImport", function(object,FUN, ...)  	  standardGeneric("rangeMapImport") )
+	
 # method for  importing external files
 setMethod("rangeMapImport",  
 	signature  = c(object = "MapImport", FUN = "function"),
@@ -186,10 +192,10 @@ setMethod("rangeMapImport",
 	tableName = paste(object@MAP, object@tableName, sep = "")		
 		
 	cnv = canvas.fetch(object@CON)
-	Msg("Converting canvas to polygons...")
+	.X.Msg("Converting canvas to polygons...")
 	cnv = rasterToPolygons(raster(cnv))
 	
-	Msg("Loading external MAP data...")
+	.X.Msg("Loading external MAP data...")
 	rst = raster(object@path)
 		
 	# is there any other way to compare CRS-s ?	
@@ -197,25 +203,25 @@ setMethod("rangeMapImport",
 		warning(sQuote(filenam), " may have a different PROJ4 string;\n", "canvas:", CRSargs(CRS(proj4string(cnv))), "\n", filenam, ":", CRSargs(projection(rst, FALSE)) )
 	
 	rstp = as(as(rst, "SpatialGridDataFrame"), "SpatialPointsDataFrame") 
-	Msg("Extracting Layer 1...")
+	.X.Msg("Extracting Layer 1...")
 	rstp = rstp[which(!is.na(rstp@data[,1])), ]
 	
 	rstp@data$ptid = as.numeric(rownames(rstp@data)) # add point id
 	
-	Msg(paste("Performing overlay: canvas polygons over", filenam, "...") )	
+	.X.Msg(paste("Performing overlay: canvas polygons over", filenam, "...") )	
 	o = overlay(cnv, rstp)
 	o$ptid = as.numeric(rownames(o))
 
 	o = merge(o, rstp@data, by = "ptid")
 	o$ptid = NULL
 	
-	Msg("Agregating data...")
+	.X.Msg("Agregating data...")
 	o = aggregate(o[, 2], list(o[,1]), FUN = FUN, na.rm = TRUE, ...)
 	
 	names(o) = c(object@ID, object@tableName) 
 
 	# build table and index
-	Msg("Creating table and indexes...")
+	.X.Msg("Creating table and indexes...")
 	RMQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@tableName, "NUMERIC)"))
 	RMQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
 	dbWriteTable(object@CON, tableName, o, row.names = FALSE, append = TRUE)
@@ -223,7 +229,7 @@ setMethod("rangeMapImport",
 	
 	res = .dbtable.exists(object@CON, tableName)
 	
-	if(res) Msg(paste(sQuote(basename(object@path)), "imported"))
+	if(res) .X.Msg(paste(sQuote(basename(object@path)), "imported"))
 	
 	return(res)	
 							

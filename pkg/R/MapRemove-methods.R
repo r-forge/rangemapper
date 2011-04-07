@@ -1,4 +1,7 @@
 
+setGeneric("rangeMapRemove", function(object, ...)   		     	standardGeneric("rangeMapRemove") )
+
+
 setMethod("rangeMapRemove",  
 		signature = "rangeMapRemove", 
 		definition = function(object){
@@ -15,13 +18,11 @@ setMethod("rangeMapRemove",
 			
 		for (i in 1:length(sql)) RMQuery(object@CON , sql[i]) 
 		
-	Msg(paste( paste(object@tableName, collapse = "; "), "removed" , collapse = " ") )
+	.X.Msg(paste( paste(object@tableName, collapse = "; "), "removed" , collapse = " ") )
 
 		
 		}
 )
-
-
 
 
 # user level

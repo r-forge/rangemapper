@@ -2,12 +2,13 @@
 \name{rangeMapper}
 \alias{rangeMapper}
 \docType{package}
+
 \title{rangeMapper: A platform for the study of macroecology of life history traits.}
 \description{ 
-	\pkg{rangeMapper} is a front end platform for the study of macroecology of life history traits at both inter-specific and assembladge levels. 
+	\pkg{rangeMapper} is a front end platform for the study of macroecology of life history traits at both inter-specific and assemblage levels. 
 	}
 \details{
-	The package uses species range (extent-of-occurrence) vector polygons and life history traits datasets to build up maps (e.g. species richnes, mean body mass, ...). \cr
+	The package uses species range (extent-of-occurrence) vector polygons and life history traits datasets to build up maps (e.g. species richness, mean body mass, ...). \cr
 	\pkg{rangeMapper} comes with an user-friendly platform-independent tcltk graphical user interface. 
 }
 \keyword{package}
@@ -29,13 +30,13 @@
 	 \itemize{
 		\item Initiate a new project (an empty sqlite database) using a pre-defined template. 
 		\item Extract/define the global bounding box of all selected range maps.
-		\item Generate a regular grid (the canvas) onto the previously constructed global bounding box.  
+		\item Generate a regular grid (the canvas) using the previously constructed global bounding box.  
 		\item Perform polygon-grid overlay of all selected range maps.
-		\item Optionally compute pre-defined or user-efined range structure indexes.
-		\item Optionally import non-spatial data to be mapped at each grid cell (data are saved as a 'BIO' table to database).
-		\item Optionally select a subset based on an existing 'MAP', 'BIO' or 'metadata' table.) 
-		\item Compute a chosen statistic (richness, average, median or any user-defined statistic). at each grid cell (data are saved as a 'MAP' table to the database).
-		\item  Extract, save, plot, export the MAP-s.
+		\item Optionally compute pre-defined or user-defined range structure indexes.
+		\item Optionally import non-spatial data to be mapped at each grid cell (data are saved as a 'BIO' table to database).		
+		\item Optionally import georeferenced raster files.
+		\item Compute a chosen statistical model at each grid cell optionally using complex subsets.
+		\item  Save, plot, export the MAP-s.
   }
 }  
 
@@ -53,7 +54,6 @@ require(rangeMapper)
 
 # Start or open a project
 wd = tempdir()
-setwd(wd)
 
 # open the GUI, messages will be re-directed here
 if(interactive() ) rangeMapper()
@@ -63,7 +63,7 @@ dbcon = rangeMap.start(file = "wrens.sqlite",
 
 # To connect latter to the project created with rangeMap.start use
 dbcon = rangeMap.open(path = 
-	paste(wd, "wrens.sqlite" , sep = .Platform$file.sep) )
+	paste(tempdir(), "wrens.sqlite" , sep = .Platform$file.sep) )
 
 # Project summary
 summary(new("rangeMap", CON = dbcon) )
@@ -74,7 +74,7 @@ f = system.file(package = "rangeMapper",
 
 # There are several alternatives to save the global bounding box, 
 # a few are  exemplified below
-# The default creates a global uprojected bounding box
+# The default creates a global unprojected bounding box
 global.bbox.save(con = dbcon)
 
 # Creating a global bbox using the  breeding range vector files
@@ -88,7 +88,7 @@ global.bbox.save(con = dbcon, bbox = f)
 plot( global.bbox.fetch(dbcon) , axes = TRUE)
 	
 # Creating a global bbox using the  breeding range vector files 
-# and reprojecting
+# and re-projecting
 # manually remove all data from the bbox table
 RMQuery(dbcon, 'DELETE from bbox') 
 RMQuery(dbcon, 'DELETE from proj4string')
@@ -133,7 +133,7 @@ APratio = function(x) {
 }
 
 
-# the APratio function will also be computed toghether with the pre-defined functions
+# the APratio function will also be computed together with the pre-defined functions
 processRanges(dir = f, con =  dbcon, metadata = TRUE, APratio)
 
 
@@ -226,6 +226,8 @@ image(rangeMap.fetch(dbcon, 'meanAltitude') )
 image(rangeMap.fetch(dbcon, 'endemicsLowlandClutch') , 
 	add = TRUE, col = "blue")	
 
+setwd(wd)	
+	
 }
 
 

@@ -1,8 +1,12 @@
 \name{bioSaveDataFrame-class}
+\alias{bioSave-methods}
+\alias{bioSave}
+\alias{bioSave,bioSaveDataFrame-method}
+\alias{bioSaveDataFrame-class}
+\alias{bioSaveDataFrame-method}
+
 \Rdversion{1.1}
 \docType{class}
-\alias{bioSaveDataFrame-class}
-\alias{bioSave,bioSaveDataFrame-method}
 
 \title{Class "bioSaveDataFrame"}
 \description{
@@ -14,19 +18,7 @@ Objects can be created by calls of the form \code{new("bioSaveDataFrame", ...)}.
 \section{Slots}{
   \describe{
     \item{\code{loc}:}{Object of class \code{"data.frame"}  }
-    \item{\code{biotab}:}{Object of class \code{"character"}  }
-    \item{\code{biotrait}:}{Object of class \code{"character"}  }
-    \item{\code{tableName}:}{Object of class \code{"character"}  }
-    \item{\code{subset}:}{Object of class \code{"list"}  }
-    \item{\code{CON}:}{Object of class \code{"SQLiteConnection"}  }
-    \item{\code{ID}:}{Object of class \code{"character"}  }
-    \item{\code{BIOID}:}{Object of class \code{"character"}  }
-    \item{\code{METADATA}:}{Object of class \code{"character"}  }
-    \item{\code{METADATA_RANGES}:}{Object of class \code{"character"}  }
-    \item{\code{CANVAS}:}{Object of class \code{"character"}  }
-    \item{\code{RANGES}:}{Object of class \code{"character"}  }
-    \item{\code{BIO}:}{Object of class \code{"character"}  }
-    \item{\code{MAP}:}{Object of class \code{"character"}  }
+
   }
 }
 \section{Extends}{

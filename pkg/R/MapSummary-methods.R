@@ -1,5 +1,9 @@
 
 
+if (!isGeneric("summary")) { 
+	setGeneric("summary", function(object, ...) standardGeneric("summary")) 
+	}
+
 summary.rangeMap = function(object, ...) {
     out = list()
 	out[["class"]] = class(object)
@@ -31,14 +35,13 @@ summary.rangeMap = function(object, ...) {
 	out
 }
 
-setMethod("summary", "rangeMap", summary.rangeMap)
-
 print.summary.rangeMap <- function(x, ...) {
 
 
-	Msg(paste(paste(names(x), ":", x), collapse = "\n"), ...)
+	.X.Msg(paste(paste(names(x), ":", x), collapse = "\n"), ...)
 	
 
 }
 
+setMethod("summary", "rangeMap", summary.rangeMap)
 

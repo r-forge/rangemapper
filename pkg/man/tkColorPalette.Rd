@@ -2,11 +2,12 @@
 \name{tkColorPalette}
 \alias{tkColorPalette}
 \alias{tkMakeColorPalette}
+
 \title{
-  Choose a color palette.
+  Interactively choose a color palette.
 }
 \description{
- Interactively choose a color palette. 
+ Interactively choose a color palette. Palettes are created on the fly as  \code{\link{tkbutton}}s.
 }
 \usage{
 tkColorPalette(pal, name, palette.size = 45, envir = .GlobalEnv)

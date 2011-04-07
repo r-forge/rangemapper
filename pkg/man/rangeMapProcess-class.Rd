@@ -1,31 +1,25 @@
-\name{rangeMapProcess-class}
+\name{rangeMapProcess}
+\alias{rangeMapProcess}
+\alias{rangeMapProcess-class}
+\alias{rangeMapProcess-methods}
+\alias{rangeMapProcess,rangeMapProcess-method}
+
+
 \Rdversion{1.1}
 \docType{class}
-\alias{rangeMapProcess-class}
-\alias{rangeMapProcess,rangeMapProcess-method}
 
 \title{Class "rangeMapProcess"}
 \description{
-A class 
+The methods of this class allows importing vector (shp) range files to a \code{rangeMapper} project.
 }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("rangeMapProcess", ...)}.
 }
 \section{Slots}{
-  \describe{
-    \item{\code{metadata}:}{Object of class \code{"logical"}  }
-    \item{\code{dir}:}{Object of class \code{"character"}  }
-    \item{\code{ogr}:}{Object of class \code{"logical"}  }
-    \item{\code{polygons.only}:}{Object of class \code{"logical"}  }
-    \item{\code{CON}:}{Object of class \code{"SQLiteConnection"}  }
-    \item{\code{ID}:}{Object of class \code{"character"}  }
-    \item{\code{BIOID}:}{Object of class \code{"character"}  }
-    \item{\code{METADATA}:}{Object of class \code{"character"}  }
-    \item{\code{METADATA_RANGES}:}{Object of class \code{"character"}  }
-    \item{\code{CANVAS}:}{Object of class \code{"character"}  }
-    \item{\code{RANGES}:}{Object of class \code{"character"}  }
-    \item{\code{BIO}:}{Object of class \code{"character"}  }
-    \item{\code{MAP}:}{Object of class \code{"character"}  }
+  	\describe{
+	\item{\code{metadata}:}{Object of class \code{"logical"}  Should the range structure parameters be extracted?}
+	\item{\code{parallel}:}{Object of class \code{"character"} Not yet implemented. }
+
   }
 }
 \section{Extends}{

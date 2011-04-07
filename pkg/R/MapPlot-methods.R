@@ -1,4 +1,10 @@
 
+
+if (!isGeneric("plot"))    { 
+	setGeneric("plot", function(x,y,...) standardGeneric("plot")) 
+	}
+
+
 # ...arguments to pass to classIntervals (eg. n) and spplot
 
 setMethod("plot", signature(x='SpatialPixelsRangeMap', y='missing'), 

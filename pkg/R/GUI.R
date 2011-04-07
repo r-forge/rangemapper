@@ -1,5 +1,5 @@
 
-gui.tooltips <- function(tip) {
+.X.tooltips <- function(tip) {
 
 switch(tip,
 # bar 1
@@ -30,25 +30,25 @@ rangeMapper <- function() {
    
    font = "helvetica 10"; fg = "#08306B" ; bg = "#F7FBFF"; relief = "flat"; borderwidth = 0
 
-   if( !is.null (gui.get.from.env ("win")) ) stop (tkmessageBox(message = "rangeMapper is allready open!", icon = "error", type = "ok") )
+   if( !is.null ( .X.get("win")) ) stop (tkmessageBox(message = "rangeMapper is allready open!", icon = "error", type = "ok") )
 
-      if(!exists(".RangeMapper")) gui.make.env()
+      if(!exists(".RangeMapper")) .X.make.env()
 
-         gui.put.to.env("win", tktoplevel() )
+         .X.put("win", tktoplevel() )
 
-         win = gui.get.from.env("win")
+         win = .X.get("win")
 
          # window manager
 		if(.Platform$OS.type == "windows") 
 		 tkwm.iconbitmap(win, system.file("ico", "favicon.ico", package="rangeMapper"))
          tkwm.title(win,paste("rangeMapper", packageDescription("rangeMapper")$Version))
          tkwm.resizable(win, 0, 0)
-         tcl("wm", "protocol", win, "WM_DELETE_WINDOW", quote(Msg("Please close the window using the lower bar button!")))
+         tcl("wm", "protocol", win, "WM_DELETE_WINDOW", quote(.X.Msg("Please close the window using the lower bar button!")))
 
 
          top  <- function() {
-            gui.put.to.env("topMenu",tkmenu(win) )
-            topMenu  <- gui.get.from.env("topMenu")
+            .X.put("topMenu",tkmenu(win) )
+            topMenu  <- .X.get("topMenu")
             tkconfigure(win, menu=topMenu)
             
 			HelpMenu <- tkmenu(topMenu, tearoff=FALSE)
@@ -56,20 +56,20 @@ rangeMapper <- function() {
             MapMenu <- tkmenu(topMenu, tearoff=FALSE)
             metadata_ranges2bioMenu <- tkmenu(topMenu, tearoff=FALSE)
 
-			tkadd(ProjectMenu,"command",label="Browse the active project", command = function() gui.tkdbBrowse.active.proj() )
-			tkadd(ProjectMenu,"command",label="Remove MAP tables", command = function() gui.rangeMap.rm("MAP") )
-			tkadd(ProjectMenu,"command",label="Remove BIO tables", command = function() gui.rangeMap.rm("BIO") )
-          	tkadd(ProjectMenu,"command",label="show project's metadata", command = function() gui.show.metadata() )
+			tkadd(ProjectMenu,"command",label="Browse the active project", command = function() .X.tkdbBrowse.active.proj() )
+			tkadd(ProjectMenu,"command",label="Remove MAP tables", command = function() .X.rangeMap.rm("MAP") )
+			tkadd(ProjectMenu,"command",label="Remove BIO tables", command = function() .X.rangeMap.rm("BIO") )
+          	tkadd(ProjectMenu,"command",label="show project's metadata", command = function() .X.show.metadata() )
   
-			tkadd(MapMenu,"command",label="import external MAP", command = function() gui.mapImport()  )
-			tkadd(MapMenu,"command",label="export MAPs to geotiff", command = function() gui.rangeMap.export()  )
+			tkadd(MapMenu,"command",label="import external MAP", command = function() .X.mapImport()  )
+			tkadd(MapMenu,"command",label="export MAPs to geotiff", command = function() .X.rangeMap.export()  )
 			
-			tkadd(metadata_ranges2bioMenu,"command", label= "convert metadata_ranges to BIO table", command = function() gui.metadata2bio()  )
-			tkadd(metadata_ranges2bioMenu,"command", label= "merge all BIO tables", command = function() gui.bio.merge()  )
+			tkadd(metadata_ranges2bioMenu,"command", label= "convert metadata_ranges to BIO table", command = function() .X.metadata2bio()  )
+			tkadd(metadata_ranges2bioMenu,"command", label= "merge all BIO tables", command = function() .X.bio.merge()  )
 			
-			tkadd(HelpMenu,"command",label= "Get started",command = function() gui.help("man") )
-			tkadd(HelpMenu,"command",label= "Example files",command = function() gui.help("support.files") )
-			tkadd(HelpMenu,"command",label= "About",command = function() gui.help("citation") )
+			tkadd(HelpMenu,"command",label= "Get started",command = function() .X.help("man") )
+			tkadd(HelpMenu,"command",label= "Example files",command = function() .X.help("support.files") )
+			tkadd(HelpMenu,"command",label= "About",command = function() .X.help("citation") )
 
 			tkadd(topMenu, "cascade", label= "Project",menu=ProjectMenu)
 			tkadd(topMenu, "cascade", label= "Maps",menu=MapMenu)
@@ -83,27 +83,27 @@ rangeMapper <- function() {
 
 
             # ARROWS
-            arrow1    =  tklabel(bar1, image=gui.img("arrow"),foreground = fg, background = bg )
-            arrow2    =  tklabel(bar1, image=gui.img("arrow"),foreground = fg, background = bg )
-            arrow3    =  tklabel(bar1, image=gui.img("arrow"),foreground = fg, background = bg )
+            arrow1    =  tklabel(bar1, image=.X.img("arrow"),foreground = fg, background = bg )
+            arrow2    =  tklabel(bar1, image=.X.img("arrow"),foreground = fg, background = bg )
+            arrow3    =  tklabel(bar1, image=.X.img("arrow"),foreground = fg, background = bg )
             # BUTTONS
-			Create    =   tkbutton(bar1,image    = gui.img("new") ,command           = function() gui.dbopen(new= TRUE)  )
-			Open      =   tkbutton(bar1,image    = gui.img("open")   ,command        = function() gui.dbopen(new= FALSE)  )
-			Bbox      =   tkbutton(bar1,image    = gui.img("bbox") , command         = function() gui.global.bbox.save() )
-			gridSize  =   tkbutton(bar1,image    = gui.img("resolution") , command   = function() gui.gridSize.save() )
-			canvasUpload  =   tkbutton(bar1,image= gui.img("uploadCanvas") , command = function() gui.canvas.save() )
-            Ranges     =   tkbutton(bar1,image= gui.img("intersectRange") , command  = function() gui.processRanges() )
-			Bio        =   tkbutton(bar1,image= gui.img("uploadBio") ,command        = function() gui.bio.save()  )
+			Create    =   tkbutton(bar1,image    = .X.img("new") ,command           = function() .X.dbopen(new= TRUE)  )
+			Open      =   tkbutton(bar1,image    = .X.img("open")   ,command        = function() .X.dbopen(new= FALSE)  )
+			Bbox      =   tkbutton(bar1,image    = .X.img("bbox") , command         = function() .X.global.bbox.save() )
+			gridSize  =   tkbutton(bar1,image    = .X.img("resolution") , command   = function() .X.gridSize.save() )
+			canvasUpload  =   tkbutton(bar1,image= .X.img("uploadCanvas") , command = function() .X.canvas.save() )
+            Ranges     =   tkbutton(bar1,image= .X.img("intersectRange") , command  = function() .X.processRanges() )
+			Bio        =   tkbutton(bar1,image= .X.img("uploadBio") ,command        = function() .X.bio.save()  )
 			
 			
             # TIPS
-            tk2tip(Create, gui.tooltips("Create") )
-            tk2tip(Open, gui.tooltips("Open") )
-            tk2tip(Bbox, gui.tooltips("Bbox"))
-            tk2tip(gridSize, gui.tooltips("gridSize") )
-            tk2tip(canvasUpload, gui.tooltips("canvasUpload") )
-            tk2tip(Ranges, gui.tooltips("Ranges"))
-            tk2tip(Bio, gui.tooltips("Bio"))
+            tk2tip(Create, .X.tooltips("Create") )
+            tk2tip(Open, .X.tooltips("Open") )
+            tk2tip(Bbox, .X.tooltips("Bbox"))
+            tk2tip(gridSize, .X.tooltips("gridSize") )
+            tk2tip(canvasUpload, .X.tooltips("canvasUpload") )
+            tk2tip(Ranges, .X.tooltips("Ranges"))
+            tk2tip(Bio, .X.tooltips("Bio"))
 
 
             # PLACE ON  GRID
@@ -113,7 +113,7 @@ rangeMapper <- function() {
             tkgrid(tklabel(bar1,text = "Upload ranges",   font = font, foreground = fg, background = bg),sticky="ns",columnspan = 1, column  = 8, row = 0)
             tkgrid(tklabel(bar1,text = "Upload Bio table",font = font, foreground = fg, background = bg),sticky="ns",columnspan = 1, column  = 10, row = 0)
 			
-			tkgrid(tklabel(bar1, image=gui.img("wren"), background= bg), sticky="ns",columnspan = 1, column  = 11, row = 0)
+			tkgrid(tklabel(bar1, image=.X.img("wren"), background= bg), sticky="ns",columnspan = 1, column  = 11, row = 0)
             
 			# BUTTONS
             tkgrid(Create,     column  = 1, row = 1, sticky= "e")
@@ -133,7 +133,7 @@ rangeMapper <- function() {
          hline <- function() {
             Hline  <- tkframe(win, relief=relief, borderwidth=borderwidth, background=bg)
 
-            tkgrid(tklabel(Hline, image=gui.img("hline"), background= bg), columnspan =1, rowspan = 1, sticky= "nsew")
+            tkgrid(tklabel(Hline, image=.X.img("hline"), background= bg), columnspan =1, rowspan = 1, sticky= "nsew")
             tkpack(Hline, fill="both", expand = 1)
          }
 
@@ -141,26 +141,26 @@ rangeMapper <- function() {
             bar2    <-tkframe(win, relief=relief, borderwidth=borderwidth, background=bg)
 
             # ARROWS
-            arrow1  <- tklabel(bar2, image   = gui.img("arrow"),foreground       = fg, background  = bg  )
-            arrow2  <- tklabel(bar2, image   = gui.img("arrow"),foreground       = fg, background  = bg  )
-            arrow3  <- tklabel(bar2, image   = gui.img("arrow"),foreground       = fg, background  = bg  )
-            arrow4  <- tklabel(bar2, image   = gui.img("arrow"),foreground       = fg, background  = bg  )
-            arrow5  <- tklabel(bar2, image   = gui.img("arrow"),foreground       = fg, background  = bg  )
+            arrow1  <- tklabel(bar2, image   = .X.img("arrow"),foreground       = fg, background  = bg  )
+            arrow2  <- tklabel(bar2, image   = .X.img("arrow"),foreground       = fg, background  = bg  )
+            arrow3  <- tklabel(bar2, image   = .X.img("arrow"),foreground       = fg, background  = bg  )
+            arrow4  <- tklabel(bar2, image   = .X.img("arrow"),foreground       = fg, background  = bg  )
+            arrow5  <- tklabel(bar2, image   = .X.img("arrow"),foreground       = fg, background  = bg  )
            # BUTTONS
-            Var       <-  tkbutton(bar2, image = gui.img("variable")      ,command= function() gui.chooseVariable()   )
-            Fun       <-  tkbutton(bar2, image = gui.img("function")      ,command= function() gui.chooseFunction()  )
-            Subset    <-  tkbutton(bar2, image = gui.img("subsetMap")     ,command= function() gui.chooseSubset()  )
-            saveMap   <-  tkbutton(bar2, image = gui.img("saveMap")       ,command= function() gui.rangeMap.save() )
-			palette  <-  tkbutton(bar2, image = gui.img("colorPalette")  ,command= function() gui.tkColorPalette() )
-            Map       <-  tkbutton(bar2, image = gui.img("plotMap")       ,command= function() gui.rangeMap.plot() )
+            Var       <-  tkbutton(bar2, image = .X.img("variable")      ,command= function() .X.chooseVariable()   )
+            Fun       <-  tkbutton(bar2, image = .X.img("function")      ,command= function() .X.chooseFunction()  )
+            Subset    <-  tkbutton(bar2, image = .X.img("subsetMap")     ,command= function() .X.chooseSubset()  )
+            saveMap   <-  tkbutton(bar2, image = .X.img("saveMap")       ,command= function() .X.rangeMap.save() )
+			palette  <-  tkbutton(bar2, image = .X.img("colorPalette")  ,command= function() .X.tkColorPalette() )
+            Map       <-  tkbutton(bar2, image = .X.img("plotMap")       ,command= function() .X.rangeMap.plot() )
 			
             # TIPS
-            tk2tip(Var, gui.tooltips("Var"))
-            tk2tip(Fun, gui.tooltips("Fun"))
-            tk2tip(Subset, gui.tooltips("Subset"))
-            tk2tip(saveMap, gui.tooltips("saveMap"))
-			tk2tip(palette, gui.tooltips("palette"))
-            tk2tip(Map, gui.tooltips("Map"))
+            tk2tip(Var, .X.tooltips("Var"))
+            tk2tip(Fun, .X.tooltips("Fun"))
+            tk2tip(Subset, .X.tooltips("Subset"))
+            tk2tip(saveMap, .X.tooltips("saveMap"))
+			tk2tip(palette, .X.tooltips("palette"))
+            tk2tip(Map, .X.tooltips("Map"))
 
 			# LABELS
 			tkgrid(tklabel(bar2,text    = "Choose variable",font   = font, foreground= fg, background= bg),sticky="w",columnspan= 2, column= 1, row = 0)
@@ -187,25 +187,25 @@ rangeMapper <- function() {
          }
 
          Info <- function() {
-               gui.put.to.env("msgFrame", tkframe(win, relief=relief, borderwidth=borderwidth, background=bg) )
-               msgFrame = gui.get.from.env("msgFrame")
+               .X.put(".X.MsgFrame", tkframe(win, relief=relief, borderwidth=borderwidth, background=bg) )
+               .X.MsgFrame = .X.get(".X.MsgFrame")
 
-               gui.put.to.env("scr",tkscrollbar(msgFrame, repeatinterval = 10, command=function(...)tkyview(msgFrame,...)) )
-               scr = gui.get.from.env("scr")
+               .X.put("scr",tkscrollbar(.X.MsgFrame, repeatinterval = 10, command=function(...)tkyview(.X.MsgFrame,...)) )
+               scr = .X.get("scr")
 
-               gui.put.to.env("msg", tktext(msgFrame,bg=bg, fg = fg,font= font, borderwidth=borderwidth,yscrollcommand=function(...)tkset(scr,...)))
-               msg = gui.get.from.env("msg")
+               .X.put(".X.Msg", tktext(.X.MsgFrame,bg=bg, fg = fg,font= font, borderwidth=borderwidth,yscrollcommand=function(...)tkset(scr,...)))
+               .X.Msg = .X.get(".X.Msg")
 
-               tkgrid(msg,scr,column = 0, row = 0, sticky="ns")
+               tkgrid(.X.Msg,scr,column = 0, row = 0, sticky="ns")
 
-               tkpack(msgFrame, fill="both", expand = 1)
+               tkpack(.X.MsgFrame, fill="both", expand = 1)
             }
 		 
          bar3 <- function() {
             bar3   <- tkframe(win, relief=relief, borderwidth=borderwidth, background=bg)
 
-            OffGui    <-  tkbutton(bar3, image= gui.img("switchOffBlue") ,command = function() gui.close())
-			OffAll    <-  tkbutton(bar3, image= gui.img("switchOffRed") ,command = function() gui.close(quitR = TRUE) )
+            OffGui    <-  tkbutton(bar3, image= .X.img("switchOffBlue") ,command = function() .X.close())
+			OffAll    <-  tkbutton(bar3, image= .X.img("switchOffRed") ,command = function() .X.close(quitR = TRUE) )
 
 		   tk2tip(OffGui, "CLOSE RANGEMAPPER GUI! \n To re-open rangeMapper type 'rangeMapper()' at the R prompter")
 		   tk2tip(OffAll, "Quit rangeMapper AND R!")

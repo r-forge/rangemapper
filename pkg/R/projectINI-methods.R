@@ -1,4 +1,5 @@
 
+setGeneric("rangeMapStart", function(object, ...)  			      	standardGeneric("rangeMapStart") )
 
 setMethod("rangeMapStart",  
 		signature = "rangeMapStart", 
@@ -9,53 +10,51 @@ setMethod("rangeMapStart",
 			verSql = paste("INSERT INTO version VALUES (" ,shQuote(packageDescription("rangeMapper")$Version) , ")")
 			
 			if(!file.exists) { 				
-				Queries = object@scheleton
+				Queries = object@skeleton
 				db = unlist(Queries)
-					for (i in 1:length(db)) RMQuery(CON , db[i])
+					for (i in 1:length(db)) 
+							sqliteQuickSQL(CON , db[i])
 			
-			RMQuery(CON, verSql)
+			sqliteQuickSQL(CON, verSql)
 			}
 			
 			if(object@overwrite && file.exists) {
-				dropAll = RMQuery(CON, "select 'drop table if exists ' || name from sqlite_master where type = 'table';")
+				dropAll = sqliteQuickSQL(CON, "select 'drop table if exists ' || name from sqlite_master where type = 'table';")
 				if(nrow(dropAll) == 0) dropAll = NULL else dropAll = dropAll[,1 ]
-				Queries = c(dropAll, "vacuum", object@scheleton )
+				Queries = c(dropAll, "vacuum", object@skeleton )
 				db = unlist(Queries)
-					for (i in 1:length(db)) RMQuery(CON , db[i])
+					for (i in 1:length(db)) sqliteQuickSQL(CON , db[i])
 				
-				RMQuery(CON, verSql)
+				sqliteQuickSQL(CON, verSql)
 				}
 		
-			if(!object@overwrite && file.exists) stop(Msg(paste("File", object@file, "allready exsits!")))
+			if(!object@overwrite && file.exists) stop(.X.Msg(paste("File", object@file, "allready exsits!")))
 		
 		   
 			} 
 	)
 
 # user level functions 
-rangeMap.start <- function(overwrite = FALSE,...) {
+rangeMap.start <- function(...) {
 
 	obj = new("rangeMapStart", ... )
-
-	obj@overwrite = overwrite
 	
 	rangeMapStart(obj)
-	Msg( paste("New session", Sys.time() ) , clearup = TRUE)
+	.X.Msg( paste("New session", Sys.time() ) , clearup = TRUE)
 	
 	
-	Msg(paste("PROJECT:", obj@file, "\nDIRECTORY:",obj@dir) )
+	.X.Msg(paste("PROJECT:", obj@file, "\nDIRECTORY:",obj@dir) )
 	
 	f = paste(obj@dir, obj@file, sep = .Platform$file.sep)
 	
 	invisible(dbConnect(dbDriver("SQLite"), dbname= f))
-	
 	
 }
 	
 
 rangeMap.open <- function(path, verbose = TRUE) {
 	
-	Msg(clearup = TRUE)
+	.X.Msg(clearup = TRUE)
 	
 	dbcon = dbConnect(dbDriver("SQLite"), dbname= path)
 	

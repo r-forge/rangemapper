@@ -1,5 +1,4 @@
-\name{gridSize}
-\alias{gridSize}
+\name{gridSize.save}
 \alias{gridSize.save}
 \alias{gridSize.fetch}
 
@@ -8,12 +7,13 @@
 Save or retrieve the grid size from the active sqlite database.
 }
 \usage{
-gridSize.save(con, gridSize) 
+gridSize.save(con, ...) 
 gridSize.fetch(con)
 }
 
 \arguments{
 	  \item{con}{A connection pointing to a valid \code{rangeMapper} project.}
+	  \item{...}{Other arguments to pass to methods of class \code{\link{gridSize-class}} }
 	  \item{gridSize}{A numeric vector of one unit length.}
 	}
 

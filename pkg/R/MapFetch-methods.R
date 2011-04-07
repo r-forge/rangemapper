@@ -1,4 +1,6 @@
 
+setGeneric("rangeMapFetch", function(object, ...) 					standardGeneric("rangeMapFetch") )
+
 setMethod("rangeMapFetch",  
 	signature  = "rangeMapFetch", 
 		definition = function(object) {
@@ -31,7 +33,6 @@ setMethod("rangeMapFetch",
 		return(map)
 		}
 	)	
-
 	
 # user level functions 
 rangeMap.fetch <- function(dbcon, maps) { 

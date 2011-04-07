@@ -1,11 +1,57 @@
 
 #UTILS
-gui.make.env <- function(env = ".RangeMapper") {
+.X.Msg <- function(.X.Msg=Sys.time(), tkMainWindow = "win", tkElement = ".X.Msg", eol = "\n", keep = TRUE, clearup = FALSE, getTime = FALSE, envir = ".RangeMapper") {
+
+   .X.Msg	= paste(.X.Msg, collapse = eol)
+   .X.Msg	= paste("\xBB\xBB", .X.Msg, collapse = " ")
+   
+   
+  if(getTime) .X.Msg = paste( "<", Sys.time(), ">\n", .X.Msg, sep = "")
+  
+  if(exists(envir)) env = eval(parse(text = envir)) else env = NULL
+  
+  # if  tcltk envir is set
+  if(is.environment(env) && exists(tkMainWindow, envir = env) && exists(tkElement, envir = env) ) {
+
+	  .X.MsgWindow = get(tkElement, envir = env)
+	  mainWindow = get(tkMainWindow, envir = env)
+	  
+	# prepare  message container 
+	 if(! exists("session.X.Msg", envir = env) ) assign("session.X.Msg", list(), envir = env)
+	 
+	# clearup any existing messages from env	
+		if(clearup) {
+			tkdelete(.X.MsgWindow, "0.0" , "1000.0" )
+			assign("session.X.Msg", list(), envir = env)
+			}
+	# if .X.Msg is to be kept then append it to session.X.Msg 
+		if(keep) assign("session.X.Msg", c( get("session.X.Msg", envir = env), .X.Msg ) , envir = env )
+			
+	#  print to GUI element
+		tkdelete(.X.MsgWindow, "1.0" , "100.0" ) 
+		.X.MsgList = get("session.X.Msg", envir = env)
+		
+		lapply(.X.MsgList , function(x) tkinsert(.X.MsgWindow, "end" , paste(x,eol) ) )
+		
+		if(!keep) tkinsert(.X.MsgWindow, "end" , paste(.X.Msg,eol) ) 
+		
+		tkyview.moveto(get(tkElement, envir = env), 1)
+		tkfocus(get(tkMainWindow, envir = env ))
+		
+		tcl("update", "idletasks") 		 
+
+}	else   cat(.X.Msg, eol)
+	
+    invisible(flush.console() )
+	
+} 
+
+.X.make.env <- function(env = ".RangeMapper") {
 
 assign(env , new.env(), env = .GlobalEnv)
 }
 
-gui.get.from.env <- function(x, mode = "any", envir = .RangeMapper) {
+.X.get <- function(x, mode = "any", envir = .RangeMapper) {
 
 obj = try(get(x, envir = envir, mode = mode, inherits = FALSE), silent = TRUE)
 
@@ -14,20 +60,20 @@ if (class(obj) == "try-error") return (NULL) else return(obj)
 
 }
 
-gui.put.to.env <- function(x, value, envir = .RangeMapper) { 
+.X.put <- function(x, value, envir = .RangeMapper) { 
 
 obj = try(assign(x, value, envir = envir), silent = TRUE) 
 if (class(obj) == "try-error") return (NULL) else return(obj)
 
 }
 
-gui.exists.in.env <- function(x, envir = .RangeMapper) {
+.X.exists <- function(x, envir = .RangeMapper) {
 
 exists(x, envir = envir)
 
 }
 
-gui.yn <- function(text = "Choose!", yn = c("YES", "NO"), title) {
+.X.yn <- function(text = "Choose!", yn = c("YES", "NO"), title) {
 
 	if(missing(title)) title = paste("rangeMapper", packageDescription("rangeMapper")$Version) 
 
@@ -59,11 +105,11 @@ gui.yn <- function(text = "Choose!", yn = c("YES", "NO"), title) {
 	return(as.integer(tclvalue(select)))
 }
 
-gui.img <- function(gif, file=system.file("ico", paste(gif, "gif", sep = "."), package="rangeMapper")) {
+.X.img <- function(gif, file=system.file("ico", paste(gif, "gif", sep = "."), package="rangeMapper")) {
 tkimage.create("photo",file=file)
  }
 
-gui.tkEntryBox <- function(txt = "enter value", default.entry = "", default.output =  "", make.sql.nam = TRUE) {
+.X.tkEntryBox <- function(txt = "enter value", default.entry = "", default.output =  "", make.sql.nam = TRUE) {
 	
 	top<-tktoplevel()
 	
@@ -93,7 +139,7 @@ gui.tkEntryBox <- function(txt = "enter value", default.entry = "", default.outp
 	getNam
 }	
 
-gui.tkComboEntryBox <- function(title = "", fixedTxt = c("a", "b") ,fixedTxtLab = "choose one", freeTxt = 1,freeTxtLab = "enter one", name, envir = .RangeMapper) {
+.X.tkComboEntryBox <- function(title = "", fixedTxt = c("a", "b") ,fixedTxtLab = "choose one", freeTxt = 1,freeTxtLab = "enter one", name, envir = .RangeMapper) {
 	
 	tclRequire("BWidget")
 	
@@ -118,7 +164,7 @@ gui.tkComboEntryBox <- function(title = "", fixedTxt = c("a", "b") ,fixedTxtLab 
 			fixedTextVal  =  fixedTxt[as.numeric(tclvalue(tcl(fixedText,"getvalue")))+1]
 			freeTextVal   =  tclvalue(tcl(freeText,"get"))
 						
-			gui.put.to.env(name, c(fixedTextVal, freeTextVal), envir = envir)
+			.X.put(name, c(fixedTextVal, freeTextVal), envir = envir)
 			tkdestroy(top)
 		}
 
@@ -137,10 +183,10 @@ gui.tkComboEntryBox <- function(title = "", fixedTxt = c("a", "b") ,fixedTxtLab 
 	tkwait.window(top)	
 }
 
-gui.tkdbBrowse.active.proj <- function() {
+.X.tkdbBrowse.active.proj <- function() {
 
-	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	dbcon = .X.get("con")
+		if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 	
 	tkdbBrowse(dbcon)
 		if(exists("out")) rm(out, envir = .GlobalEnv)
@@ -148,42 +194,42 @@ gui.tkdbBrowse.active.proj <- function() {
 }
 
 # MAIN GUI ELEMENTS 
-gui.dbopen <- function(new = TRUE) {
+.X.dbopen <- function(new = TRUE) {
 
-	Msg("Starting new session....", clearup = TRUE)
-	Msg("", getTime = TRUE, keep = TRUE)
+	.X.Msg("Starting new session....", clearup = TRUE)
+	.X.Msg("", getTime = TRUE, keep = TRUE)
 	
 	if(new) {
 		path = tclvalue(tkgetSaveFile(defaultextension = ".sqlite", filetypes = "{rangeMapper_project {.sqlite}}" ) )
-		 if(nchar(path)==0)  stop(Msg("Nothing selected!"))
+		 if(nchar(path)==0)  stop(.X.Msg("Nothing selected!"))
 		dbcon = rangeMap.start(file = basename(path), overwrite = TRUE, dir = dirname(path) )
 		
 		}
 	
 	if(!new) {
 		path = tclvalue(tkgetOpenFile(defaultextension = ".sqlite", filetypes = "{rangeMapper_project {.sqlite}}" ) )
-		if(nchar(path)==0)  stop(Msg("Nothing selected!"))
+		if(nchar(path)==0)  stop(.X.Msg("Nothing selected!"))
 		dbcon = rangeMap.open(path, verbose = TRUE)
 		}
 		
-		gui.put.to.env("con", dbcon)
-		gui.put.to.env("path", path)
+		.X.put("con", dbcon)
+		.X.put("path", path)
 		
-		print(summary(new("rangeMap", CON = gui.get.from.env("con"))))
+		print(summary(new("rangeMap", CON = .X.get("con"))))
 
 				
 	}
 	
-gui.close <- function(quitR = FALSE) {
+.X.close <- function(quitR = FALSE) {
 
  if(quitR) q(save = "no") else {
 
-   if(!is.null(gui.get.from.env ("con"))) {
-	  try(sqliteCloseConnection(gui.get.from.env ("con")), silent = TRUE)
+   if(!is.null( .X.get("con"))) {
+	  try(sqliteCloseConnection(.X.get("con")), silent = TRUE)
 	  rm("con", envir = .RangeMapper)
    }
    
-   tkdestroy(gui.get.from.env ("win"))
+   tkdestroy(.X.get ("win"))
    rm(list = ls( envir = .RangeMapper), envir = .RangeMapper, inherits = TRUE)
    rm(.RangeMapper, envir = .GlobalEnv)
    
@@ -192,15 +238,15 @@ gui.close <- function(quitR = FALSE) {
 
 }
 
-gui.show.metadata <- function() {
-	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(Msg("There is no active project!"))
+.X.show.metadata <- function() {
+	dbcon = .X.get("con")
+	if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 	
-	print(summary(new("rangeMap", CON = gui.get.from.env("con"))))
+	print(summary(new("rangeMap", CON = .X.get("con"))))
 
 }
 
-gui.help <- function(what) {
+.X.help <- function(what) {
 
 	wrens.shp = 	system.file(package="rangeMapper", "extdata", "wrens", "vector")
 	wrens.csv = 	system.file(package="rangeMapper", "data", "wrens.csv")
@@ -214,13 +260,13 @@ gui.help <- function(what) {
 		
 	if(what == "support.files") setwd(wrens.shp)
 	
-	Msg(out)
+	.X.Msg(out)
 	}
 	
-gui.global.bbox.save <- function() {
+.X.global.bbox.save <- function() {
 
-	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	dbcon = .X.get("con")
+		if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 
 	Dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory")
 	
@@ -228,11 +274,11 @@ gui.global.bbox.save <- function() {
 	
 }
 	
-gui.gridSize.save <- function() {
+.X.gridSize.save <- function() {
 
-	dbcon = gui.get.from.env("con")
+	dbcon = .X.get("con")
 	if(is.null(dbcon)) 
-		stop(Msg("There is no active project!"))
+		stop(.X.Msg("There is no active project!"))
 	
 	
 	bb  = global.bbox.fetch(dbcon)
@@ -252,7 +298,7 @@ gui.gridSize.save <- function() {
 		
 		gridSize.save(dbcon ,gridSize = val)
 		
-		if(val < WarnCellsize) Msg("WARNING: The canvas is going to have a high resolution, processing all ranges will be potentially time consumming.")
+		if(val < WarnCellsize) .X.Msg("WARNING: The canvas is going to have a high resolution, processing all ranges will be potentially time consumming.")
 		
 		tkdestroy(top)
 	}
@@ -266,20 +312,20 @@ gui.gridSize.save <- function() {
 
 }
  
-gui.canvas.save <- function() {
-		dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(Msg("There is no active project!"))
+.X.canvas.save <- function() {
+		dbcon = .X.get("con")
+		if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 		
 		canvas.save(dbcon)
 
 	}	
 		
-gui.processRanges <- function() {
+.X.processRanges <- function() {
 	
-	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	dbcon = .X.get("con")
+	if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 
-	selectVal = gui.yn(text = "Save range centroid and range extent?") 
+	selectVal = .X.yn(text = "Save range centroid and range extent?") 
 
 	if(selectVal == 1) {
 		processRanges(con = dbcon,dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory"), metadata = TRUE)	
@@ -290,10 +336,10 @@ gui.processRanges <- function() {
 
 }
 
-gui.bio.save <- function() {
+.X.bio.save <- function() {
 
-	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	dbcon = .X.get("con")
+		if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 
 	f = tk_choose.files( filter = matrix(c("comma delim, sep = ';'", ".csv"), ncol = 2) )
 	
@@ -303,33 +349,33 @@ gui.bio.save <- function() {
 	
     common_id = tk_select.list(names(dat),  multiple = FALSE, title = "Select range ID")
 	
-	if(nchar(common_id) ==0) Msg ("Nothing selected") else 
+	if(nchar(common_id) ==0) .X.Msg ("Nothing selected") else 
 		bio.save(con = dbcon, loc =  dat,  ID = common_id, tableName = tabnam)
 
 }
 
-gui.chooseVariable <- function() {
+.X.chooseVariable <- function() {
 
-	con = gui.get.from.env("con")
-	if(is.null(con)) stop(Msg("There is no active project!"))
+	con = .X.get("con")
+	if(is.null(con)) stop(.X.Msg("There is no active project!"))
 
-	if(gui.exists.in.env("VAR")) rm(list = "VAR", envir = .RangeMapper)
+	if(.X.exists("VAR")) rm(list = "VAR", envir = .RangeMapper)
 	
 	VAR = tkdbBrowse(con, prefix = "BIO", tables.name.only = FALSE, info = "Choose a variable to map.")	
 		
-	gui.put.to.env("VAR", VAR[1, ])
+	.X.put("VAR", VAR[1, ])
 	
-	msg = gui.get.from.env("VAR")
-	Msg( paste("<ACTIVE VARIABLE>", paste(msg[2], "in table ", msg[1])), keep = TRUE )
+	.X.Msg = .X.get("VAR")
+	.X.Msg( paste("<ACTIVE VARIABLE>", paste(.X.Msg[2], "in table ", .X.Msg[1])), keep = TRUE )
 	
 }
 
-gui.chooseFunction <- function() {
+.X.chooseFunction <- function() {
 	
 	# all sqlite aggreegate functions + functions in assemblageStat.R without (default) extra arguments
-	predefined = c(as.character(.sqlAggregate()), "lmer_mean") 
+	predefined =  as.character(.sqlAggregate())
 	
-	if(gui.exists.in.env("FUN")) rm("FUN", envir = .RangeMapper)
+	if(.X.exists("FUN")) rm("FUN", envir = .RangeMapper)
 	
 	top  =  tktoplevel()
 	tkwm.title(top, "Choose or define a function") 
@@ -349,7 +395,7 @@ gui.chooseFunction <- function() {
 	tkinsert(txtFUN, "0.0", "function(x) {\n\n}")
 
 	# formula
-	depvar = paste(gui.get.from.env("VAR")[2], "~")
+	depvar = paste(.X.get("VAR")[2], "~")
 	depvarLab = tklabel(Frame1, text = depvar)
 	Formula =  tclVar("")
 	pred  = tkentry(Frame1, width = "50" , textvariable= Formula)
@@ -380,14 +426,14 @@ gui.chooseFunction <- function() {
 			}
 			
 			# save output	
-			gui.put.to.env("FUN", fun)
-			gui.put.to.env("FUN.formula", formVal)
+			.X.put("FUN", fun)
+			.X.put("FUN.formula", formVal)
 
-			funStr = gui.get.from.env("FUN")
+			funStr = .X.get("FUN")
 			funStr = gsub(" ", "", paste(deparse(funStr), collapse = "" ) )
 			
 			
-			Msg( paste("<ACTIVE FUNCTION>", funStr ), keep = TRUE )
+			.X.Msg( paste("<ACTIVE FUNCTION>", funStr ), keep = TRUE )
 			
 			tkdestroy(top)
 		}
@@ -415,12 +461,12 @@ gui.chooseFunction <- function() {
 
 }
 
-gui.chooseSubset <- function() {
+.X.chooseSubset <- function() {
 
-	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	dbcon = .X.get("con")
+		if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 
-	if(gui.exists.in.env("SUBSET")) rm("SUBSET", envir = .RangeMapper)
+	if(.X.exists("SUBSET")) rm("SUBSET", envir = .RangeMapper)
 		
 	tabs = RMQuery(dbcon, "select name from sqlite_master where type = 'table' and (name like 'BIO_%' or name like 'MAP_%' or name = 'metadata_ranges')")$name
 	tabs = lapply(split(tabs, tabs), function(x) RMQuery(dbcon, paste("PRAGMA table_info(", x, ");"))$name)
@@ -461,39 +507,39 @@ gui.chooseSubset <- function() {
 	Res = Res[unlist(lapply(Res, nchar))>0]
 	
 
-	gui.put.to.env("SUBSET", Res)
+	.X.put("SUBSET", Res)
 		
 	
-	if( gui.exists.in.env("SUBSET") ) Msg( paste("<ACTIVE SUBSET>", gui.get.from.env("SUBSET") ), keep = FALSE )
+	if( .X.exists("SUBSET") ) .X.Msg( paste("<ACTIVE SUBSET>", .X.get("SUBSET") ), keep = FALSE )
 
 	
 	
 	}
 
-gui.tkColorPalette <- function() {
+.X.tkColorPalette <- function() {
 
-	Msg("Loading color palettes...", keep = FALSE)
+	.X.Msg("Loading color palettes...", keep = FALSE)
 
 	pal =  c(brewer.pal.get(), list(heatcol = heat.colors (9),terraincol = terrain.colors(9), topocol = topo.colors(9) ))
  	
 	tkColorPalette(pal = pal, name = "palette" , palette.size = 43, envir = .RangeMapper)
 
-	if( gui.exists.in.env("palette") ) Msg( paste("<ACTIVE PALETTE>", attributes(gui.get.from.env("palette")) ), keep = TRUE )
+	if( .X.exists("palette") ) .X.Msg( paste("<ACTIVE PALETTE>", attributes(.X.get("palette")) ), keep = TRUE )
 }
 
-gui.rangeMap.save <- function() {
+.X.rangeMap.save <- function() {
 	t1 = Sys.time()
-	dbcon       =gui.get.from.env("con")
-	FUN         =gui.get.from.env("FUN")
-	VAR         =gui.get.from.env("VAR")
-	FUN.formula =gui.get.from.env("FUN.formula")
-	subsetSQL   =gui.get.from.env("SUBSET")
+	dbcon       =.X.get("con")
+	FUN         =.X.get("FUN")
+	VAR         =.X.get("VAR")
+	FUN.formula =.X.get("FUN.formula")
+	subsetSQL   =.X.get("SUBSET")
 	
 	if(is.null(subsetSQL)) subsetSQL = list()
-	if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 
 	if(is.null(FUN)) {
-		Msg("Since no function was chosen SPECIES RICHNESS will be computed by default!")
+		.X.Msg("Since no function was chosen SPECIES RICHNESS will be computed by default!")
 		tableName = "species_richness"
 		rangeMap.save(dbcon, tableName = tableName)
 		} 
@@ -501,7 +547,7 @@ gui.rangeMap.save <- function() {
 	
 	if(is.character(FUN)) {
 		suggested.tab.nam = paste( c(VAR[1], VAR[2], FUN), collapse  = "_")
-		tableName =  gui.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam, default.output = "." )
+		tableName =  .X.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam, default.output = "." )
 		if(tableName!="_")
 		rangeMap.save(CON = dbcon, FUN = FUN, biotab =  VAR[1][,1], biotrait =  VAR[2][,1], tableName = tableName, subset = subsetSQL)
 		}
@@ -509,7 +555,7 @@ gui.rangeMap.save <- function() {
 
 	if(is.function(FUN)) {
 		suggested.tab.nam = paste( c(VAR[1], VAR[2], "aggregate_R_function"), collapse  = "_")
-		tableName =  gui.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam )
+		tableName =  .X.tkEntryBox(txt = "enter table name\n(-MAP_- prefix will be appended to it).", default.entry =  suggested.tab.nam )
 		
 		if(tableName!="_") {
 			if(is.null(FUN.formula) )
@@ -523,13 +569,13 @@ gui.rangeMap.save <- function() {
 
 	}
 
-gui.rangeMap.plot <- function() {
+.X.rangeMap.plot <- function() {
 	
-	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	dbcon = .X.get("con")
+	if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 
-	colorpalette = gui.get.from.env("palette")
-	if(is.null(colorpalette)) stop(Msg("There is no active palette!"))
+	colorpalette = .X.get("palette")
+	if(is.null(colorpalette)) stop(.X.Msg("There is no active palette!"))
 	
 	map = tkdbBrowse(dbcon, prefix = "MAP", tables.name.only = TRUE)
 
@@ -537,24 +583,24 @@ gui.rangeMap.plot <- function() {
 	
 	# ncols and style
 	classType = c("sd", "equal", "quantile", "kmeans", "hclust", "bclust", "fisher", "jenks")
-	gui.tkComboEntryBox(title = "plot MAP", fixedTxt = classType,  fixedTxtLab = "Class interval type",  freeTxt = 20, freeTxtLab = "Number of classes", name = "CLASSINT")
+	.X.tkComboEntryBox(title = "plot MAP", fixedTxt = classType,  fixedTxtLab = "Class interval type",  freeTxt = 20, freeTxtLab = "Number of classes", name = "CLASSINT")
 	
-	classint = gui.get.from.env("CLASSINT")	
+	classint = .X.get("CLASSINT")	
 	
 	plot(rangeMap, colorpalette = colorpalette, ncols = as.numeric(classint[2]) , style = classint[1]) 
 
 }
 
-gui.rangeMap.rm <- function(table.type) {
-	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(Msg("There is no active project!"))
+.X.rangeMap.rm <- function(table.type) {
+	dbcon = .X.get("con")
+	if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 
 	nam = as.character(tkdbBrowse(dbcon, prefix = table.type, tables.name.only = TRUE)$dbtable)
 	if(exists("out")) rm(out, envir = .GlobalEnv)
 
 	table.nam = paste(table.type, nam, sep = "_")
 	
-	if(all(is.na(nam)) && gui.yn("Really delete all ?") )
+	if(all(is.na(nam)) && .X.yn("Really delete all ?") )
 				rm.rangeMapper(dbcon, tablePrefix = table.type)
 
 	if(! all(is.na(nam)) ) 
@@ -563,10 +609,10 @@ gui.rangeMap.rm <- function(table.type) {
 
 }
 
-gui.mapImport <- function() {
+.X.mapImport <- function() {
 
-	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	dbcon = .X.get("con")
+	if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 
 
 	rangeMap.save(dbcon , path = tk_choose.files(caption = "Select file to import", multi = FALSE))
@@ -577,18 +623,18 @@ gui.mapImport <- function() {
 
 }
 
-gui.metadata2bio <-function() {
-	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(Msg("There is no active project!"))
+.X.metadata2bio <-function() {
+	dbcon = .X.get("con")
+		if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 	
 	metadata2bio (dbcon)
 
 }
 
-gui.rangeMap.export <-function() {
+.X.rangeMap.export <-function() {
 
-	dbcon = gui.get.from.env("con")
-		if(is.null(dbcon)) stop(Msg("There is no active project!"))
+	dbcon = .X.get("con")
+		if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 		
 	path = tkchooseDirectory()
 
@@ -598,11 +644,10 @@ gui.rangeMap.export <-function() {
 
 }
 
-
-gui.bio.merge <- function() {
-	dbcon = gui.get.from.env("con")
-	if(is.null(dbcon)) stop(Msg("There is no active project!"))
-	tableName = gui.tkEntryBox("Name of the merged BIO table")
+.X.bio.merge <- function() {
+	dbcon = .X.get("con")
+	if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
+	tableName = .X.tkEntryBox("Name of the merged BIO table")
 	bio.merge(con = dbcon, tableName = tableName)
 	
 	

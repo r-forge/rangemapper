@@ -1,7 +1,11 @@
 \name{rangeFiles-class}
-\docType{class}
 \alias{rangeFiles-class}
+\alias{rangeFiles-methods}
+\alias{rangeFiles}
 \alias{rangeFiles,rangeFiles-method}
+
+\docType{class}
+
 
 \title{Class "rangeFiles"}
 \description{

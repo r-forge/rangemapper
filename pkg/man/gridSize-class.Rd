@@ -1,8 +1,33 @@
-\name{gridSize-class}
+\name{gridSize}
+\alias{gridSize}
+\alias{gridSize-class}
+\alias{gridSize-methods}
+\alias{gridSize,gridSize-method}
+
+\alias{canvasSave}
+\alias{canvasSave-methods}
+\alias{canvasSave,canvasSave-method}
+\alias{canvasSave,rangeMap-method}
+
+\alias{canvasFetch}
+\alias{canvasFetch-methods}
+\alias{canvasFetch,canvasFetch-method}
+\alias{canvasFetch,rangeMap-method}
+
+\alias{gridSizeFetch}
+\alias{gridSizeFetch-methods}
+\alias{gridSizeFetch,gridSizeFetch-method}
+\alias{gridSizeFetch,rangeMap-method}
+
+\alias{gridSizeSave}
+\alias{gridSizeSave-methods}
+\alias{gridSizeSave,gridSizeSave-method}
+\alias{gridSizeSave,gridSize-method}
+
+
+
 \Rdversion{1.1}
 \docType{class}
-\alias{gridSize-class}
-\alias{gridSizeSave,gridSize-method}
 
 \title{Class "gridSize"}
 \description{
@@ -14,15 +39,6 @@ Objects can be created by calls of the form \code{new("gridSize", ...)}.
 \section{Slots}{
   \describe{
     \item{\code{gridSize}:}{Object of class \code{"numeric"}  }
-    \item{\code{CON}:}{Object of class \code{"SQLiteConnection"}  }
-    \item{\code{ID}:}{Object of class \code{"character"}  }
-    \item{\code{BIOID}:}{Object of class \code{"character"}  }
-    \item{\code{METADATA}:}{Object of class \code{"character"}  }
-    \item{\code{METADATA_RANGES}:}{Object of class \code{"character"}  }
-    \item{\code{CANVAS}:}{Object of class \code{"character"}  }
-    \item{\code{RANGES}:}{Object of class \code{"character"}  }
-    \item{\code{BIO}:}{Object of class \code{"character"}  }
-    \item{\code{MAP}:}{Object of class \code{"character"}  }
   }
 }
 \section{Extends}{

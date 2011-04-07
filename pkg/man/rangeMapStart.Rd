@@ -1,6 +1,6 @@
 
 \name{rangeMap.start}
-
+\alias{rangeMap.start}
 \alias{rangeMap.open}
 
 \title{Initiate/open a new rangeMapper project}
@@ -10,12 +10,11 @@ Initiate/open a new rangeMapper project using an object of class \code{\link{ran
 }
 
 \usage{
-rangeMap.start(overwrite, ...)
+rangeMap.start(...)
 rangeMap.open(path, verbose)
 }
 
 \arguments{
-	  \item{overwrite}{Logical; if TRUE the all the project's tables are removed}
 	  \item{path}{Character vector; a path to a valid rangeMapper project}
 	  \item{verbose}{Character vector; if \code{TRUE} the project's summary is printed }
 	  \item{...}{Arguments to be passed to \code{\link{rangeMapStart-class}} }

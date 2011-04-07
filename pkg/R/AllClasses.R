@@ -1,16 +1,29 @@
 	
 # Class definitions
+	# rangeMapStart
+	# rangeMap
+	# rangeFiles
+	# gridSize
+	# rangeMapProcess
+	# rangeMapSave
+	# bioSaveFile
+	# bioSaveDataFrame
+	# MapImport
+	# rangeMapFetch
+	# SpatialPixelsRangeMap
+	# rangeMapRemove
+
 
 setClass("rangeMapStart", 
 		representation(
 			dir = "character", 
 			file = "character", 
-			scheleton = "list",
+			skeleton = "list",
 			overwrite = "logical"
 			), 
 		prototype(
 			file = paste("rangeMapperProj",format(Sys.time(), "%Y-%m-%d_%H-%M-%S.sqlite"), sep = "_"),
-			scheleton = 	list(
+			skeleton = 	list(
 		create = 
 		c(	"CREATE TABLE version (ver CHAR)", 
 			"CREATE TABLE proj4string (p4s CHAR)", 
@@ -38,7 +51,7 @@ setClass("rangeMapStart",
 		), 
 		
 		validity = function(object) {
-		if(!file.exists(object@dir)) stop(Msg("'dir' should be set and point to a valid location."))
+		if(!file.exists(object@dir)) stop(.X.Msg("'dir' should be set and point to a valid location."))
 		}
 	)
 	
@@ -74,21 +87,21 @@ setClass("rangeMap",
 		
 		validity = function(object) {
 		
-		if ( ! init_extensions(object@CON)) warning(Msg("Warning: Aggregate functions provided by RSQLite.extfuns packages not available!"))
+		if ( ! init_extensions(object@CON)) warning(.X.Msg("Warning: Aggregate functions provided by RSQLite.extfuns packages not available!"))
 		
 		if ( ! all( .dbtable.exists(object@CON, object@PROJ4STRING),
 				  .dbtable.exists(object@CON, object@METADATA_RANGES),
 				  .dbtable.exists(object@CON, object@GRIDSIZE),
 				  .dbtable.exists(object@CON, object@BBOX),
 				  .dbtable.exists(object@CON, object@CANVAS),
-				  .dbtable.exists(object@CON, object@RANGES) ) ) stop (Msg("Corrupt rangeMapper project!"))
+				  .dbtable.exists(object@CON, object@RANGES) ) ) stop (.X.Msg("Corrupt rangeMapper project!"))
 		
-		projVer = try(RMQuery(object@CON, paste("SELECT * FROM", object@VERSION) )$ver, silent = TRUE)
+		projVer = try(sqliteQuickSQL(object@CON, paste("SELECT * FROM", object@VERSION) )$ver, silent = TRUE)
 		if(inherits(projVer, "try-error")) projVer = "0.0-0"
 		
 		curVer  = packageDescription("rangeMapper")$Version 		
 		if(compareVersion(curVer,  projVer) == 1)
-			Msg("The project was created with a previous version of rangeMapper, some functions may not work!")
+			.X.Msg("The project was created with a previous version of rangeMapper, some functions may not work!")
 		
 		}	
 	)
@@ -103,7 +116,7 @@ setClass("rangeFiles",
 		ogr = TRUE, 
 		polygons.only = TRUE), 
 		validity = function(object) {
-		if(!file.exists(object@dir)) stop(Msg("'dir' should be set and point to a valid location."))
+		if(!file.exists(object@dir)) stop(.X.Msg("'dir' should be set and point to a valid location."))
 		
 		}
 	)
@@ -130,7 +143,7 @@ setClass("rangeMapProcess",
 		contains = c("rangeFiles", "rangeMap"), 
 		
 		validity = function(object)	{
-					if(!.is.empty(object@CON, object@RANGES)) stop(Msg("ranges table is not empty!"))
+					if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg("ranges table is not empty!"))
 		},
 		prototype(
 			metadata = TRUE, 
@@ -150,10 +163,10 @@ setClass("rangeMapSave",
 		validity = function(object)	{
 		# the new table should not exist
 			if(.dbtable.exists(object@CON, paste(object@MAP, object@tableName, sep = "") ) ) 
-				stop(Msg( paste(sQuote(object@tableName), " already exists."))	)
+				stop(.X.Msg( paste(sQuote(object@tableName), " already exists."))	)
 			
 			if(.dbtable.exists(object@CON, paste(object@BIO, object@tableName, sep = "") ) ) 
-				stop(Msg( paste(sQuote(object@tableName), " already exists."))	)
+				stop(.X.Msg( paste(sQuote(object@tableName), " already exists."))	)
 			
 		}
 	)
@@ -166,7 +179,7 @@ setClass("bioSaveFile", representation(loc = "character", sep = "character"),
 							
 							), 
 							validity = function(object) {
-							if(!file.exists(object@loc)) stop(Msg(paste(sQuote(object@loc), "is not a valid file")))
+							if(!file.exists(object@loc)) stop(.X.Msg(paste(sQuote(object@loc), "is not a valid file")))
 
 
 							}
@@ -188,16 +201,12 @@ setClass("MapImport", representation(path = "character"),
  
 							validity = function(object) {
 							
-							if(!file.exists(object@path)) stop( Msg( paste(sQuote(object@path), "is not a valid path.") ) )	
-							if(!require("raster")) stop(Msg("package raster is not available"))
+							if(!file.exists(object@path)) stop( .X.Msg( paste(sQuote(object@path), "is not a valid path.") ) )	
+							if(!require("raster")) stop(.X.Msg("package raster is not available"))
 
 							} 
 
 		)
-
-
-
-		
 
 setClass("rangeMapFetch", representation(
 					tableName    = "character"), 
@@ -209,17 +218,17 @@ setClass("rangeMapFetch", representation(
 						invalidNam = sapply(mapNam, FUN = function(x) !.dbtable.exists(object@CON, x) )
 						
 						if( any(invalidNam) )
-						  stop(Msg(paste(sQuote(names(invalidNam[invalidNam] )), "is not a valid MAP!\n")))
+						  stop(.X.Msg(paste(sQuote(names(invalidNam[invalidNam] )), "is not a valid MAP!\n")))
 						
 						# check if empty map
 						mapvar = sapply(mapNam, function(x)
-									setdiff(RMQuery(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )
+									setdiff(sqliteQuickSQL(object@CON, paste("pragma table_info(", x, ")"))$name, object@ID ) )
 						
 						sql = paste("select count (", mapvar, ") FROM", mapNam)
-						isempty = sapply(sql, function(x) RMQuery(object@CON,  x)[, 1] ) < 1
+						isempty = sapply(sql, function(x) sqliteQuickSQL(object@CON,  x)[, 1] ) < 1
 						
 						if(any(isempty))
-						 stop(Msg(paste(sQuote(mapNam[isempty]), "is an empty MAP!\n")))
+						 stop(.X.Msg(paste(sQuote(mapNam[isempty]), "is an empty MAP!\n")))
 			}
 	)
 
@@ -231,11 +240,6 @@ setClass("SpatialPixelsRangeMap", representation(
 					return(TRUE)
 					}
 	)
-
-
-
-	
-	
 
 setClass("rangeMapRemove", representation(
 						tableName = "character", 
@@ -249,7 +253,7 @@ setClass("rangeMapRemove", representation(
 									   object@GRIDSIZE%in%object@tableName|
 									   object@CANVAS%in%object@tableName|
 									   object@CANVAS%in%object@tableName)
-						stop(Msg( paste(object@PROJ4STRING,",", object@BBOX, ",",object@GRIDSIZE,",",
+						stop(.X.Msg( paste(object@PROJ4STRING,",", object@BBOX, ",",object@GRIDSIZE,",",
 										object@CANVAS, "or", 
 										object@RANGES, "table(s) cannot be removed!")) )
 

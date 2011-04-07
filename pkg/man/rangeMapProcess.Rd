@@ -1,7 +1,6 @@
 \name{processRanges}
 \alias{processRanges}
-\alias{rangeMapProcess-class}
-\alias{rangeMapProcess,rangeMapProcess-method}
+
 
 \title{Process ranges}
 \description{
@@ -13,12 +12,13 @@ Each polygon range is overlayed on the \code{\link[rangeMapper]{canvas}} and the
 
 \arguments{
 	  \item{con}{An sqlite connection pointing to a valid \code{rangeMapper} project.}
-	  \item{Dir}{ranges file directory}
+	  \item{dir}{ranges file directory}
 	  \item{metadata}{A logical value. If \sQuote{TRUE} ranges metadata: range area, median range centroid and range extents (min, max) are saved to \sQuote{metadata_ranges} table}
+	  \item{...}{One or several user defined functions applied on each range. The output of these functions will be appended to metadata_ranges table}
 	}
 
 \usage{
-processRanges(dir,con,metadata)
+processRanges(dir,con,metadata = TRUE, ...)
 }
 
 

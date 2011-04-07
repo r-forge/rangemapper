@@ -1,12 +1,12 @@
 
 
-rangeTraits <- function(spdf, ...) {
+ .rangeTraits <- function(spdf, ...) {
 # ... must be functions
 # if functions in ... return a named numeric vector then the name is used else names T1, T2, Tn are used.
 
 	dots = list(...)
 
-	if( ! all(sapply(dots, is.function)) ) stop (Msg("All extra arguments must be functions"))
+	if( ! all(sapply(dots, is.function)) ) stop (.X.Msg("All extra arguments must be functions"))
 
 
 	Area = sum(sapply(slot(spdf, "polygons"), function(x) slot(x, "area") ))
@@ -22,7 +22,7 @@ rangeTraits <- function(spdf, ...) {
 		
 		userdef = sapply(dots, function(x) x(spdf))	
 
-		if( !is.numeric(userdef) ) stop(Msg("User defined functions should return numeric vectors"))
+		if( !is.numeric(userdef) ) stop(.X.Msg("User defined functions should return numeric vectors"))
 		
 		if(is.null(names(userdef))) names(userdef) = paste("V", 1:length(userdef), sep = "")
 		
@@ -38,6 +38,8 @@ rangeTraits <- function(spdf, ...) {
 	
 	res
 }
+
+setGeneric("rangeMapProcess", function(object, ...)  				standardGeneric("rangeMapProcess") )
 
 setMethod("rangeMapProcess",  
 		signature = "rangeMapProcess", 
@@ -61,7 +63,7 @@ setMethod("rangeMapProcess",
 	if(!inherits(r, "try-error") ) {
 			 
 		# progress report	
-		Msg( paste("Processsing ranges, please wait!...", 
+		.X.Msg( paste("Processsing ranges, please wait!...", 
 				   paste("Range:", Files$layer[i]),	
 					 paste(round(i/length(Files$layer)*100,2), "% done"), 
 					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n"), 
@@ -88,7 +90,7 @@ setMethod("rangeMapProcess",
 		dbWriteTable(object@CON, "ranges", o, append = TRUE, row.names = FALSE) 
 		
 		if(object@metadata) {
-			rtr =rangeTraits(r, ...)
+			rtr = .rangeTraits(r, ...)
 			if( i == 1 && ncol(rtr) > 7 )# reshape metadata_ranges table
 			 lapply( paste("ALTER TABLE metadata_ranges ADD COLUMN", names(rtr[, 8:ncol(rtr), drop = FALSE]), "FLOAT"), function(x)  RMQuery(object@CON, x))
 	
@@ -97,15 +99,15 @@ setMethod("rangeMapProcess",
 			}
 			
 			
-		} else Msg(r)
+		} else .X.Msg(r)
 	}		
 	
      #if(object@parallel)
 	 #mclapply (1:length(Files$layer) ,FUN = processRangei) else  lapply (1:length(Files$layer) ,FUN = processRangei)
 		lapply (1:length(Files$layer), FUN = processRangei) 
 
-	# last msg
-	Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
+	# last Msg
+	.X.Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
 							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
 	
 		

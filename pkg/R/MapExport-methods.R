@@ -1,5 +1,7 @@
 
 
+setGeneric("rangeMapExport", function(object,dirName, ...)  	    standardGeneric("rangeMapExport") )
+
 # method for  exporting to external files
 setMethod("rangeMapExport",  
 	signature  = c(object = "rangeMap", dirName = "character"),
@@ -9,7 +11,7 @@ setMethod("rangeMapExport",
 					'select name from sqlite_master where type = "table" and 
 						(tbl_name like "MAP_%")')$name
 		
-		if(length(mapnams) == 0) stop(Msg("The project does not contain any MAP tables!"))
+		if(length(mapnams) == 0) stop(.X.Msg("The project does not contain any MAP tables!"))
 		
 		wd = setwd(dirName)
 		

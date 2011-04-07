@@ -1,8 +1,11 @@
-\name{rangeMapStart-class}
+\name{rangeMapStart}
+\alias{rangeMapStart}
+\alias{rangeMapStart-class}
+\alias{rangeMapStart-methods}
+\alias{rangeMapStart,rangeMapStart-method}
+
 \Rdversion{1.1}
 \docType{class}
-\alias{rangeMapStart-class}
-\alias{rangeMapStart,rangeMapStart-method}
 
 \title{Class "rangeMapStart"}
 \description{
@@ -15,8 +18,8 @@ Objects can be created by calls of the form \code{new("rangeMapStart", ...)}.
   \describe{
 	\item{\code{dir}:}{Object of class \code{"character"}; the directory hosting the \code{rangeMapper} project }
 	\item{\code{file}:}{Object of class \code{"character"} Name of the \code{rangeMapper} project; an *.sqlite file}
-    \item{\code{scheleton}:}{Object of class \code{"list"} containing the sql code to initiate a rangeMapper project }
-	\item{\code{overwrite}:}{Object of class \code{"logical"} if \code{TRUE}  all the project's table are removed}
+    \item{\code{skeleton}:}{Object of class \code{"list"} containing the SQL calls to initiate a rangeMapper project }
+	\item{\code{overwrite}:}{Object of class \code{"logical"}; if \code{TRUE}  all the project's table are removed}
   }
 }
 \section{Methods}{
@@ -31,11 +34,8 @@ Mihai Valcu, \email{valcu@orn.mpg.de}
 
 
 \seealso{
-  \code{\link{rangeMapper}} for a complete example.\cr
-  \code{\link{rangeMap.start}} \cr
-  \code{\link{rangeMap.open}}
-
-  
+  \code{\link{rangeMapper}} for a complete example.
+ 
   }
 
 \keyword{classes}

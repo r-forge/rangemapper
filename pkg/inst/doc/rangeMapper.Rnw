@@ -105,13 +105,8 @@ After pushing the initiate project button, choose a location to save the file, n
 
 
 	\subsection{Process and upload ranges}
-	\begin{figure}[htbp]
-	  \begin{center}
-		\includegraphics[width=0.5\linewidth]{fig5}
-		\caption{\label{fig:fig5} Upload ranges}
-	  \end{center}
-	\end{figure}
-	At this step, (see fig. \ref{fig:fig5}) you can select the individual range files or a directory containing the range files. Then every range polygon is overlaid on the canvas and the result of the overlap is saved to the database.\\
+
+	At this step you can select a directory containing the range files. Then every range polygon is overlaid on the canvas and the result of the overlap is saved to the database.\\
 For the wrens, push the `PROCESS RANGES' button and select the directory with the wrens range vector files. Hit `YES' when asked to save range centroid and range extent data to the data project file.\\
 Note that if there are thousands of range map polygons with complex geometries to be processed and/or the canvas resolution is relatively high this step can be time consuming. For example processing all amphibians of the world \cite{iucn09} (5816 ranges, total 252 MB) using a grid of 0.25$^{\circ}$ resolution takes 544 minutes on a 64-bit machine with 4 GB of RAM running Windows Vista and R 2.10.0. However, once this step has been performed and the results saved to the database, the other operations are fast.
 	
