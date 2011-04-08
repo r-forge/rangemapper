@@ -19,7 +19,7 @@ Mihai Valcu\footnote{
 	\url{http://orn.mpg.de/mitarbeiter/valcu.html }
 	Max Planck Institute for Ornithology, 
 	Behavioural Ecology and Evolutionary Genetics, 
-	Eberhard-Gwinner-Straﬂe 5, D-82319 Starnberg (Seewiesen)} and 
+	Eberhard-Gwinner-Street 5, D-82319 Starnberg (Seewiesen)} and 
 James Dale\footnote{
 	\texttt{J.Dale@massey.ac.nz},
 	\url{http://quelea.net}
@@ -337,10 +337,7 @@ spplot(hotSpots, "species_richness", sp.layout = list(list("sp.polygons", world,
 			\url{http://www.asdar-book.org/}
 			
 \bibitem[maptools]{maptools}
-	P Nicholas J. Lewin-Koh, Roger Bivand, contributions by Edzer J. Pebesma, Eric Archer, Adrian Baddeley, Hans-J√∂rg Bibiko,
-	  St√©phane Dray, David Forrest, Michael Friendly, Patrick Giraudoux, Duncan Golicher, Virgilio G√≥mez Rubio, Patrick
-	  Hausmann, Thomas Jagger, Sebastian P. Luque, Don MacQueen, Andrew Niccolai, Tom Short and Ben Stabler (2009). maptools:
-	  Tools for reading and handling spatial objects. R package version 0.7-29. \url{http://CRAN.R-project.org/package=maptools}			
+	P Nicholas J. Lewin-Koh, Roger Bivand (2009). maptools: Tools for reading and handling spatial objects. R package version 0.7-29. \url{http://CRAN.R-project.org/package=maptools}			
 
 \bibitem[rgdal]{rgdal}  
 	Timothy H. Keitt, Roger Bivand, Edzer Pebesma and Barry Rowlingson (2010). rgdal: Bindings for the Geospatial Data
@@ -350,7 +347,7 @@ spplot(hotSpots, "species_richness", sp.layout = list(list("sp.polygons", world,
  David A. James (2010). RSQLite: SQLite interface for R. R package version 0.8-4. \url{http://CRAN.R-project.org/package=RSQLite}
   
 \bibitem[Buckley (2007)]{buckley07}  
-Lauren B. Buckley and Jetz, W (2007) Environmental and historical constraints on global patterns of amphibian richness, Proc. R. Soc. B , 274, 1167ñ1173
+Lauren B. Buckley and Jetz, W (2007) Environmental and historical constraints on global patterns of amphibian richness, Proc. R. Soc. B , 274, 1167-1173
 \bibitem[amphibiaweb.org]{amphibiaweb09}
 Worldwide Amphibian Declines: How big is the problem, what are the causes and what can be done?
 \url{http://amphibiaweb.org/declines/declines.html}

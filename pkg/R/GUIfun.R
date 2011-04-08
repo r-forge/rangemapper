@@ -341,7 +341,7 @@ tkimage.create("photo",file=file)
 	dbcon = .X.get("con")
 		if(is.null(dbcon)) stop(.X.Msg("There is no active project!"))
 
-	f = tk_choose.files( filter = matrix(c("comma delim, sep = ';'", ".csv"), ncol = 2) )
+	f = tk_choose.files( filters = matrix(c("comma delim, sep = ';'", ".csv"), ncol = 2) )
 	
 	dat = read.csv(f, as.is = TRUE,sep = ";", strip.white = TRUE)
 	
