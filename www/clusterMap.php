@@ -21,8 +21,15 @@ $group_name=ereg_replace('([^\.]*)\..*$','\1',$_SERVER['HTTP_HOST']);
 
 <body>
 
+r-forge
  
 <a href="http://www2.clustrmaps.com/counter/maps.php?url=http://rangemapper.r-forge.r-project.org/" id="clustrMapsLink"><img src="http://www2.clustrmaps.com/counter/index2.php?url=http://rangemapper.r-forge.r-project.org/" style="border:0px;" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='http://clustrmaps.com/images/clustrmaps-back-soon.jpg'; document.getElementById('clustrMapsLink').href='http://clustrmaps.com';" />
+</a>
+
+
+CRAN
+
+<a href="http://www2.clustrmaps.com/counter/maps.php?url=http://cran.r-project.org/web/packages/rangeMapper/index.html" id="clustrMapsLink"><img src="http://www2.clustrmaps.com/counter/index2.php?url=http://cran.r-project.org/web/packages/rangeMapper/index.html" style="border:0px;" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='http://clustrmaps.com/images/clustrmaps-back-soon.jpg'; document.getElementById('clustrMapsLink').href='http://clustrmaps.com';" />
 </a>
 
 
