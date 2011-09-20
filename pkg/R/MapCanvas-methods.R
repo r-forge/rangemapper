@@ -30,7 +30,7 @@ setMethod("rangeMapBbox",
 		definition = function(object, checkProj = TRUE,...) {
 		shpFiles = rangeFiles(object)
 		
-		.X.Msg(paste("computing global bouding box for",length(shpFiles ), "ranges...") )
+		.X.Msg(paste("Computing global bounding box for",length(shpFiles ), "ranges...") )
 		
 		nfo = lapply(shpFiles, getinfo.shape)
 			
