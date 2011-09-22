@@ -3,7 +3,7 @@
 .X.Msg <- function(.X.Msg=Sys.time(), tkMainWindow = "win", tkElement = ".X.Msg", eol = "\n", keep = TRUE, clearup = FALSE, getTime = FALSE, envir = ".RangeMapper") {
 
    .X.Msg	= paste(.X.Msg, collapse = eol)
-   .X.Msg	= paste("\xBB\xBB", .X.Msg, collapse = " ")
+   .X.Msg	= paste(" >>", .X.Msg, collapse = " ")
    
    
   if(getTime) .X.Msg = paste( "<", Sys.time(), ">\n", .X.Msg, sep = "")
