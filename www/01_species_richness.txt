@@ -1,0 +1,60 @@
+Species richness of the New World Wrens
+---------------------------------------
+:lang: en
+:encoding: iso-8859-1
+ 
+
+
+
+NOTE: The functions +gridSize.save()+ and +rangeMap.save()+, and implicitly +canvas.save()+ ,
+are called with their default arguments. 
++plot()+ uses the default colour scheme and scale class interval. 
++global.bbox.save()+ uses the extent of all the ranges to compute a global bounding box.
+
+----
+ require(rangeMapper)
+ wd = tempdir()
+ dbcon = rangeMap.start(file = "wrens.sqlite", dir = tempdir(), overwrite = TRUE)
+ f = system.file(package = "rangeMapper", "extdata", "wrens", "vector")
+----
+
+Mapping using default parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+----
+ global.bbox.save(con = dbcon, bbox = f)
+ gridSize.save(dbcon)
+ canvas.save(dbcon)
+ processRanges(dir = f, con = dbcon)
+ rangeMap.save(dbcon, tableName = "species_richness")
+----
+
+----
+ sr = rangeMap.fetch(dbcon)
+ plot(sr)
+----
+image::figs/01-003.jpg[]
+
+
+----
+[1] "R version 2.13.1 Patched (2011-08-19 r56770)"
+[1] "rangeMapper 0.0-6.4"
+[1] "website generated using ascii 1.4"
+----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

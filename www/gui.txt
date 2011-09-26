@@ -1,0 +1,6 @@
+
+
+== Graphical user interface ==
+
+A graphical user interface quick guide is available here: +
+http://cran.r-project.org/web/packages/rangeMapper/vignettes/rangeMapper.pdf[http://cran.r-project.org/.../vignettes/rangeMapper.pdf]
