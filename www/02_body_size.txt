@@ -10,7 +10,6 @@ processing. +
 The ``FUN'' in +rangeMap.save()+ is either a 'string' corresponding to an SQL ``aggregate function'' or 
 an R function. 
 
-
 ----
  require(rangeMapper)
  wd = tempdir()
@@ -54,15 +53,14 @@ Mapping using R functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 ----
  custom_function = function(x, ...) (sd(x, ...))
- rangeMap.save(dbcon, biotab = "wrens", FUN = custom_function, biotrait = "body_size", tableName = "sd_body_size", 
-     overwrite = TRUE)
+ rangeMap.save(dbcon, biotab = "wrens", FUN = custom_function, biotrait = "body_size", tableName = "sd_body_size", overwrite = TRUE)
 ----
 
 ----
  sr = rangeMap.fetch(dbcon)
  plot(sr)
 ----
-image::figs/01-006.jpg[]
+image::figs/02-006.jpg[]
 
 
 ----

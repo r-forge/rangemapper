@@ -5,7 +5,6 @@ Species richness of the New World Wrens
  
 
 
-
 NOTE: The functions +gridSize.save()+ and +rangeMap.save()+, and implicitly +canvas.save()+ ,
 are called with their default arguments. 
 +plot()+ uses the default colour scheme and scale class interval. 
