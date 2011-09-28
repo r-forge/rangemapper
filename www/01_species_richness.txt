@@ -2,7 +2,7 @@ Species richness of the New World Wrens
 ---------------------------------------
 :lang: en
 :encoding: iso-8859-1
- 
+> 
 
 
 NOTE: The functions +gridSize.save()+ and +rangeMap.save()+, and implicitly +canvas.save()+ ,

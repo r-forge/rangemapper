@@ -9,6 +9,23 @@
 
 <link rel="stylesheet" href="media/asciidoc.css" type="text/css" />
 <link rel="stylesheet" href="media/layout2.css" type="text/css" />
+
+<script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-25987540-1']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+</script>
+
+
+
+
 </head>
 
 <body style="max-width:1024px">
@@ -47,6 +64,7 @@
 <div class="sect1">
 <h2 id="_body_size_distribution_of_the_new_world_wrens">Body size distribution of the New World Wrens</h2>
 <div class="sectionbody">
+<div class="paragraph"><p>&gt;</p></div>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
@@ -62,8 +80,10 @@ an R function.</td>
 <div class="content">
 <pre><tt> require(rangeMapper)
  wd = tempdir()
- dbcon = rangeMap.start(file = "wrens.sqlite", dir = tempdir(), overwrite = TRUE)
- f = system.file(package = "rangeMapper", "extdata", "wrens", "vector")
+ dbcon = rangeMap.start(file = "wrens.sqlite", dir = tempdir(),
+     overwrite = TRUE)
+ f = system.file(package = "rangeMapper", "extdata", "wrens",
+     "vector")
  projString = CRS(" +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=km +no_defs")
  global.bbox.save(con = dbcon, bbox = f, p4s = projString)
  gridSize.save(dbcon, gridSize = 100)
@@ -78,13 +98,20 @@ an R function.</td>
 </div></div>
 <div class="literalblock">
 <div class="content">
-<pre><tt>                         sci_name       com_name           genus body_size body_mass
-1         Campylorhynchus_jocosus boucard's wren Campylorhynchus      17.0      27.6
-2         Campylorhynchus_gularis   spotted wren Campylorhynchus      17.0      30.1
-3     Campylorhynchus_yucatanicus   yucatan wren Campylorhynchus      18.0      35.5
-4 Campylorhynchus_brunneicapillus    cactus wren Campylorhynchus      18.5      38.9
-5      Campylorhynchus_chiapensis     giant wren Campylorhynchus      21.0      50.9
-6         Campylorhynchus_griseus bicolored wren Campylorhynchus      21.5      42.4</tt></pre>
+<pre><tt>                         sci_name       com_name           genus body_size
+1         Campylorhynchus_jocosus boucard's wren Campylorhynchus      17.0
+2         Campylorhynchus_gularis   spotted wren Campylorhynchus      17.0
+3     Campylorhynchus_yucatanicus   yucatan wren Campylorhynchus      18.0
+4 Campylorhynchus_brunneicapillus    cactus wren Campylorhynchus      18.5
+5      Campylorhynchus_chiapensis     giant wren Campylorhynchus      21.0
+6         Campylorhynchus_griseus bicolored wren Campylorhynchus      21.5
+  body_mass
+1      27.6
+2      30.1
+3      35.5
+4      38.9
+5      50.9
+6      42.4</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
@@ -103,7 +130,8 @@ an R function.</td>
 <h4 id="_mapping_using_sql_aggregate_functions">Mapping using SQL aggregate functions</h4>
 <div class="listingblock">
 <div class="content">
-<pre><tt> rangeMap.save(dbcon, biotab = "wrens", FUN = "median", biotrait = "body_size", tableName = "median_body_size")</tt></pre>
+<pre><tt> rangeMap.save(dbcon, biotab = "wrens", FUN = "median", biotrait = "body_size",
+     tableName = "median_body_size")</tt></pre>
 </div></div>
 </div>
 <div class="sect3">
@@ -111,7 +139,8 @@ an R function.</td>
 <div class="listingblock">
 <div class="content">
 <pre><tt> custom_function = function(x, ...) (sd(x, ...))
- rangeMap.save(dbcon, biotab = "wrens", FUN = custom_function, biotrait = "body_size", tableName = "sd_body_size", overwrite = TRUE)</tt></pre>
+ rangeMap.save(dbcon, biotab = "wrens", FUN = custom_function,
+     biotrait = "body_size", tableName = "sd_body_size", overwrite = TRUE)</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
@@ -138,7 +167,7 @@ an R function.</td>
         <div id="footer">
 
         <div id="footer-text">
-Last updated 2011-09-27 09:31:36 W. Europe Daylight Time
+Last updated 2011-09-28 08:35:06 W. Europe Daylight Time
         </div>
 
 <div id="footer-badges">
