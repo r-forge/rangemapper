@@ -140,14 +140,14 @@ setClass("rangeMapProcess",
 		parallel = "logical"
 			), 
 		
-		contains = c("rangeFiles", "rangeMap"), 
+		contains = c("rangeMap"), 
 		
 		validity = function(object)	{
 					if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg("ranges table is not empty!"))
 		},
 		prototype(
 			metadata = TRUE, 
-			parallel = FALSE # "multicore"%in%basename(searchpaths()) 
+			parallel = FALSE  
 			)
 	)	
 	

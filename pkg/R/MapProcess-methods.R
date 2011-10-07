@@ -39,15 +39,17 @@
 	res
 }
 
-setGeneric("rangeMapProcess", function(object, ...)  				standardGeneric("rangeMapProcess") )
+setGeneric("rangeMapProcess", function(object, file = "character", dir = "character", ...)  standardGeneric("rangeMapProcess") )
 
+ # Method 1:  Each range file is a separate shp file. 
 setMethod("rangeMapProcess",  
 		signature = "rangeMapProcess", 
-		definition = function(object, ...){
+		definition = function(object, file = "missing", dir , ...){
 	# . . . pass to rangeTraits	
 	Startprocess = Sys.time()
 
-	Files = rangeFiles(object)
+	
+	Files = rangeFiles(new("rangeFiles", dir = dir))
 	
 	cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
 
@@ -102,9 +104,14 @@ setMethod("rangeMapProcess",
 		} else .X.Msg(r)
 	}		
 	
-     #if(object@parallel)
-	 #mclapply (1:length(Files$layer) ,FUN = processRangei) else  lapply (1:length(Files$layer) ,FUN = processRangei)
-		lapply (1:length(Files$layer), FUN = processRangei) 
+     if(object@parallel) {
+	 
+	lapply (1:length(Files$layer), FUN = processRangei) 
+		 
+	 } else
+
+	 lapply (1:length(Files$layer), FUN = processRangei) 
+	 
 
 	# last Msg
 	.X.Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
@@ -117,9 +124,9 @@ setMethod("rangeMapProcess",
 	)
 
 # user level function
-processRanges <- function(dir, con, metadata = TRUE, ...) {
+processRanges <- function(con, metadata = TRUE, ...) {
 
-	x = new("rangeMapProcess", CON = con, dir = dir, metadata = metadata)
+	x = new("rangeMapProcess", CON = con, metadata = metadata)
 
 	rangeMapProcess(x, ...)	
 		
