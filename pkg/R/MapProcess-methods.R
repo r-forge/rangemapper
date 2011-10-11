@@ -39,16 +39,16 @@
 	res
 }
 
-setGeneric("rangeMapProcess", function(object, file = "character", dir = "character", ...)  standardGeneric("rangeMapProcess") )
+setGeneric("rangeMapProcess", function(object,file, dir, ID, ...)  standardGeneric("rangeMapProcess") )
 
  # Method 1:  Each range file is a separate shp file. 
 setMethod("rangeMapProcess",  
-		signature = "rangeMapProcess", 
-		definition = function(object, file = "missing", dir , ...){
+		signature = c(object = "rangeMap",file = "missing", dir = "character", ID = "missing"), 
+		definition = function(object, dir , ...){
 	# . . . pass to rangeTraits	
+
 	Startprocess = Sys.time()
 
-	
 	Files = rangeFiles(new("rangeFiles", dir = dir))
 	
 	cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
@@ -122,18 +122,67 @@ setMethod("rangeMapProcess",
 			} 
 	
 	)
+	
+#   Method 2:  One big shp file
+setMethod("rangeMapProcess",  
+		signature = c(object = "rangeMap",file = "character", dir = "missing", ID = "character"), 
+		definition = function(object, file, ID,  ...){
+		Startprocess = Sys.time()
+	
+		.X.Msg("Processsing ranges, please wait!...", keep = FALSE)
+			
+		cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
+					
+		r = readOGR(dirname(file), gsub(".shp", "", basename(file)), verbose = FALSE)
+		
+		#  reproject
+		p4s =  dbReadTable(object@CON, object@PROJ4STRING)[1,1]
+		if(!identical(gsub(" ", "", proj4string(r)), gsub(" ", "", p4s) ) ) r = spTransform( r , CRS(p4s) )
+	
+		# split by range		
+		r = split(r, r@data[, ID])
 
+		overlayRes = lapply(r, function(x) {
+		
+				.X.Msg(paste("Processsing", x@data[1, ID]), keep = FALSE)
+				o = overlay(x[, ID], cnv)
+				
+				# TODO
+				#snap to grid if o returns nothing. 
+				# add snap = TRUE for both methods
+				
+				m = cbind(cnv@data, o)
+				m[!is.na(m[, ID]), ]
+			})
+			
+
+		overlayRes = do.call(rbind, overlayRes )	
+		names(overlayRes) = c("id", object@BIOID) 
+
+		.X.Msg("Writing to project.", keep = FALSE)		
+		dbWriteTable(object@CON, "ranges", overlayRes, append = TRUE, row.names = FALSE) 
+
+		# last Msg
+		nranges = RMQuery(object@CON, paste("SELECT count(*) FROM (SELECT distinct", object@BIOID, " from", object@RANGES, ")"))[1,1]
+		
+		.X.Msg(paste(nranges , "ranges updated to database; Elapsed time:", 
+							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
+	
+
+}
+)	
+	
+	
 # user level function
 processRanges <- function(con, metadata = TRUE, ...) {
 
 	x = new("rangeMapProcess", CON = con, metadata = metadata)
 
 	rangeMapProcess(x, ...)	
-		
+	
 }
 
- 
- 
+
 
 
 
