@@ -31,14 +31,7 @@ setClass("rangeMapStart",
 			"CREATE TABLE bbox(xmin FLOAT,xmax FLOAT,ymin FLOAT,ymax FLOAT)", 
 			"CREATE TABLE canvas (x FLOAT,y FLOAT,id INT)", 
 			"CREATE TABLE ranges (id INT,bioid CHAR)",
-			"CREATE TABLE metadata_ranges (bioid CHAR, 
-										   Area FLOAT, 
-										   Median_x FLOAT, 
-										   Median_y FLOAT, 
-										   Min_x FLOAT, 
-										   Max_x FLOAT,
-										   Min_y FLOAT, 
-										   Max_y FLOAT)"
+			"CREATE TABLE metadata_ranges (bioid CHAR)"
 
 		),
 		index = 
@@ -140,7 +133,7 @@ setClass("rangeMapProcess",
 		parallel = "logical"
 			), 
 		
-		contains = c("rangeMap"), 
+		contains = "rangeMap", 
 		
 		validity = function(object)	{
 					if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg("ranges table is not empty!"))

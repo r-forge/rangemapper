@@ -16,18 +16,21 @@ wd = tempdir()
 dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
 
 # Breeding range vector files
-f = system.file(package = "rangeMapper", "extdata", "wrens", "vector")
+loc = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
+f = list.files(loc, full.names = TRUE, pattern = ".shp$")
 @
 
 Mapping using default parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 <<results=hide>>=
-global.bbox.save(con = dbcon, bbox = f) 
+global.bbox.save(con = dbcon, bbox = loc) 
 gridSize.save(dbcon) 
 canvas.save(dbcon) 
-processRanges(dir = f, con =  dbcon)
+processRanges(file = f, ID = "sci_name", con =  dbcon)
+
 rangeMap.save(dbcon, tableName = "species_richness")
+
 @
 
 <<results=hide,fig=true>>=

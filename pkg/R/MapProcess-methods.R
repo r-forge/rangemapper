@@ -1,70 +1,72 @@
 
 
- .rangeTraits <- function(spdf, ...) {
-# ... must be functions
-# if functions in ... return a named numeric vector then the name is used else names T1, T2, Tn are used.
+rangeTraits <- function() {
 
-	dots = list(...)
+	Area = function(spdf) sum(sapply(slot(spdf, "polygons"), function(x) slot(x, "area") ))
+	Median_x = function(spdf) median(coordinates(spdf)[, 1])
+	Median_y = function(spdf) median(coordinates(spdf)[, 2])
+	Min_x = function(spdf) min(coordinates(spdf)[, 1])
+	Min_y = function(spdf) min(coordinates(spdf)[, 2])
+	Max_x = function(spdf) max(coordinates(spdf)[, 1])
+	Max_y = function(spdf) max(coordinates(spdf)[, 2])
 
-	if( ! all(sapply(dots, is.function)) ) stop (.X.Msg("All extra arguments must be functions"))
 
+	list(Area = Area, Median_x = Median_x, Median_y = Median_y, Min_x = Min_x, Min_y = Min_y, Max_x = Max_x, Max_y = Max_y)
 
-	Area = sum(sapply(slot(spdf, "polygons"), function(x) slot(x, "area") ))
-
-	midExt = apply(coordinates(spdf), 2, FUN = function(x) data.frame(Median = median(x), Min = min(x), Max = max(x) ) )
-
-	names(midExt[[1]]) = paste(names(midExt[[1]]), "x", sep = "_")
-	names(midExt[[2]]) = paste(names(midExt[[2]]), "y", sep = "_")
-
-	default = cbind(Area, midExt[[1]], midExt[[2]])
-
-	if(length(dots) > 0) {
-		
-		userdef = sapply(dots, function(x) x(spdf))	
-
-		if( !is.numeric(userdef) ) stop(.X.Msg("User defined functions should return numeric vectors"))
-		
-		if(is.null(names(userdef))) names(userdef) = paste("V", 1:length(userdef), sep = "")
-		
-		if( any(nchar(names(userdef)) == 0 )) {
-			nonam = which(nchar(names(userdef)) == 0)
-			names(userdef)[nonam]  = paste("V", 1:length(nonam), sep = "")
-			}
-		names(userdef) =   make.db.names.default(names(userdef))	
-
-		res = cbind(default,  data.frame( t(userdef )) )
-		} else 
-		res = default
-	
-	res
 }
 
-setGeneric("rangeMapProcess", function(object,file, dir, ID, ...)  standardGeneric("rangeMapProcess") )
+# sapply(rangeTraits(), function(x) x(spdf) )
 
- # Method 1:  Each range file is a separate shp file. 
+.rangeOverlay <- function(spdf, canvas, name) {
+	#SpatialPolygonsDataFrame
+	# canvas 	SpatialPointsDataFrame
+	# name character, length 2
+	
+	overlayRes = which(!is.na(overlay(spdf, canvas)[, 1]))
+	
+	if(length(overlayRes) > 0) { # do grid interpolation
+		sp = canvas[overlayRes, ]
+		o = data.frame(id = sp$id, bioid = rep(name, nrow(sp)) ) 
+		}
+		
+	if(length(overlayRes) == 0) { # the polygon is smaller than a grid cell: snap to the nearest point
+			ctr = apply(coordinates(spdf),2, mean)
+			nn = spDistsN1(canvas, ctr)
+			sp = canvas[which(nn == min(nn) ), ]
+			o = data.frame(id = sp$id, bioid = rep(name, nrow(sp@coords)) )
+		} 
+	
+	return(o)
+
+}
+
+		
+setGeneric("rangeMapProcess", function(object,spdf, dir, ID,metadata, parallel)  standardGeneric("rangeMapProcess") )
+
+
+ # Method 1.1 :  Each range file is a separate shp file. No metadata
 setMethod("rangeMapProcess",  
-		signature = c(object = "rangeMap",file = "missing", dir = "character", ID = "missing"), 
-		definition = function(object, dir , ...){
+		signature = c(object = "rangeMap",spdf = "missing", dir = "character", ID = "missing", metadata = "missing", parallel = "missing"), 
+		definition = function(object, dir){
+	
+	if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg( paste(dQuote(object@RANGES), "table is not empty!")))
+	
 	# . . . pass to rangeTraits	
 
 	Startprocess = Sys.time()
-
 	Files = rangeFiles(new("rangeFiles", dir = dir))
-	
 	cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
-
-	processRangei = function(i) {
-		
-	r = try(readOGR(Files$dsn[i], Files$layer[i], verbose = FALSE), silent = TRUE)
 	
+	
+	.processRange = function(i) {
+		
+	name = Files$layer[i]
+	r = readOGR(Files$dsn[i], Files$layer[i], verbose = FALSE)
 	#  reproject
 	p4s =  dbReadTable(object@CON, object@PROJ4STRING)[1,1]
-	if(!identical(gsub(" ", "", proj4string(r)), gsub(" ", "", p4s) ) ) r = spTransform( r , CRS(p4s) )
+		if(!identical(gsub(" ", "", proj4string(r)), gsub(" ", "", p4s) ) ) r = spTransform( r , CRS(p4s) )
 	
-	
-	if(!inherits(r, "try-error") ) {
-			 
-		# progress report	
+	# progress report	
 		.X.Msg( paste("Processsing ranges, please wait!...", 
 				   paste("Range:", Files$layer[i]),	
 					 paste(round(i/length(Files$layer)*100,2), "% done"), 
@@ -72,125 +74,233 @@ setMethod("rangeMapProcess",
 					 keep = FALSE)
 		
 
-			overlayRes = overlay(r, cnv) 
-			overlayRes = which(!is.na(overlayRes[, 1]))
-			
-			if(length(overlayRes) > 0) { # do grid interpolation
-				sp = cnv[overlayRes, ]
-				
-				o = data.frame(id = sp$id, bioid = rep(Files$layer[i], nrow(sp@coords)) ) 
-				
-				} else { # the polygon is smaller than a grid cell: snap to the nearest point
-					ctr = apply(coordinates(r),2, mean)
-					nn = spDistsN1(cnv, ctr)
-					sp = cnv[which(nn == min(nn) ), ]
-					o = data.frame(id = sp$id, bioid = rep(Files$layer[i], nrow(sp@coords)) )
-				} 
-			names(o) = c("id", "bioid")
-
-		# save  to db
-		dbWriteTable(object@CON, "ranges", o, append = TRUE, row.names = FALSE) 
+		o = .rangeOverlay(r,  cnv, name) 
 		
-		if(object@metadata) {
-			rtr = .rangeTraits(r, ...)
-			if( i == 1 && ncol(rtr) > 7 )# reshape metadata_ranges table
-			 lapply( paste("ALTER TABLE metadata_ranges ADD COLUMN", names(rtr[, 8:ncol(rtr), drop = FALSE]), "FLOAT"), function(x)  RMQuery(object@CON, x))
-	
-			md = data.frame(bioid =Files$layer[i],  rtr)
-			dbWriteTable(object@CON, "metadata_ranges", md, append = TRUE, row.names = FALSE) 
-			}
-			
-			
-		} else .X.Msg(r)
+		names(o) = c(object@ID, object@BIOID)
+		
+		# save  to db
+		dbWriteTable(object@CON, object@RANGES, o, append = TRUE, row.names = FALSE) 
+
 	}		
 	
-     if(object@parallel) {
+	lapply (1:length(Files$layer), FUN = .processRange) 
 	 
-	lapply (1:length(Files$layer), FUN = processRangei) 
-		 
-	 } else
 
-	 lapply (1:length(Files$layer), FUN = processRangei) 
+	# last Msg
+	.X.Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
+							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
+
+			} 
+	)
+ 
+ # TODO: Method 1.2 :  Each range file is a separate shp file. Metadata are computed
+setMethod("rangeMapProcess",  
+		signature = c(object = "rangeMap",spdf = "missing", dir = "character", ID = "missing", metadata = "list", parallel = "missing"), 
+		definition = function(object, dir, metadata){
+	
+	if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg( paste(dQuote(object@RANGES), "table is not empty!")))
+	
+	# . . . pass to rangeTraits	
+
+	Startprocess = Sys.time()
+
+	Files = rangeFiles(new("rangeFiles", dir = dir))
+	
+	cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
+	
+	
+	.processRange = function(i) {
+		
+	name = Files$layer[i]
+	r = readOGR(Files$dsn[i], Files$layer[i], verbose = FALSE)
+	
+	#  reproject
+	p4s =  dbReadTable(object@CON, object@PROJ4STRING)[1,1]
+		if(!identical(gsub(" ", "", proj4string(r)), gsub(" ", "", p4s) ) ) r = spTransform( r , CRS(p4s) )
+	
+	
+	# progress report	
+		.X.Msg( paste("Processsing ranges, please wait!...", 
+				   paste("Range:", Files$layer[i]),	
+					 paste(round(i/length(Files$layer)*100,2), "% done"), 
+					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n"), 
+					 keep = FALSE)
+		
+
+		o = .rangeOverlay(r,  cnv, name) 
+		
+		names(o) = c(object@ID, object@BIOID)
+		
+		# save  to @RANGES
+		dbWriteTable(object@CON, object@RANGES, o, append = TRUE, row.names = FALSE) 
+		
+		# save  to @METADATA_RANGES
+		rtr = sapply(rangeTraits(), function(x) x(r) )
+		
+		rtr = data.frame(t(rtr))
+		id = data.frame(name); names(id) = object@BIOID
+		metadata = cbind(id, rtr)
+		
+		 if(i == 1) { 
+		  lapply( 
+			paste("ALTER TABLE metadata_ranges ADD COLUMN", names(rtr[, 1:ncol(rtr), drop = FALSE]), "FLOAT"), 
+				function(x)  RMQuery(object@CON, x)) }
+
+		dbWriteTable(object@CON, object@METADATA_RANGES, metadata, append = TRUE, row.names = FALSE) 
+
+			
+
+	}		
+
+	
+	lapply (1:length(Files$layer), FUN = .processRange) 
 	 
 
 	# last Msg
 	.X.Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
 							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
 	
-		
-		
-			} 
-	
+ } 
 	)
-	
-#   Method 2:  One big shp file
+
+#   Method 2.1:  One shp file containing all ranges, ID is required. No metadata
 setMethod("rangeMapProcess",  
-		signature = c(object = "rangeMap",file = "character", dir = "missing", ID = "character"), 
-		definition = function(object, file, ID,  ...){
+		signature = c(object = "rangeMap",spdf = "SpatialPolygonsDataFrame", dir = "missing", ID = "character", metadata = "missing", parallel = "missing"), 
+		definition = function(object, spdf, ID,  metadata){
+		
+		if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg( paste(dQuote(object@RANGES), "table is not empty!")))
+
+		
 		Startprocess = Sys.time()
 	
 		.X.Msg("Processsing ranges, please wait!...", keep = FALSE)
 			
 		cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
-					
-		r = readOGR(dirname(file), gsub(".shp", "", basename(file)), verbose = FALSE)
 		
 		#  reproject
 		p4s =  dbReadTable(object@CON, object@PROJ4STRING)[1,1]
-		if(!identical(gsub(" ", "", proj4string(r)), gsub(" ", "", p4s) ) ) r = spTransform( r , CRS(p4s) )
+		if(!identical(gsub(" ", "", proj4string(spdf)), gsub(" ", "", p4s) ) ) { 
+			.X.Msg( paste("Reprojecting to", dQuote(p4s)), keep = FALSE)	
+			spdf = spTransform( spdf , CRS(p4s) )
+			}
 	
-		# split by range		
-		r = split(r, r@data[, ID])
+		# split by range	
+		.X.Msg( "Identifing ranges...", keep = FALSE)	
+		spdf = split(spdf, spdf@data[, ID])
 
-		overlayRes = lapply(r, function(x) {
+		rnames = names(spdf)
+		pb = txtProgressBar(min = 0, max = length(rnames), char = ".", style = 3)
+	
+		.X.Msg( "Processing ranges...", keep = FALSE)
+		.processRange = function(x) {
+				name = x@data[1, ID]
+				pos = which(rnames%in%name)
+				setTxtProgressBar(pb, pos)
+				.rangeOverlay(x,  cnv, name) 
+			}
 		
-				.X.Msg(paste("Processsing", x@data[1, ID]), keep = FALSE)
-				o = overlay(x[, ID], cnv)
-				
-				# TODO
-				#snap to grid if o returns nothing. 
-				# add snap = TRUE for both methods
-				
-				m = cbind(cnv@data, o)
-				m[!is.na(m[, ID]), ]
-			})
+		overlayRes = lapply(spdf, .processRange)
 			
+		close(pb)
 
-		overlayRes = do.call(rbind, overlayRes )	
-		names(overlayRes) = c("id", object@BIOID) 
+		overlayRes = do.call(rbind, overlayRes)	
+		
+		names(overlayRes) = c(object@ID, object@BIOID) 
 
 		.X.Msg("Writing to project.", keep = FALSE)		
-		dbWriteTable(object@CON, "ranges", overlayRes, append = TRUE, row.names = FALSE) 
+		res = dbWriteTable(object@CON, "ranges", overlayRes, append = TRUE, row.names = FALSE) 
 
-		# last Msg
-		nranges = RMQuery(object@CON, paste("SELECT count(*) FROM (SELECT distinct", object@BIOID, " from", object@RANGES, ")"))[1,1]
 		
-		.X.Msg(paste(nranges , "ranges updated to database; Elapsed time:", 
+		# last Msg
+		if(res) .X.Msg(paste(length(rnames) , "ranges updated to database; Elapsed time:", 
 							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
 	
 
 }
 )	
 	
+#   Method 2.2:  One shp file containing all ranges, ID is required.  Metadata are computed
+setMethod("rangeMapProcess",  
+		signature = c(object = "rangeMap",spdf = "SpatialPolygonsDataFrame", dir = "missing", ID = "character", metadata = "list", parallel = "missing"), 
+		definition = function(object, spdf, ID,  metadata){
+		
+		if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg( paste(dQuote(object@RANGES), "table is not empty!")))
+
+		
+		Startprocess = Sys.time()
 	
-# user level function
-processRanges <- function(con, metadata = TRUE, ...) {
+		.X.Msg("Processsing ranges, please wait!...", keep = FALSE)
+			
+		cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
+		
+		#  reproject
+		p4s =  dbReadTable(object@CON, object@PROJ4STRING)[1,1]
+		if(!identical(gsub(" ", "", proj4string(spdf)), gsub(" ", "", p4s) ) ) { 
+			.X.Msg( paste("Reprojecting to", dQuote(p4s)), keep = FALSE)	
+			spdf = spTransform( spdf , CRS(p4s) )
+			}
+	
+		# split by range	
+		.X.Msg( "Identifing ranges...", keep = FALSE)	
+		spdf = split(spdf, spdf@data[, ID])
+		.X.Msg( paste(length(spdf), " ranges found."), keep = FALSE)
+		
+		rnames = names(spdf)
+		pb = txtProgressBar(min = 0, max = length(rnames), char = ".", style = 3)
+	
+		.X.Msg( "Processing ranges...", keep = FALSE)
+		.processRange = function(x) {
+				name = x@data[1, ID]
+				pos = which(rnames%in%name)
+				setTxtProgressBar(pb, pos)
+				.rangeOverlay(x,  cnv, name) 
+			}
+		
+		overlayRes = lapply(spdf, .processRange)
+			
+		close(pb)
 
-	x = new("rangeMapProcess", CON = con, metadata = metadata)
+		overlayRes = do.call(rbind, overlayRes)	
+		
+		names(overlayRes) = c(object@ID, object@BIOID) 
 
-	rangeMapProcess(x, ...)	
+		# save  to @RANGES
+		.X.Msg("Writing to project...", keep = FALSE)		
+		res = dbWriteTable(object@CON, "ranges", overlayRes, append = TRUE, row.names = FALSE) 
+			.X.Msg(res, keep = FALSE)	
+		
+		# last Msg
+		if(res) .X.Msg(paste(length(rnames) , "ranges updated to database; Elapsed time:", 
+							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
+	
+		
+		# save  to @METADATA_RANGES
+		.X.Msg("Extracting metadata..", keep = FALSE)
+		rtr = lapply( spdf, function(R) sapply(rangeTraits(), function(x) x(R) ) )
+		rtr = data.frame(do.call(rbind, rtr))
+
+		  lapply( 
+			paste("ALTER TABLE metadata_ranges ADD COLUMN", names(rtr[, 1:ncol(rtr), drop = FALSE]), "FLOAT"), 
+				function(x)  RMQuery(object@CON, x))
+		
+		rtr = cbind(rownames(rtr), rtr)
+		names(rtr)[1] = object@BIOID
+		
+		res = dbWriteTable(object@CON, object@METADATA_RANGES, rtr, append = TRUE, row.names = FALSE) 
+			.X.Msg(res, keep = FALSE)
+	
+	
 	
 }
+)	
+	
+# user level function
+processRanges <- function(con, ...) {
 
-
-
-
-
-
-
-
-
-
+	x = new("rangeMap", CON = con)
+	rangeMapProcess(x, ... )	
+	
+}
 
 
 

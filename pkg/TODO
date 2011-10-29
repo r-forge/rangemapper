@@ -1,8 +1,4 @@
 
 	* save R function called by rangeMapSave/rangeMapSaveR to a table similar to sqlite_master "to SELECT sql FROM sqlite_master where type = 'table'"
 
-	* summary() shoud return a list. One element of the list should be a data.frame containing table and fiend names
-
-	* method for head(SpatialPixelsRangeMap)
-	
-	* use doSMP package within rangeMapProcess() 
+	* use doSMP package or similar within rangeMapProcess() 

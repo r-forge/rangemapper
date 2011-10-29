@@ -1,12 +1,9 @@
 
 *************************************************
-NEWS: rangeMapper VERSION 0.0-6.5
+NEWS: rangeMapper VERSION 0.0-7
 *************************************************	
-2011-Oct-11	MV
-New 'rangeMapProcess' method.
-'processRanges' function accepts now one single file 
-containing all ranges. 
-
+2011-Oct-29
+Several 'rangeMapProcess' methods written.
 
 *************************************************
 NEWS: rangeMapper VERSION 0.0-6

@@ -1,10 +1,3 @@
-{ #temp
-
-f = "C:\\Users\\valcu\\Desktop\\vector"
-
-
-
-}
 
 { # tools; settings
 setwd("M:\\PROJECTS\\SOFTWARE\\R\\PACKAGES\\rangeMapper\\R-forge\\www")
