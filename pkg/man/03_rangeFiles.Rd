@@ -8,12 +8,12 @@
 Returns the file path to all \sQuote{.shp} files in a directory.
 }
 \usage{
-selectShpFiles(dir, ...)
+selectShpFiles(dir, \dots)
 }
 
 \arguments{
 	  \item{dir}{character string specifying the directory containing .shp files.}	
-	  \item{...}{Other arguments to pass to methods of class \code{\link{rangeFiles-class}}  }	
+	  \item{\dots}{Other arguments to pass to methods of class \code{\link{rangeFiles-class}}  }	
 	  
 }
 

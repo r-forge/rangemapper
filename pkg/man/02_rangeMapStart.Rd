@@ -10,14 +10,14 @@ Initiate/open a new rangeMapper project using an object of class \code{\link{ran
 }
 
 \usage{
-rangeMap.start(...)
+rangeMap.start(\dots)
 rangeMap.open(path, verbose)
 }
 
 \arguments{
 	  \item{path}{Character vector; a path to a valid rangeMapper project}
 	  \item{verbose}{Character vector; if \code{TRUE} the project's summary is printed }
-	  \item{...}{Arguments to be passed to \code{\link{rangeMapStart-class}} }
+	  \item{\dots}{Arguments to be passed to \code{\link{rangeMapStart-class}} }
 }
 
 \value{
@@ -32,5 +32,34 @@ An sqlite connection is returned.
 }
 
 
+\examples{
+td = setwd(tempdir())
+
+dbcon = rangeMap.start(file = "test.sqlite", overwrite = TRUE, dir = tempdir() )
+summary(dbcon)
+summary(new("rangeMap", CON = dbcon) )
+
+dbcon = rangeMap.open(path = "test.sqlite")
+summary(dbcon)
+setwd(td)
+
+}
+
 \keyword{spatial}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

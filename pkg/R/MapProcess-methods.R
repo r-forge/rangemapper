@@ -1,6 +1,6 @@
 
 
-rangeTraits <- function() {
+rangeTraits <- function(..., use.default = TRUE) {
 
 	Area = function(spdf) sum(sapply(slot(spdf, "polygons"), function(x) slot(x, "area") ))
 	Median_x = function(spdf) median(coordinates(spdf)[, 1])
@@ -10,12 +10,20 @@ rangeTraits <- function() {
 	Max_x = function(spdf) max(coordinates(spdf)[, 1])
 	Max_y = function(spdf) max(coordinates(spdf)[, 2])
 
-
-	list(Area = Area, Median_x = Median_x, Median_y = Median_y, Min_x = Min_x, Min_y = Min_y, Max_x = Max_x, Max_y = Max_y)
+	
+	res = list(Area = Area, Median_x = Median_x, Median_y = Median_y, Min_x = Min_x, Min_y = Min_y, Max_x = Max_x, Max_y = Max_y)
+	
+	x = list(...)
+	if(length(x) > 0) {
+		 if(length(names(x)) != length(x)) stop (dQuote("..."), " elements should be named, e.g. myFun = abc")
+		 if( !all(sapply(x, is.function))) stop (dQuote("..."), " elements should be functions.")
+		 if(use.default) res = c(res, x)
+	}
+	
+	res
 
 }
 
-# sapply(rangeTraits(), function(x) x(spdf) )
 
 .rangeOverlay <- function(spdf, canvas, name) {
 	#SpatialPolygonsDataFrame
@@ -46,13 +54,9 @@ setGeneric("rangeMapProcess", function(object,spdf, dir, ID,metadata, parallel) 
 
  # Method 1.1 :  Each range file is a separate shp file. No metadata
 setMethod("rangeMapProcess",  
-		signature = c(object = "rangeMap",spdf = "missing", dir = "character", ID = "missing", metadata = "missing", parallel = "missing"), 
+		signature = c(object = "rangeMapProcess",spdf = "missing", dir = "character", ID = "missing", metadata = "missing", parallel = "missing"), 
 		definition = function(object, dir){
 	
-	if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg( paste(dQuote(object@RANGES), "table is not empty!")))
-	
-	# . . . pass to rangeTraits	
-
 	Startprocess = Sys.time()
 	Files = rangeFiles(new("rangeFiles", dir = dir))
 	cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
@@ -93,12 +97,10 @@ setMethod("rangeMapProcess",
 			} 
 	)
  
- # TODO: Method 1.2 :  Each range file is a separate shp file. Metadata are computed
+ #  Method 1.2 :  Each range file is a separate shp file. Metadata are computed
 setMethod("rangeMapProcess",  
-		signature = c(object = "rangeMap",spdf = "missing", dir = "character", ID = "missing", metadata = "list", parallel = "missing"), 
+		signature = c(object = "rangeMapProcess",spdf = "missing", dir = "character", ID = "missing", metadata = "list", parallel = "missing"), 
 		definition = function(object, dir, metadata){
-	
-	if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg( paste(dQuote(object@RANGES), "table is not empty!")))
 	
 	# . . . pass to rangeTraits	
 
@@ -165,11 +167,8 @@ setMethod("rangeMapProcess",
 
 #   Method 2.1:  One shp file containing all ranges, ID is required. No metadata
 setMethod("rangeMapProcess",  
-		signature = c(object = "rangeMap",spdf = "SpatialPolygonsDataFrame", dir = "missing", ID = "character", metadata = "missing", parallel = "missing"), 
+		signature = c(object = "rangeMapProcess",spdf = "SpatialPolygonsDataFrame", dir = "missing", ID = "character", metadata = "missing", parallel = "missing"), 
 		definition = function(object, spdf, ID,  metadata){
-		
-		if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg( paste(dQuote(object@RANGES), "table is not empty!")))
-
 		
 		Startprocess = Sys.time()
 	
@@ -221,11 +220,8 @@ setMethod("rangeMapProcess",
 	
 #   Method 2.2:  One shp file containing all ranges, ID is required.  Metadata are computed
 setMethod("rangeMapProcess",  
-		signature = c(object = "rangeMap",spdf = "SpatialPolygonsDataFrame", dir = "missing", ID = "character", metadata = "list", parallel = "missing"), 
+		signature = c(object = "rangeMapProcess",spdf = "SpatialPolygonsDataFrame", dir = "missing", ID = "character", metadata = "list", parallel = "missing"), 
 		definition = function(object, spdf, ID,  metadata){
-		
-		if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg( paste(dQuote(object@RANGES), "table is not empty!")))
-
 		
 		Startprocess = Sys.time()
 	
@@ -297,7 +293,7 @@ setMethod("rangeMapProcess",
 # user level function
 processRanges <- function(con, ...) {
 
-	x = new("rangeMap", CON = con)
+	x = new("rangeMapProcess", CON = con)
 	rangeMapProcess(x, ... )	
 	
 }

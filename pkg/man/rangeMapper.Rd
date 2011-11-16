@@ -8,7 +8,7 @@
 	\pkg{rangeMapper} is a front end platform for the study of macroecology of life history traits at both inter-specific and assemblage levels. 
 	}
 \details{
-	The package uses species range (extent-of-occurrence) vector polygons and life history traits datasets to build up maps (e.g. species richness, mean body mass, ...). \cr
+	The package uses species range (extent-of-occurrence) vector polygons and life history traits datasets to build up maps (e.g. species richness, mean body mass, \dots). \cr
 	\pkg{rangeMapper} comes with an user-friendly platform-independent tcltk graphical user interface. 
 }
 \keyword{package}
@@ -55,9 +55,6 @@ require(rangeMapper)
 # Start or open a project
 wd = tempdir()
 
-# open the GUI, messages will be re-directed here
-if(interactive() ) rangeMapper()
-
 dbcon = rangeMap.start(file = "wrens.sqlite", 
 	overwrite = TRUE, dir = tempdir() )
 
@@ -69,88 +66,29 @@ dbcon = rangeMap.open(path =
 summary(new("rangeMap", CON = dbcon) )
 
 # Breeding range vector files location
-f = system.file(package = "rangeMapper", 
-	"extdata", "wrens", "vector")
+f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
 
-# There are several alternatives to save the global bounding box, 
-# a few are  exemplified below
-# The default creates a global unprojected bounding box
-global.bbox.save(con = dbcon)
+# Save the global bounding box, 
+global.bbox.save(con = dbcon, bbox = f, 
+	p4s = CRS("+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs") ) 
 
-# Creating a global bbox using the  breeding range vector files
-
-# manually remove all data from the bbox  and proj4string table
-RMQuery(dbcon, 'DELETE from bbox') 
-RMQuery(dbcon, 'DELETE from proj4string')
-
-global.bbox.save(con = dbcon, bbox = f) 
-
-plot( global.bbox.fetch(dbcon) , axes = TRUE)
+summary( global.bbox.fetch(dbcon) )
 	
-# Creating a global bbox using the  breeding range vector files 
-# and re-projecting
-# manually remove all data from the bbox table
-RMQuery(dbcon, 'DELETE from bbox') 
-RMQuery(dbcon, 'DELETE from proj4string')
-
-global.bbox.save(con = dbcon,bbox = f, 
-	p4s =  
-	CRS(" +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"))
-
-	
-# upload grid size using the default
+# upload grid size using the proposed default
 gridSize.save(dbcon)  
-
-# upload grid size to 100000 sqm
-RMQuery(dbcon, 'DELETE from gridSize')
-gridSize.save(dbcon, gridSize = 100000) 
 
 #  save canvas 
 canvas.save(dbcon) 
 summary(canvas.fetch(dbcon) )
 
-# Process ranges & BIO tables
-
-# first define a new range structure function
-
-APratio = function(x) {
-# returns 1 for a circle polygon
-	# area
-	A = sapply(slot(x, "polygons"), 
-		function(x) slot(x, "area") )
-	
-	# perimeter
-	a = lapply(slot(x, "polygons"),
-		function(x) slot(x, "Polygons") )
-	b = do.call(c, a)
-	a1 = lapply(b, function(x) 
-		Line(coordinates(x)))
-	L = sapply(a1, LineLength)
-	
-	# A-P ratio
-	2*(sqrt(pi*sum(A)))/sum(L)
-	
-}
-
-
-# the APratio function will also be computed together with the pre-defined functions
-processRanges(dir = f, con =  dbcon, metadata = TRUE, APratio)
-
-
-# Manage BIO tables
-csvfile = system.file(package="rangeMapper", "data", "wrens.csv")
-bio.save(con = dbcon, loc = csvfile ,  ID = "sci_name")
-
-rm.rangeMapper(con = dbcon, tablePrefix = "BIO")
-
+# Upload BIO tables
 data(wrens)
 bio.save(con = dbcon, loc = wrens,  ID = "sci_name")
 
-# metadata_ranges table can be merged with the wrens table
-metadata2bio(dbcon)
-bio.merge(dbcon, tableNam = "wrensRanges", 
-		"wrens", "metadata_ranges")
+# Process species ranges
+r = readOGR(f, "wrens", verbose = FALSE)
 
+processRanges(spdf = r, con =  dbcon, metadata = rangeTraits(), ID = "sci_name" )
 
 # Save MAPs
 rangeMap.save(dbcon) #species richness is the default
@@ -160,15 +98,15 @@ rangeMap.save(dbcon) #species richness is the default
 rangeMap.save(dbcon, FUN = "median" , biotab = "wrens", 
 	biotrait = "body_size", tableName = "body_size")
 
-rangeMap.save(dbcon, FUN = "median" , 
-	biotab = "metadata_ranges", biotrait = "V1", tableName = "APratio")
-
 #Using an  R function which does not require a formula argument
 rangeMap.save(dbcon, FUN = mean , biotab = "wrens", 
 	biotrait = "clutch_size", tableName = "clutch_size", 
 		na.rm = TRUE, overwrite = TRUE)
 
 #Using an user defined R function which has a formula argument
+ # and subsetting
+# Map of log(body_mass) ~ clutch_size only for species richness > 10
+
 lmSlope = function (formula, data) {
     fm = try(lm(formula, data = data), silent = TRUE)
 	if (inherits(fm, "try-error")) 
@@ -177,7 +115,6 @@ lmSlope = function (formula, data) {
     as.numeric(res)
 }
 
-# Map of log(body_mass) ~ clutch_size only for species richness > 10
 rangeMap.save(dbcon, FUN = lmSlope, biotab = "wrens", 
 	biotrait = "body_mass", 
 	tableName = "slope_body_mass_clutchSize", 
@@ -190,6 +127,9 @@ rangeMap.save(dbcon, FUN = lmSlope, biotab = "wrens",
 r = system.file(package = "rangeMapper", 
 	"extdata", "etopo1", "etopo1_Americas.tif")
 
+# etopo1_Americas.tif data source:
+strwrap(readChar(system.file(package = "rangeMapper", "extdata", "etopo1", "data_source.txt"), 500))
+	
 rangeMap.save(dbcon, path = r, tableName = 'meanAltitude', 
 	FUN = mean , overwrite = TRUE)
 
@@ -212,11 +152,10 @@ rangeMap.save(dbcon, biotab = "wrens", biotrait = "clutch_size",
 	
 plot(rangeMap.fetch(dbcon, 'species_richness') ,n = 10, style = "fisher")		
 
-plot(rangeMap.fetch(dbcon, "APratio"), style = "equal" )
 plot(rangeMap.fetch(dbcon, 'meanAltitude'),  style = "quantile")
 
-clutch = rangeMap.fetch(dbcon, 
-	c('clutch_size', 'slope_body_mass_clutchSize', 'body_size') )
+clutch = rangeMap.fetch(dbcon,
+ c('clutch_size', 'slope_body_mass_clutchSize', 'body_size') )
 plot(clutch, style = "fisher")
 
 plot(rangeMap.fetch(dbcon, 'highlandClutch'), n = 4)	

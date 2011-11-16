@@ -1,15 +1,13 @@
+******************************
+* CHANGES FROM VERSION 0.0-6 *
+******************************
 
-*************************************************
-NEWS: rangeMapper VERSION 0.0-7
-*************************************************	
-2011-Oct-29
-Several 'rangeMapProcess' methods written.
+rangeMapper 0.0-6.6
+	o metadata in processRanges	
+	o processRanges methods on one file 
 
-*************************************************
-NEWS: rangeMapper VERSION 0.0-6
-*************************************************
-2011-Apr-07 
-	*	Package converted to S4. 
+
+
 
 
 

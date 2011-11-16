@@ -1,6 +1,10 @@
 \name{canvas.save}
 \alias{canvas.save}
 \alias{canvas.fetch}
+\alias{canvasFetch-methods}
+\alias{canvasFetch,rangeMap-method}
+\alias{canvasSave-methods}
+\alias{canvasSave,rangeMap-method}
 
 \title{Project's canvas}
 
@@ -22,8 +26,7 @@ canvas.fetch(con)
 }
 
 \note{
-The method canvasSave() fails if \code{grid.size} was not set.
-The method canvasSave() fails if the canvas was already constructed for the given project.
+The method canvasSave() fails if \code{grid.size} was not set and if the canvas was already constructed for the given project.
 }
 
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}
@@ -37,7 +40,36 @@ The method canvasSave() fails if the canvas was already constructed for the give
 Valcu, M., Dale, J. and Kempenaers, B. (in prep) rangeMapper: A platform for the study of macroecology of life history traits.
 }
 	
+\examples{
+require(rangeMapper)
+wd = tempdir()
+dbcon = rangeMap.start(file = "test.sqlite", overwrite = TRUE, dir = wd)
+global.bbox.save(con = dbcon)
+gridSize.save(dbcon, gridSize = 2)
+canvas.save(dbcon)
+cnv = canvas.fetch(dbcon)
+summary(cnv)
+plot(cnv, col = 'grey', axes = TRUE)
+}
 
 \keyword{spatial}
 \keyword{sqlite}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

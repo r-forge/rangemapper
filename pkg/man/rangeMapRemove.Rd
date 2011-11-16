@@ -8,11 +8,11 @@
 
 \arguments{
 	  \item{con}{A valid sqlite connection.}
-	  \item{...}{arguments passed to methods of \code{"\linkS4class{rangeMapRemove}"}, specifically \sQuote{tablePrefix} or \sQuote{tableName} }
+	  \item{\dots}{arguments passed to methods of \code{"\linkS4class{rangeMapRemove}"}, specifically \sQuote{tablePrefix} or \sQuote{tableName} }
 }
 
 \usage{
-rm.rangeMapper(con, ...) 
+rm.rangeMapper(con, \dots) 
 }
 
 \note{

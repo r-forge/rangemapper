@@ -11,9 +11,9 @@ Import tables (e.g. life history data) to a \code{rangeMapper} project.
 }
 	
 \usage{
-	bio.save(con, loc, tableName, ...)
-	metadata2bio(con, ...)
-	bio.merge(con, tableName, ...)
+	bio.save(con, loc, tableName, \dots)
+	metadata2bio(con, \dots)
+	bio.merge(con, tableName, \dots)
 }
 
 
@@ -22,7 +22,7 @@ Import tables (e.g. life history data) to a \code{rangeMapper} project.
 	\item{con}{An sqlite connection pointing to a valid \code{rangeMapper} project. }
 	\item{loc}{file location or data.frame name}
 	\item{tableName}{if missing, the name of the file or data.frame is used}
-	\item{...}{Other arguments to pass to methods of \code{\link{bioSaveFile-class}} class, e.g. the ID, the column corresponding to the names of the range files}
+	\item{\dots}{Other arguments to pass to methods of \code{\link{bioSaveFile-class}} class, e.g. the ID, the column corresponding to the names of the range files}
 }
 
 \value{

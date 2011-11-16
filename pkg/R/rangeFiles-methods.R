@@ -1,4 +1,8 @@
 
+
+setGeneric("rangeFiles", function(object, ...)   					standardGeneric("rangeFiles") )
+
+
 setMethod("rangeFiles",  
 		signature = "rangeFiles", 
 		definition = function(object){

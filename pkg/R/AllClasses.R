@@ -123,48 +123,21 @@ setClass("gridSize",
 		contains = "rangeMap", 
 		
 		validity = function(object)	{
-			invisible(TRUE)
-		},
-	)
-	
-setClass("rangeMapProcess", 
-		representation(
-		metadata = "logical",
-		parallel = "logical"
-			), 
-		
-		contains = "rangeMap", 
-		
-		validity = function(object)	{
-					if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg("ranges table is not empty!"))
-		},
-		prototype(
-			metadata = TRUE, 
-			parallel = FALSE  
-			)
-	)	
-	
-setClass("rangeMapSave", 
-		representation(
-			biotab    = "character", 
-			biotrait  = "character",
-			tableName = "character",
-			subset    = "list"), 
-			
-		contains = "rangeMap", 
-		
-		validity = function(object)	{
-		# the new table should not exist
-			if(.dbtable.exists(object@CON, paste(object@MAP, object@tableName, sep = "") ) ) 
-				stop(.X.Msg( paste(sQuote(object@tableName), " already exists."))	)
-			
-			if(.dbtable.exists(object@CON, paste(object@BIO, object@tableName, sep = "") ) ) 
-				stop(.X.Msg( paste(sQuote(object@tableName), " already exists."))	)
-			
-		}
-	)
+			if(!.is.empty(object@CON, object@GRIDSIZE)) stop(.X.Msg("The grid size was allready set!"))
+			if(.is.empty(object@CON, object@BBOX)) stop(.X.Msg("There is no bouding box!") )
 
+		},
+	)
 	
+# class only used for validity checks
+setClass("rangeMapProcess", 
+		contains = "rangeMap", 
+		
+		validity = function(object)	{
+					if(!.is.empty(object@CON, object@RANGES)) stop(.X.Msg( paste(dQuote(object@RANGES), "table is not empty!")))
+		}
+)	
+
 setClass("bioSaveFile", representation(loc = "character", sep = "character"), 
 							contains = "rangeMapSave", 
 							prototype( sep = ";", 
@@ -185,9 +158,26 @@ setClass("bioSaveDataFrame", representation(loc = "data.frame"),
 
 							}
 		)	
+			
+setClass("rangeMapSave", 
+		representation(
+			biotab    = "character", 
+			biotrait  = "character",
+			tableName = "character",
+			subset    = "list"), 
+			
+		contains = "rangeMap", 
 		
-	
-	
+		validity = function(object)	{
+		# the new table should not exist
+			if(.dbtable.exists(object@CON, paste(object@MAP, object@tableName, sep = "") ) ) 
+				stop(.X.Msg( paste(sQuote(object@tableName), " already exists."))	)
+			
+			if(.dbtable.exists(object@CON, paste(object@BIO, object@tableName, sep = "") ) ) 
+				stop(.X.Msg( paste(sQuote(object@tableName), " already exists."))	)
+			
+		}
+	)
 
 setClass("MapImport", representation(path = "character"), 
 							contains = "rangeMapSave", 

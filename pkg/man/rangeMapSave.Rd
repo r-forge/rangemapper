@@ -18,12 +18,12 @@ Compute a chosen statistic (e.g. richness (count), mean, median or any user-defi
 	  \item{path}{Path to the raster file(quoted) to be imported to the existing project. \code{raster package} is required at this step.}			
 	  \item{overwrite}{If \code{TRUE} then the table is removed}			
 		
-	\item{...}{When R is an R function, ... denotes any extra arguments to be passed to it.}
+	\item{\dots}{When R is an R function, \dots denotes any extra arguments to be passed to it.}
 }
 
 
 \usage{
-rangeMap.save(CON, tableName, FUN, biotab, biotrait, subset, path , overwrite, ...)
+rangeMap.save(CON, tableName, FUN, biotab, biotrait, subset, path , overwrite, \dots)
 }
 	
 

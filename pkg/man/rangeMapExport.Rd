@@ -14,12 +14,12 @@
 
 	
 \usage{
-	rangeMap.export(con, dirName, ...) }
+	rangeMap.export(con, dirName, \dots) }
 
 \arguments{
 	\item{con}{An sqlite connection pointing to a valid \code{rangeMapper} project. }
 	\item{dirName}{The directory name where the \sQuote{MAP}s will be exported. If missing, the \sQuote{MAP}s will be exported in project's directory}
-	\item{...}{Further arguments to pass to \code{\link{writeGDAL}} }
+	\item{\dots}{Further arguments to pass to \code{\link{writeGDAL}} }
 }	
 
 \references{
