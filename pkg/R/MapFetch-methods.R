@@ -35,13 +35,13 @@ setMethod("rangeMapFetch",
 	)	
 	
 # user level functions 
-rangeMap.fetch <- function(dbcon, maps) { 
+rangeMap.fetch <- function(con, maps) { 
 	
-	if(missing(maps)) maps = RMQuery(dbcon, 'select name from sqlite_master where type = "table" and tbl_name like "MAP_%"')$name
+	if(missing(maps)) maps = RMQuery(con, 'select name from sqlite_master where type = "table" and tbl_name like "MAP_%"')$name
 
 	maps = gsub("MAP_", "", maps)
 	
-	x = new("rangeMapFetch", CON = dbcon, tableName = maps)
+	x = new("rangeMapFetch", CON = con, tableName = maps)
 	rangeMapFetch(x)	
 
 } 

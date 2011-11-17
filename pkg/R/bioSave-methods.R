@@ -67,7 +67,7 @@ bio.save   <- function(con, loc, tableName, ...) {
 
 }	
 
-bio.merge <- function(con, tableName, ...) {
+bio.merge <-  function(con, tableName, ...) {
 # merge 2 or more BIO tables, default is merge all
 
 	r = new("rangeMap", CON = con)

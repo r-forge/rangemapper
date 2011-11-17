@@ -73,7 +73,7 @@ gridSize.save(dbcon)
 canvas.save(dbcon) 
 
 system.time(processRanges(spdf = r, con =  dbcon, metadata = rangeTraits(), ID = "sci_name" ))
-# 13 times faster than processing individual ranges.
+# ~ 13 times faster than processing individual ranges.
 
 }
 

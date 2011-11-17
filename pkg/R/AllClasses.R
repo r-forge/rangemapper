@@ -138,27 +138,6 @@ setClass("rangeMapProcess",
 		}
 )	
 
-setClass("bioSaveFile", representation(loc = "character", sep = "character"), 
-							contains = "rangeMapSave", 
-							prototype( sep = ";", 
-									  tableName = "unknown"
-							
-							), 
-							validity = function(object) {
-							if(!file.exists(object@loc)) stop(.X.Msg(paste(sQuote(object@loc), "is not a valid file")))
-
-
-							}
-		)	
-	
-	
-setClass("bioSaveDataFrame", representation(loc = "data.frame"), 
-							contains = "rangeMapSave", 
-							validity = function(object) {
-
-							}
-		)	
-			
 setClass("rangeMapSave", 
 		representation(
 			biotab    = "character", 
@@ -179,6 +158,32 @@ setClass("rangeMapSave",
 		}
 	)
 
+	
+	
+setClass("bioSaveFile", representation(loc = "character", sep = "character"), 
+							contains = "rangeMapSave", 
+							prototype( sep = ";", 
+									  tableName = "unknown"
+							
+							), 
+							validity = function(object) {
+							if(!file.exists(object@loc)) stop(.X.Msg(paste(sQuote(object@loc), "is not a valid file")))
+
+
+							}
+		)	
+	
+	
+setClass("bioSaveDataFrame", representation(loc = "data.frame"), 
+							contains = "rangeMapSave", 
+							validity = function(object) {
+
+							}
+		)	
+	
+	
+	
+	
 setClass("MapImport", representation(path = "character"), 
 							contains = "rangeMapSave", 
  
