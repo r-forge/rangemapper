@@ -18,7 +18,7 @@
 \author{
 Mihai Valcu\footnote{
 	\texttt{valcu@orn.mpg.de},
-	\url{http://orn.mpg.de/mitarbeiter/valcu.html }
+	\url{http://rangemapper.r-forge.r-project.org}
 	Max Planck Institute for Ornithology, 
 	Behavioural Ecology and Evolutionary Genetics, 
 	Eberhard-Gwinner-Street 5, D-82319 Starnberg (Seewiesen)} and 
@@ -35,7 +35,7 @@ James Dale\footnote{
 
 \maketitle
 R version 2.14.0 (2011-10-31),
-rangeMapper 0.0-6.5.
+rangeMapper 0.0-6.6.
 
 
 \section{Introduction}
@@ -224,111 +224,6 @@ Push the `CHOOSE FUNCTION' icon and select `richness'. Save the map, choose a ne
   \end{center}
 \end{figure}	
 	
-	
-	
- \pagebreak	
-\section{Further examples}
-Below are a few examples of maps created with \emph{rangeMapper}.
-
-\subsection{Amphibians of the world}
-The geographical range data of amphibians of the world (5816 species) is available online at \cite{iucn09}. The \emph{rangeMapper} project was created using a 0.5$^{\circ}$ canvas.
-
-\subsubsection{Amphibians: species richness}
-The first example (fig \ref{fig:map1}) shows species richness. This map replicates Figure 1 in \cite{buckley07} and \cite{amphibiaweb09} although using an unprojected coordinates system of the original files.
-
-\begin{figure}[htbp]
-  \begin{center}
-	\includegraphics[width=1\linewidth]{map1}
-    \caption{\label{fig:map1} Amphibians of the world: species richness}
-  \end{center}
-\end{figure}
-
-
-\subsubsection{Amphibians: range size}
-In this case, species range size is used to illustrate the creation of a species trait map (e.g. \cite{orme06} ).  To do this, we first have to export the \texttt{metadata\_ranges} of the project and re-import it as a `BIO' table. No interface is available for this procedure, nevertheless it can be easily done using R's command line: 
-
-\begin{Rcode}
-\begin{verbatim}
-dbcon = dbConnect(dbDriver("SQLite"), dbname= "\\...\\amphibians.sqlite")
-d = sqliteQuickSQL(dbcon, "select bioid, Area from metadata_ranges")
-bio.save(dbcon, table_name = "range_size", d, common_id = "bioid")
-\end{verbatim}
-\end{Rcode}
-
-The median of range size is shown in fig \ref{fig:map1a} while the sd of the log transformed range size is shown in fig. \ref{fig:map1b}. In both cases `fisher' (\cite{classInt}) unequal interval class was chosen.
-
-
-\begin{figure}[htbp]
-  \begin{center}
-	\includegraphics[width=1\linewidth]{map1a}
-    \caption{\label{fig:map1a} Amphibians of the world: median of range size}
-  \end{center}
-\end{figure}
-
-\begin{figure}[htbp]
-  \begin{center}
-	\includegraphics[width=1\linewidth]{map1b}
-    \caption{\label{fig:map1b} Amphibians of the world: sd of the log-transformed range size}
-  \end{center}
-\end{figure}
-
-
-\subsection{Terestrial mammals of the world}
-The geographical range data of mammals of the world (5227 species) is available online at \cite{iucn09}. The \emph{rangeMapper} project was created using a 1.5$^{\circ}$ canvas.
-
-\subsubsection{Mammals: richness}
-The first map (figure \ref{fig:map1c}) shows the mammalian species richness of all species available in the dataset. 
- 
- \begin{figure}[htbp]
-  \begin{center}
-	\includegraphics[width=1\linewidth]{map1c}
-    \caption{\label{fig:map1c} Mammals of the world: species richness}
-  \end{center}
-\end{figure}
-
- 
-The  map in figure \ref{fig:map1c} includes the Polar Bear (Ursus maritimus) as a land mammal. In order to illustrate the subsetting option of \emph{rangeMapper} the  map in figure \ref{fig:map1d} was created excluding `Ursus maritimus' by specifying: \texttt{`bioid is not  "Ursus\_maritimus"'} in the `Choose subset' dialog.
-
-
- \begin{figure}[htbp]
-  \begin{center}
-	\includegraphics[width=1\linewidth]{map1d}
-    \caption{\label{fig:map1d} Mammals of the world: species richness without the Polar Bear.}
-  \end{center}
-\end{figure}
-
-
- \subsubsection{Mammals: hotspots}
-The map of mammalian hotspots (i.e. the richest 2.5\% canvas cells \cite{orme05} ) further illustrates the subsetting capabilities of \emph{rangeMapper}. The map in figure \ref{fig:map1e}  was created based on the previously saved `species richness' map subsetting for  \texttt{`species\_richness >142'}. The map in figure \ref{fig:map1e} replicates fig. 2A in \cite{ceballos06}.
-
-To overlay the hotspots map on the world base-map the following code can be used:
-
-\begin{Rcode}
-\begin{verbatim}
-
-require(rangeMapper)
-world = readOGR(".../110m-admin-0-countries", "110m_admin_0_countries")
-# world data freely available at: http://www.naturalearthdata.com/downloads/10m-physical-vectors/ 
-hotSpots = rangeMap.fetch(dbcon, "hotspots_richness")
-spplot(hotSpots, "species_richness", sp.layout = list(list("sp.polygons", world, fill = "grey90", col = "grey80")) )
-\end{verbatim}
-\end{Rcode}
-
-
-
-
- \begin{figure}[htbp]
-  \begin{center}
-	\includegraphics[width=1\linewidth]{map1e}
-    \caption{\label{fig:map1e} Mammals of the world: hotspots.}
-  \end{center}
-\end{figure}
-
-
-
-
-
-	
 \pagebreak		
 \begin{thebibliography}{1}
 
@@ -348,38 +243,12 @@ spplot(hotSpots, "species_richness", sp.layout = list(list("sp.polygons", world,
 \bibitem[sqlite]{sqlite}  
  David A. James (2010). RSQLite: SQLite interface for R. R package version 0.8-4. \url{http://CRAN.R-project.org/package=RSQLite}
   
-\bibitem[Buckley (2007)]{buckley07}  
-Lauren B. Buckley and Jetz, W (2007) Environmental and historical constraints on global patterns of amphibian richness, Proc. R. Soc. B , 274, 1167-1173
-\bibitem[amphibiaweb.org]{amphibiaweb09}
-Worldwide Amphibian Declines: How big is the problem, what are the causes and what can be done?
-\url{http://amphibiaweb.org/declines/declines.html}
-
-\bibitem[IUCN (2009)]{iucn09} 
-IUCN 2009. IUCN Red List of Threatened Species. Version 2009.1 
-\url{http://www.iucnredlist.org}, \url{http://www.iucnredlist.org/technical-documents/spatial-data}
-
 \bibitem[Ridgely (2007)]{ridgely07}  
 	 The breeding range files available in /extdata/wrens/vector/  package directory are available online at \url{http://www.natureserve.org/getData/dataSets/birdMapData/wrens.zip}. Data provided by NatureServe in collaboration with Robert Ridgely, James Zook, The Nature Conservancy - Migratory Bird Program, Conservation International - CABS, World Wildlife Fund - US, and Environment Canada - WILDSPACE.\\
 Ridgely, R. S., T. F. Allnutt, T. Brooks, D. K. McNicol, D. W. Mehlman, B. E. Young, and J. R. Zook. 2007. Digital Distribution Maps of the Birds of the Western Hemisphere, version 3.0. NatureServe, Arlington, Virginia, USA.
 
 \bibitem[classInt]{classInt}
 Roger Bivand, with contributions by Hisaji Ono and Richard Dunlap (2009). classInt: Choose univariate class intervals. R package version 0.1-14. \url{http://CRAN.R-project.org/package=classInt}
-
-\bibitem[Orme (2006)]{orme06}
-Orme CDL, Davies RG, Olson VA, et al (2006) Global patterns of geographic range size in birds, PLOS BIOL, Vol:4, Pages:1276-1283, 
-\url{http://www.plosbiology.org/article/info:doi/10.1371/journal.pbio.0040237 }
-
-\bibitem[Orme (2005)]{orme05}
-Orme CDL, RG. Davies, M Burgess, et al (2005). Global hotspots of species richness are not congruent with endemism or threat, Nature Vol 436, 18 August 2005 \url{http://www.nature.com/nature/journal/v436/n7053/full/nature03850.html}
-
-\bibitem[Ceballos (2006)]{ceballos06}
-Ceballos, G and Ehrlich, PR (2006). Global mammal distributions, biodiversity hotspots, and conservation., PNAS,vol. 103 no. 51, 19374-19379  \url{http://www.pnas.org/content/103/51/19374.full}
-
-
-
-
-
-
 
 
 \end{thebibliography}
