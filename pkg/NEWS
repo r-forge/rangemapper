@@ -8,6 +8,7 @@ rangeMapper 0.0-6.6
 	o A new processRanges() method has been added taking
 		as an argunent only one SpatialPolygonsDataFrame 
 		containing all ranges.
+	o
 
 
 
