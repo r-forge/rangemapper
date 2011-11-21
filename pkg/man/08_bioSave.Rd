@@ -35,14 +35,14 @@ A \sQuote{BIO} table is created in the corresponding \code{rangeMapper} project.
 
 
 \seealso{
-\code{\link{rangeMapper}} for a complete example.
+\code{\link{rangeMap.save}}.
 \code{\link{bioSaveDataFrame-class}}
 \code{\link{bioSaveFile-class}}
 \code{\link{wrens}}
 }
 
 \references{
-Valcu, M., Dale, J. and Kempenaers, B. (in prep) rangeMapper: A platform for the study of macroecology of life history traits.
+Valcu, M., Dale, J. and Kempenaers, B. (in press)  rangeMapper: A platform for the study of macroecology of life history traits.
 }
 
 

@@ -71,7 +71,7 @@ setMethod("rangeMapProcess",
 		if(!identical(gsub(" ", "", proj4string(r)), gsub(" ", "", p4s) ) ) r = spTransform( r , CRS(p4s) )
 	
 	# progress report	
-		.X.Msg( paste("Processsing ranges, please wait!...", 
+		x.Msg( paste("Processsing ranges, please wait!...", 
 				   paste("Range:", Files$layer[i]),	
 					 paste(round(i/length(Files$layer)*100,2), "% done"), 
 					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n"), 
@@ -91,7 +91,7 @@ setMethod("rangeMapProcess",
 	 
 
 	# last Msg
-	.X.Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
+	x.Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
 							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
 
 			} 
@@ -122,7 +122,7 @@ setMethod("rangeMapProcess",
 	
 	
 	# progress report	
-		.X.Msg( paste("Processsing ranges, please wait!...", 
+		x.Msg( paste("Processsing ranges, please wait!...", 
 				   paste("Range:", Files$layer[i]),	
 					 paste(round(i/length(Files$layer)*100,2), "% done"), 
 					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n"), 
@@ -159,7 +159,7 @@ setMethod("rangeMapProcess",
 	 
 
 	# last Msg
-	.X.Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
+	x.Msg(paste(nrow(Files), "ranges updated to database; Elapsed time:", 
 							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
 	
  } 
@@ -172,25 +172,25 @@ setMethod("rangeMapProcess",
 		
 		Startprocess = Sys.time()
 	
-		.X.Msg("Processsing ranges, please wait!...", keep = FALSE)
+		x.Msg("Processsing ranges, please wait!...", keep = FALSE)
 			
 		cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
 		
 		#  reproject
 		p4s =  dbReadTable(object@CON, object@PROJ4STRING)[1,1]
 		if(!identical(gsub(" ", "", proj4string(spdf)), gsub(" ", "", p4s) ) ) { 
-			.X.Msg( paste("Reprojecting to", dQuote(p4s)), keep = FALSE)	
+			x.Msg( paste("Reprojecting to", dQuote(p4s)), keep = FALSE)	
 			spdf = spTransform( spdf , CRS(p4s) )
 			}
 	
 		# split by range	
-		.X.Msg( "Identifing ranges...", keep = FALSE)	
+		x.Msg( "Identifing ranges...", keep = FALSE)	
 		spdf = split(spdf, spdf@data[, ID])
 
 		rnames = names(spdf)
 		pb = txtProgressBar(min = 0, max = length(rnames), char = ".", style = 3)
 	
-		.X.Msg( "Processing ranges...", keep = FALSE)
+		x.Msg( "Processing ranges...", keep = FALSE)
 		.processRange = function(x) {
 				name = x@data[1, ID]
 				pos = which(rnames%in%name)
@@ -206,12 +206,12 @@ setMethod("rangeMapProcess",
 		
 		names(overlayRes) = c(object@ID, object@BIOID) 
 
-		.X.Msg("Writing to project.", keep = FALSE)		
+		x.Msg("Writing to project.", keep = FALSE)		
 		res = dbWriteTable(object@CON, "ranges", overlayRes, append = TRUE, row.names = FALSE) 
 
 		
 		# last Msg
-		if(res) .X.Msg(paste(length(rnames) , "ranges updated to database; Elapsed time:", 
+		if(res) x.Msg(paste(length(rnames) , "ranges updated to database; Elapsed time:", 
 							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
 	
 
@@ -225,26 +225,26 @@ setMethod("rangeMapProcess",
 		
 		Startprocess = Sys.time()
 	
-		.X.Msg("Processsing ranges, please wait!...", keep = FALSE)
+		x.Msg("Processsing ranges, please wait!...", keep = FALSE)
 			
 		cnv = as(canvasFetch(object), "SpatialPointsDataFrame")
 		
 		#  reproject
 		p4s =  dbReadTable(object@CON, object@PROJ4STRING)[1,1]
 		if(!identical(gsub(" ", "", proj4string(spdf)), gsub(" ", "", p4s) ) ) { 
-			.X.Msg( paste("Reprojecting to", dQuote(p4s)), keep = FALSE)	
+			x.Msg( paste("Reprojecting to", dQuote(p4s)), keep = FALSE)	
 			spdf = spTransform( spdf , CRS(p4s) )
 			}
 	
 		# split by range	
-		.X.Msg( "Identifing ranges...", keep = FALSE)	
+		x.Msg( "Identifing ranges...", keep = FALSE)	
 		spdf = split(spdf, spdf@data[, ID])
-		.X.Msg( paste(length(spdf), " ranges found."), keep = FALSE)
+		x.Msg( paste(length(spdf), " ranges found."), keep = FALSE)
 		
 		rnames = names(spdf)
 		pb = txtProgressBar(min = 0, max = length(rnames), char = ".", style = 3)
 	
-		.X.Msg( "Processing ranges...", keep = FALSE)
+		x.Msg( "Processing ranges...", keep = FALSE)
 		.processRange = function(x) {
 				name = x@data[1, ID]
 				pos = which(rnames%in%name)
@@ -261,17 +261,17 @@ setMethod("rangeMapProcess",
 		names(overlayRes) = c(object@ID, object@BIOID) 
 
 		# save  to @RANGES
-		.X.Msg("Writing to project...", keep = FALSE)		
+		x.Msg("Writing to project...", keep = FALSE)		
 		res = dbWriteTable(object@CON, "ranges", overlayRes, append = TRUE, row.names = FALSE) 
-			.X.Msg(res, keep = FALSE)	
+			x.Msg(res, keep = FALSE)	
 		
 		# last Msg
-		if(res) .X.Msg(paste(length(rnames) , "ranges updated to database; Elapsed time:", 
+		if(res) x.Msg(paste(length(rnames) , "ranges updated to database; Elapsed time:", 
 							round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
 	
 		
 		# save  to @METADATA_RANGES
-		.X.Msg("Extracting metadata..", keep = FALSE)
+		x.Msg("Extracting metadata..", keep = FALSE)
 		rtr = lapply( spdf, function(R) sapply(rangeTraits(), function(x) x(R) ) )
 		rtr = data.frame(do.call(rbind, rtr))
 
@@ -283,7 +283,7 @@ setMethod("rangeMapProcess",
 		names(rtr)[1] = object@BIOID
 		
 		res = dbWriteTable(object@CON, object@METADATA_RANGES, rtr, append = TRUE, row.names = FALSE) 
-			.X.Msg(res, keep = FALSE)
+			x.Msg(res, keep = FALSE)
 	
 	
 	

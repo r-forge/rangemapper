@@ -36,7 +36,7 @@ Vargas-Soriano, J., Ortiz, J.S. & Segura, G.E. (2010) Breeding Phenology and Nes
 }
 
 \seealso{
-\code{\link{rangeMapper}} for a complete example.
+\code{\link{rangeMap.save}}.
 }
 
 

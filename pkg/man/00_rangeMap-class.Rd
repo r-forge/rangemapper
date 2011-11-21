@@ -2,20 +2,6 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{rangeMap-class}
-\alias{canvasFetch,rangeMap-method}
-\alias{canvasSave,rangeMap-method}
-\alias{gridSizeFetch,rangeMap-method}
-\alias{rangeMapBboxFetch,rangeMap-method}
-\alias{rangeMapBboxSave,rangeMap,character,CRS-method}
-\alias{rangeMapBboxSave,rangeMap,character,missing-method}
-\alias{rangeMapBboxSave,rangeMap,missing,CRS-method}
-\alias{rangeMapBboxSave,rangeMap,missing,missing-method}
-\alias{rangeMapBboxSave,rangeMap,Spatial,missing-method}
-\alias{rangeMapExport,rangeMap,character-method}
-\alias{rangeMapProcess,rangeMap,missing,character,missing,list,missing-method}
-\alias{rangeMapProcess,rangeMap,missing,character,missing,missing,missing-method}
-\alias{rangeMapProcess,rangeMap,SpatialPolygonsDataFrame,missing,character,list,missing-method}
-\alias{rangeMapProcess,rangeMap,SpatialPolygonsDataFrame,missing,character,missing,missing-method}
 \alias{summary,rangeMap-method}
 
 
@@ -72,6 +58,7 @@ Objects can be created by calls of the form \code{new("rangeMap", \dots)}.
 
 \seealso{
   \code{\link{rangeMapper}},
+  \code{\link{processRanges}}
 
 }
 

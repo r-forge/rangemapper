@@ -62,6 +62,9 @@ Any valid SQL expression can be used to build up a subset. See \url{http://www.s
 }
 
 
+\references{
+Valcu, M., Dale, J. and Kempenaers, B. (in press)  rangeMapper: A platform for the study of macroecology of life history traits.
+}
 
 \examples{
 require(rangeMapper)

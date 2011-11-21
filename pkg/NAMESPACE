@@ -9,7 +9,7 @@ exportMethods(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSi
 
 export(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapExport, rangeMapStart )
 
-export(bio.save, bio.merge, metadata2bio, global.bbox.save, global.bbox.fetch, canvas.fetch, canvas.save, gridSize.save ,gridSize.fetch, rm.rangeMapper,  selectShpFiles, rangeMap.fetch, processRanges, rangeMap.save, rangeMap.start, rangeMap.open, rangeMap.export,rangeTraits, RMQuery, brewer.pal.get, tkColorPalette, tkMakeColorPalette)
+export(bio.save, bio.merge, metadata2bio, global.bbox.save, global.bbox.fetch, canvas.fetch, canvas.save, gridSize.save ,gridSize.fetch, rm.rangeMapper,  selectShpFiles, rangeMap.fetch, processRanges, rangeMap.save, rangeMap.start, rangeMap.open, rangeMap.export,rangeTraits, RMQuery, brewer.pal.get, tkColorPalette, tkMakeColorPalette, tkdbBrowse)
 
 
 export(rangeMapper)

@@ -7,7 +7,7 @@
   Interactively choose a color palette.
 }
 \description{
- Interactively choose a color palette. Palettes are created on the fly as  \code{\link{tkbutton}}s.
+ Interactively choose a color palette. Palettes are created on the fly using  \code{\link{tkbutton}}.
 }
 \usage{
 tkColorPalette(pal, name, palette.size = 45, envir = .GlobalEnv)
@@ -18,8 +18,8 @@ tkMakeColorPalette(n)
   \item{name}{A quoted \code{name} to be assigned to  \code{envir}.}
   \item{palette.size}{\code{palette.size} is the size of the tiles (\code{tkbutton}-s) in pixels.}
   \item{envir}{the \code{\link{environment}} to use.}
-  \item{n}{length of the user-defined palette returned by \{tkMakeColorPalette}
-}
+  \item{n}{length of the user-defined palette returned by \code{tkMakeColorPalette} } 
+  }
 
 \details{
 \code{tkMakeColorPalette} is called by \code{tkColorPalette} 

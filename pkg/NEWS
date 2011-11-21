@@ -1,10 +1,13 @@
-******************************
-* CHANGES FROM VERSION 0.0-6 *
-******************************
+************************************************************
+*                CHANGES FROM VERSION 0.0-6                *
+************************************************************
 
 rangeMapper 0.0-6.6
-	o metadata in processRanges	
-	o processRanges methods on one file 
+	o metadata argument in processRanges() is now a named 
+		list and not a logical vector.
+	o A new processRanges() method has been added taking
+		as an argunent only one SpatialPolygonsDataFrame 
+		containing all ranges.
 
 
 

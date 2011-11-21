@@ -27,7 +27,7 @@ An sqlite connection is returned.
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}
 
 \seealso{
-	\code{\link{rangeMapper}} for a complete example.\cr
+	\code{\link{rangeMap.save}}.\cr
 	\code{\link{rangeMapStart-class}} 
 }
 

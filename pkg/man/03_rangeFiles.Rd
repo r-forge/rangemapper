@@ -24,12 +24,12 @@ Either a \code{\link{data.frame}} or a character vector is returned.
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}
 
 \seealso{
-	\code{\link{rangeMapper}} for a complete example.\cr
+	\code{\link{rangeMap.save}}.\cr
 	\code{\link{rangeFiles-class}} 
 }
 
 \references{
-Valcu, M., Dale, J. and Kempenaers, B. (in prep) rangeMapper: A platform for the study of macroecology of life history traits.
+Valcu, M., Dale, J. and Kempenaers, B. (in press)  rangeMapper: A platform for the study of macroecology of life history traits.
 }
 	
 	

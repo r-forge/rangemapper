@@ -136,7 +136,7 @@ tkdbBrowse <- function(con, prefix = NULL, tables.name.only = FALSE, info) {
 	
 	
 	if(!is.null(prefix) && !.dbtable.exists(con, paste(prefix, "%", sep = "") ) ) 
-		stop(.X.Msg(paste("The active project does not contain any", dQuote(prefix), "table" )))
+		stop(x.Msg(paste("The active project does not contain any", dQuote(prefix), "table" )))
 	
 	dbpath = dbGetInfo(con)$dbname
 	
@@ -286,7 +286,7 @@ class(funs) = "simple.list"
 if(missing(fun) )
  return(funs) else if
 	(fun%in%funs) return(TRUE) else
-			stop(.X.Msg(sQuote(fun), "is not a known sqlite aggregate function!" ))
+			stop(x.Msg(sQuote(fun), "is not a known sqlite aggregate function!" ))
 	}
 
 

@@ -31,12 +31,12 @@ If \code{gridSize} is not given the default grid size is computed based on the b
 }
 
 \seealso{
-\code{\link[rangeMapper]{rangeMapper}}.
+\code{\link[rangeMapper]{rangeMap.save}}.
 \code{\link[rangeMapper]{global.bbox}}
 }
 
 \references{
-Valcu, M., Dale, J. and Kempenaers, B. (in prep) rangeMapper: A platform for the study of macroecology of life history traits.
+Valcu, M., Dale, J. and Kempenaers, B. (in press)  rangeMapper: A platform for the study of macroecology of life history traits.
 }
 
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}

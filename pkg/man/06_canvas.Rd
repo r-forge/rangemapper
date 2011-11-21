@@ -32,12 +32,12 @@ The method canvasSave() fails if \code{grid.size} was not set and if the canvas 
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}
 
 \seealso{
-	\code{\link{rangeMapper}} for a complete example.\cr
+	\code{\link{rangeMap.save}}.\cr
 	\code{\link{gridSize.save}} 
 	}
 	
 \references{
-Valcu, M., Dale, J. and Kempenaers, B. (in prep) rangeMapper: A platform for the study of macroecology of life history traits.
+Valcu, M., Dale, J. and Kempenaers, B. (in press)  rangeMapper: A platform for the study of macroecology of life history traits.
 }
 	
 \examples{
