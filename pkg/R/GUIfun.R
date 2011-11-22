@@ -47,7 +47,6 @@ x.Msg <- function(x.Msg=Sys.time(), tkMainWindow = "win", tkElement = "x.Msg", e
 } 
 
 x.make.env <- function(env = ".RangeMapper") {
-
 assign(env , new.env(), env = .GlobalEnv)
 }
 

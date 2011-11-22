@@ -42,9 +42,11 @@
           <div id="layout-menu-EXAMPLE"> EXAMPLES</div>
 
           <div id="layout-menu-examples">
-                <div><a href="01_species_richness.html">Species&nbsp;richness</a></div>
-                <div><a href="02_body_size.html">Body&nbsp;size</a></div>
-          </div>
+
+          <div><a href="01_canned.html">    Simple&nbsp;example</a></div>
+          <div><a href="02_sql_and_R.html"> SQL vs. R</a></div>
+
+                </div>
 
 
         </div>
@@ -62,18 +64,18 @@
 
         <div id="content">
 <div class="sect1">
-<h2 id="_species_richness_of_the_new_world_wrens">Species richness of the New World Wrens</h2>
+<h2 id="_body_size_distribution_of_the_new_world_wrens">Body size distribution of the New World Wrens</h2>
 <div class="sectionbody">
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
 <img src="media/note.png" alt="Note" />
 </td>
-<td class="content">AN OUT OF THE BOX EXAMPLE.
-The functions <tt>gridSize.save()</tt> and <tt>rangeMap.save()</tt>, and implicitly <tt>canvas.save()</tt> ,
-are called with their default arguments.
-<tt>plot()</tt> uses the default colour scheme and scale class interval.
-<tt>global.bbox.save()</tt> uses the extent of all the ranges to compute a global bounding box.</td>
+<td class="content">SQLITE vs. R MAPPING.
+<tt>global.bbox.save()</tt> gets a p4s argument and the ranges are re-projected to equal area before
+processing.<br />
+The &#8220;FUN&#8221; in <tt>rangeMap.save()</tt> is either a <em>string</em> corresponding to an SQL &#8220;aggregate function&#8221; or
+an R function.</td>
 </tr></table>
 </div>
 <div class="listingblock">
@@ -81,29 +83,72 @@ are called with their default arguments.
 <pre><tt> require(rangeMapper)
  dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
  # Breeding range vector files
- loc = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")</tt></pre>
+ f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
+ # Creating a global bbox using the  breeding range vector files; re-project to equal area
+ projString =  CRS(" +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=km +no_defs")
+ global.bbox.save(con = dbcon, bbox = f, p4s = projString)
+ # upload grid size to 100 sqkm
+ gridSize.save(dbcon, gridSize = 100)
+ #  save canvas
+ canvas.save(dbcon)</tt></pre>
 </div></div>
 <div class="sect3">
-<h4 id="_mapping_using_default_parameters">Mapping using default parameters</h4>
+<h4 id="_import_taxa_and_life_history_data">Import taxa and life history data</h4>
 <div class="listingblock">
 <div class="content">
-<pre><tt> global.bbox.save(con = dbcon, bbox = loc)
- gridSize.save(dbcon)
- canvas.save(dbcon)
- r = readOGR(loc, "wrens", verbose = FALSE)
- processRanges(spdf = r, con =  dbcon, ID = "sci_name")
- # creates  "species_richness" map
- rangeMap.save(dbcon)</tt></pre>
+<pre><tt> data(wrens)
+ head(wrens[, 3:6])</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>        com_name           genus body_size body_mass
+1 boucard's wren Campylorhynchus      17.0      27.6
+2   spotted wren Campylorhynchus      17.0      30.1
+3   yucatan wren Campylorhynchus      18.0      35.5
+4    cactus wren Campylorhynchus      18.5      38.9
+5     giant wren Campylorhynchus      21.0      50.9
+6 bicolored wren Campylorhynchus      21.5      42.4</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
-<pre><tt> # Fetch and plot species richness map
+<pre><tt> bio.save(con = dbcon, loc = wrens ,  ID = "sci_name")</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>&gt;&gt; Table wrens saved as a  BIO_ table</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Process ranges
+  r = readOGR(loc, "wrens", verbose = FALSE)
+  processRanges(spdf = r, con =  dbcon, ID = "sci_name")</tt></pre>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_mapping_using_sql_aggregate_functions">Mapping using SQL aggregate functions</h4>
+<div class="listingblock">
+<div class="content">
+<pre><tt> rangeMap.save(dbcon, biotab = "wrens",FUN = "median", biotrait = "body_size",
+        tableName = "median_body_size")</tt></pre>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_mapping_using_r_functions">Mapping using R functions</h4>
+<div class="listingblock">
+<div class="content">
+<pre><tt> custom_function = function(x, ...) (sd(x, ...))
+ rangeMap.save(dbcon, biotab = "wrens", FUN = custom_function, biotrait = "body_size",
+        tableName = "sd_body_size", overwrite = TRUE)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Fetch and plot map
  sr = rangeMap.fetch(dbcon)
  plot(sr)</tt></pre>
 </div></div>
 <div class="imageblock">
 <div class="content">
-<img src="figs/01-003.jpg" alt="figs/01-003.jpg" />
+<img src="figs/02-006.jpg" alt="figs/02-006.jpg" />
 </div>
 </div>
 <div class="listingblock">
@@ -121,7 +166,7 @@ are called with their default arguments.
         <div id="footer">
 
         <div id="footer-text">
-Last updated 2011-11-22 16:31:35 W. Europe Standard Time
+Last updated 2011-11-22 16:52:13 W. Europe Standard Time
         </div>
 
 <div id="footer-badges">

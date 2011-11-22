@@ -34,7 +34,7 @@ For the moment \code{mapvar} is the only slot which makes this class distinct fr
 
 
 \seealso{
-\code{\link{rangeMapFetch-class}}
+\code{\link{rangeMap.fetch}}
 }
 
 

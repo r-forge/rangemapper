@@ -1,6 +1,8 @@
 \name{canvas.save}
 \alias{canvas.save}
 \alias{canvas.fetch}
+\alias{canvasFetch}
+\alias{canvasSave}
 \alias{canvasFetch-methods}
 \alias{canvasFetch,rangeMap-method}
 \alias{canvasSave-methods}

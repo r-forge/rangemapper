@@ -36,7 +36,7 @@ setMethod("bioSave",
 		
 		ranges.nam = RMQuery(object@CON, "select distinct bioid from ranges")$bioid
 
-		d$has_range= is.element(nam, ranges.nam)
+		d$has_range = is.element(nam, ranges.nam)
 		
 		res = dbWriteTable(object@CON ,tableName , d, row.names = FALSE)
 

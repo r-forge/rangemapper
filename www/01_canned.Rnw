@@ -5,19 +5,19 @@ Species richness of the New World Wrens
 \Sexpr{options(prompt=" ", continue=" ")}
 \SweaveOpts{prefix.string=figs/01}
 
-NOTE: The functions +gridSize.save()+ and +rangeMap.save()+, and implicitly +canvas.save()+ ,
+NOTE: AN OUT OF THE BOX EXAMPLE.
+The functions +gridSize.save()+ and +rangeMap.save()+, and implicitly +canvas.save()+ ,
 are called with their default arguments. 
 +plot()+ uses the default colour scheme and scale class interval. 
 +global.bbox.save()+ uses the extent of all the ranges to compute a global bounding box.
 
 <<results=hide>>=
 require(rangeMapper)
-wd = tempdir()
+
 dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
 
 # Breeding range vector files
 loc = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
-f = list.files(loc, full.names = TRUE, pattern = ".shp$")
 @
 
 Mapping using default parameters
@@ -27,10 +27,12 @@ Mapping using default parameters
 global.bbox.save(con = dbcon, bbox = loc) 
 gridSize.save(dbcon) 
 canvas.save(dbcon) 
-processRanges(file = f, ID = "sci_name", con =  dbcon)
 
-rangeMap.save(dbcon, tableName = "species_richness")
+r = readOGR(loc, "wrens", verbose = FALSE)
+processRanges(spdf = r, con =  dbcon, ID = "sci_name")
 
+# creates  "species_richness" map
+rangeMap.save(dbcon) 
 @
 
 <<results=hide,fig=true>>=

@@ -50,10 +50,12 @@ Valcu, M., Dale, J. and Kempenaers, B. (in press)  rangeMapper: A platform for t
 \code{\link[rangeMapper]{rangeMap.save}}.
 }
 
+
+\examples{
 \dontrun{ 
 rangeMapper()
 }
- 
+}
  
  
 

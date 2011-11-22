@@ -12,8 +12,9 @@
 {\begin{list}{}{\setlength{\leftmargin}{1em}}\item\scriptsize\bfseries}
 {\end{list}}
 
+\usepackage{Sweave}
 \begin{document}
-\title{rangeMapper Package Vignette}
+\title{rangeMapper graphical user interface package vignette}
 \author{
 Mihai Valcu\footnote{
 	\texttt{valcu@orn.mpg.de},
@@ -33,12 +34,12 @@ James Dale\footnote{
 }
 
 \maketitle
-\Sexpr{print(version$version.string)},
-\Sexpr{print(paste("rangeMapper", packageDescription("rangeMapper")$Version))}.
+R version 2.14.0 (2011-10-31),
+rangeMapper 0.0-6.6.
 
 
 \section{Introduction}
-	\emph{rangeMapper} is a suite of tools for easy generation of biodiversity (species richness) or life-history traits maps and, in general, maps of any variable associated with a species or population. 
+	\cite{rangeMapper} is a suite of tools for easy generation of biodiversity (species richness) or life-history traits maps and, in general, maps of any variable associated with a species or population. 
 	\emph{rangeMapper} performs range maps interpolation with a pre-defined grid, then computes at each grid cell a chosen statistical model. 
 	\emph{rangeMapper} can be easily extended with {\bf any} statistical model (from a simple average to mixed-effect and phylogenetic models) available in one of the existing R packages.
 	 The resulting raster maps are stored in a \emph{rangeMapper} project file (a pre-customized SQLite database) and 
@@ -109,7 +110,7 @@ After pushing the initiate project button, choose a location to save the file, n
 
 	At this step you can select a directory containing the range files. Then every range polygon is overlaid on the canvas and the result of the overlap is saved to the database.\\
 For the wrens, push the `PROCESS RANGES' button and select the directory with the wrens range vector files. Hit `YES' when asked to save range centroid and range extent data to the data project file.\\
-Note that if there are thousands of range map polygons with complex geometries to be processed and/or the canvas resolution is relatively high this step can be time consuming. For example processing all amphibians of the world \cite{iucn09} (5816 ranges, total 252 MB) using a grid of 0.25$^{\circ}$ resolution takes 544 minutes on a 64-bit machine with 4 GB of RAM running Windows Vista and R 2.10.0. However, once this step has been performed and the results saved to the database, the other operations are fast.
+Note that if there are thousands of range map polygons with complex geometries to be processed and/or the canvas resolution is relatively high this step can be time consuming. 
 	
 	\subsection{ Upload external `BIO' data (e.g. life history data)}
 	\begin{figure}[htbp]
@@ -223,9 +224,10 @@ Push the `CHOOSE FUNCTION' icon and select `richness'. Save the map, choose a ne
   \end{center}
 \end{figure}	
 	
-\pagebreak		
-\begin{thebibliography}{1}
 
+
+\begin{thebibliography}{1}
+	
 \bibitem[sp]{sp}
 	Pebesma, E.J., R.S. Bivand, 2005. Classes and methods for spatial data in R. R News 5 (2), 
 			\url{http://cran.r-project.org/doc/Rnews/.}\\
@@ -249,9 +251,11 @@ Ridgely, R. S., T. F. Allnutt, T. Brooks, D. K. McNicol, D. W. Mehlman, B. E. Yo
 \bibitem[classInt]{classInt}
 Roger Bivand, with contributions by Hisaji Ono and Richard Dunlap (2009). classInt: Choose univariate class intervals. R package version 0.1-14. \url{http://CRAN.R-project.org/package=classInt}
 
+\bibitem[rangeMapper]{rangeMapper}
+Valcu, M., Dale, J. and Kempenaers, B. (2011) rangeMapper: A platform for the study of macroecology of life history traits. \url{http://rangemapper.r-forge.r-project.org}
+
 
 \end{thebibliography}
-
 
 \end{document}
 	

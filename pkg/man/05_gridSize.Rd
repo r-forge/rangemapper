@@ -1,6 +1,8 @@
 \name{gridSize.save}
 \alias{gridSize.save}
 \alias{gridSize.fetch}
+\alias{gridSizeFetch}
+\alias{gridSizeSave}
 \alias{gridSizeSave-methods}
 \alias{gridSizeSave,gridSize-method}
 \alias{gridSizeFetch-methods}
@@ -17,7 +19,7 @@ gridSize.fetch(con)
 
 \arguments{
 	  \item{con}{A connection pointing to a valid \code{rangeMapper} project.}
-	  \item{gridSize}{A numeric vector of one unit length. See notes.}
+	  \item{\dots}{ \code{gridSize}: A numeric vector of one unit length. See notes.}
 	}
 
 \value{

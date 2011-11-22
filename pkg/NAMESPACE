@@ -3,9 +3,9 @@ import(methods)
 import(utils) 
 import(sp) 
 
-exportClasses(rangeFiles, rangeMapStart, rangeMap, gridSize, rangeMapProcess, rangeMapSave, bioSaveFile, bioSaveDataFrame, MapImport, rangeMapFetch, rangeMapRemove)
+exportClasses(rangeMapStart, rangeMap,SpatialPixelsRangeMap)
 
-exportMethods(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapExport, rangeMapStart, summary, plot )
+exportMethods(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapExport, rangeMapStart, summary, plot)
 
 export(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapExport, rangeMapStart )
 

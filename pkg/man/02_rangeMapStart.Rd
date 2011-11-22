@@ -1,6 +1,7 @@
 
 \name{rangeMap.start}
 \alias{rangeMap.start}
+\alias{rangeMapStart}
 \alias{rangeMap.open}
 
 \title{Initiate/open a new rangeMapper project}

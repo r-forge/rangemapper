@@ -1,6 +1,7 @@
 
 \name{rm.rangeMapper}
 \alias{rm.rangeMapper}
+\alias{rangeMapRemove}
 \alias{rangeMapRemove-methods}
 \alias{rangeMapRemove,rangeMapRemove-method}
 
@@ -9,7 +10,7 @@
 
 \arguments{
 	  \item{con}{A valid sqlite connection.}
-	  \item{\dots}{arguments passed to methods of \code{"\linkS4class{rangeMapRemove}"}, specifically \sQuote{tablePrefix} or \sQuote{tableName} }
+	  \item{\dots}{Arguments passed to the corresponding methods specifically \sQuote{tablePrefix} or \sQuote{tableName} }
 }
 
 \usage{

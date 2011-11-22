@@ -1,11 +1,14 @@
 
 \name{selectShpFiles}
 \alias{selectShpFiles}
+\alias{rangeFiles}
+\alias{rangeFiles-methods}
+\alias{rangeFiles,rangeFiles-method}
 
 
 \title{Select (recursively) shape files}
 \description{
-Returns the file path to all \sQuote{.shp} files in a directory.
+Returns the file path to all \sQuote{.shp} polygons in a directory.
 }
 \usage{
 selectShpFiles(dir, \dots)
@@ -13,7 +16,7 @@ selectShpFiles(dir, \dots)
 
 \arguments{
 	  \item{dir}{character string specifying the directory containing .shp files.}	
-	  \item{\dots}{Other arguments to pass to methods of class \code{\link{rangeFiles-class}}  }	
+	  \item{\dots}{currently ignored}	
 	  
 }
 
@@ -21,11 +24,17 @@ selectShpFiles(dir, \dots)
 Either a \code{\link{data.frame}} or a character vector is returned.
 }	
 
+\note{
+The function uses \code{\link[maptools]{getinfo.shape}} to only select polygon files (aka type 5). 
+}	
+
+
+
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}
 
 \seealso{
-	\code{\link{rangeMap.save}}.\cr
-	\code{\link{rangeFiles-class}} 
+	\code{\link{rangeMap.save}}.
+	\code{\link[maptools]{getinfo.shape}}
 }
 
 \references{

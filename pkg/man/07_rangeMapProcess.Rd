@@ -1,6 +1,7 @@
 \name{processRanges}
 \alias{processRanges}
 \alias{rangeMapProcess-methods}
+\alias{rangeMapProcess}
 \alias{rangeMapProcess,rangeMapProcess,missing,character,missing,list,missing-method}
 \alias{rangeMapProcess,rangeMapProcess,missing,character,missing,missing,missing-method}
 \alias{rangeMapProcess,rangeMapProcess,SpatialPolygonsDataFrame,missing,character,list,missing-method}
@@ -20,7 +21,7 @@ Each polygon range is overlayed on the canvas and the results are saved to the a
 				\emph{spdf} \code{\link[sp]{SpatialPolygonsDataFrame}} object containing all the ranges. \cr 
 				\emph{ID} when spdf is set this is a \code{character} vector given the name of the range. \cr 
 				\emph{dir} ranges file directory where the individual ranges shp files are located. In this case the range ID is the file name. \cr 
-				\emph{metadata} a named list of functions. See \code{\link[sp]{rangeTraits}} \cr 
+				\emph{metadata} a named list of functions. See \code{\link[rangeMapper]{rangeTraits}} \cr 
 				\emph{parallel} for the moment no method defined for this signature. \cr 
 		}
 	  

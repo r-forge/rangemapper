@@ -6,7 +6,7 @@
 
 \title{Class \code{"rangeMapStart"}}
 \description{
-
+Methods of this class allows to initiate a new rangeMapper project.
 }
 
 

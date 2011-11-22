@@ -1,12 +1,17 @@
 
 \name{rangeMap.save}
 \alias{rangeMap.save}
+\alias{rangeMapSave}
 \alias{rangeMapSave-methods}
 \alias{rangeMapSave,rangeMapSave,character,missing-method}
 \alias{rangeMapSave,rangeMapSave,function,formula-method}
 \alias{rangeMapSave,rangeMapSave,function,missing-method}
 \alias{rangeMapSave,rangeMapSave,missing,missing-method}
+\alias{rangeMapFetch}
+\alias{rangeMapFetch-methods}
+\alias{rangeMapFetch,rangeMapFetch-method}
 \alias{rangeMap.fetch}
+
 
 
 \title{Save, retrieve and export maps.}
@@ -14,7 +19,7 @@
 Apply a chosen \code{SQL} or \R function at each grid cell, allowing for complex subsetting at both ID (e.g. species) and pixel (e..g assemblage) levels.}
 
 \arguments{
-	  \item{con}{An sqlite connection pointing to a valid \code{rangeMapper} project. }
+	  \item{CON}{An sqlite connection pointing to a valid \code{rangeMapper} project. }
 	  \item{tableName}{Name of the table (quoted) to be added to the sqlite database. The prefix \sQuote{MAP} will be appended to \code{tableName} prior to saving.}
 	  \item{FUN}{the function to be applied to each pixel. If \code{FUN} is missing then species richness (species count) is computed.}
 	  \item{biotab}{character string identifying the \sQuote{BIO} table to use.}
@@ -28,7 +33,7 @@ Apply a chosen \code{SQL} or \R function at each grid cell, allowing for complex
 
 
 \usage{
-rangeMap.save(con, tableName, FUN, biotab, biotrait, subset, path , overwrite, \dots)
+rangeMap.save(CON, tableName, FUN, biotab, biotrait, subset, path , overwrite, \dots)
 }
 	
 

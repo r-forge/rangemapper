@@ -5,11 +5,13 @@
 \alias{global.bbox.fetch}
 \alias{rangeMapBbox-methods}
 \alias{rangeMapBboxSave-methods}
+\alias{rangeMapBboxSave}
 \alias{rangeMapBboxSave,rangeMap,character,CRS-method}
 \alias{rangeMapBboxSave,rangeMap,character,missing-method}
 \alias{rangeMapBboxSave,rangeMap,missing,CRS-method}
 \alias{rangeMapBboxSave,rangeMap,missing,missing-method}
 \alias{rangeMapBboxSave,rangeMap,Spatial,missing-method}
+\alias{rangeMapBboxFetch}
 \alias{rangeMapBboxFetch-methods}
 \alias{rangeMapBboxFetch,rangeMap-method}
 
