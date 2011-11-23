@@ -2,14 +2,14 @@ Body size distribution of the New World Wrens
 ---------------------------------------------
 :lang: en
 :encoding: iso-8859-1
- 
+> 
 
 
 NOTE: SQLITE vs. R MAPPING. 
-+global.bbox.save()+ gets a p4s argument and the ranges are re-projected to equal area before 
-processing. +
 The ``FUN'' in +rangeMap.save()+ is either a 'string' corresponding to an SQL ``aggregate function'' or 
 an R function. 
++global.bbox.save()+ gets a p4s argument and the ranges are re-projected to equal area before 
+processing. +
 
 ----
  require(rangeMapper)

@@ -87,9 +87,6 @@ h1 {
 }
 
 
-
-
-
 #layout-content {
   padding-top: 0.2em;
   padding-left: 1.0em;
@@ -101,6 +98,43 @@ h1 {
   #layout-menu-box { display: none; }
   #layout-content-box { margin-top: 0; margin-left: 0; }
 }
+
+.tooltip { position:relative; z-index:24; }
+.tooltip span { display:none;}
+.tooltip:hover {z-index:25;}
+.tooltip:hover span { 
+	display:inline;
+	position:absolute; 
+	width:400px; 
+	top:20px; 
+	left:100px; 
+	background-color:rgba(115, 160, 197, 0.8);
+	border:0.25px solid #333333; 
+	border-radius: 0em 1.5em 1.5em 1.5em;
+	padding:5px;
+	font-size:11px;
+	color:#333333;
+	text-decoration:none;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

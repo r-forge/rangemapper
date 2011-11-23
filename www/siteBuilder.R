@@ -1,6 +1,6 @@
 
 { # tools; settings
-setwd("M:\\PROJECTS\\SOFTWARE\\R\\PACKAGES\\rangeMapper\\R-forge\\www")
+setwd("M:\\SOFTWARE\\R\\PACKAGES\\rangeMapper\\R-forge\\www")
 
 bldfun = function(nam, sweave = TRUE) {
 	require(ascii)
@@ -28,7 +28,7 @@ bldfun("gallery", FALSE)
 bldfun("bibliography", FALSE)
 
 #SWEAVE
-bldfun("01_species_richness")
-bldfun("02_body_size")
+bldfun("01_canned")
+bldfun("02_sql_and_R")
 
 
