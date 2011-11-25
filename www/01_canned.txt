@@ -1,12 +1,13 @@
-Species richness of the New World Wrens
----------------------------------------
+
 :lang: en
 :encoding: iso-8859-1
 > 
 
 
-NOTE: AN OUT OF THE BOX EXAMPLE.
-The functions +gridSize.save()+ and +rangeMap.save()+, and implicitly +canvas.save()+ ,
+=== Species richness of the New World Wrens
+==== An out of the box example
+
+NOTE: The functions +gridSize.save()+ and +rangeMap.save()+, and implicitly +canvas.save()+ ,
 are called with their default arguments. 
 +plot()+ uses the default colour scheme and scale class interval. 
 +global.bbox.save()+ uses the extent of all the ranges to compute a global bounding box.
@@ -18,8 +19,7 @@ are called with their default arguments.
  loc = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
 ----
 
-Mapping using default parameters
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.# Mapping using default parameters
 
 ----
  global.bbox.save(con = dbcon, bbox = loc) 

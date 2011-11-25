@@ -137,7 +137,7 @@ setMethod("rangeMapProcess",
 		dbWriteTable(object@CON, object@RANGES, o, append = TRUE, row.names = FALSE) 
 		
 		# save  to @METADATA_RANGES
-		rtr = sapply(rangeTraits(), function(x) x(r) )
+		rtr = sapply(metadata, function(x) x(r) )
 		
 		rtr = data.frame(t(rtr))
 		id = data.frame(name); names(id) = object@BIOID
@@ -272,7 +272,7 @@ setMethod("rangeMapProcess",
 		
 		# save  to @METADATA_RANGES
 		x.Msg("Extracting metadata..", keep = FALSE)
-		rtr = lapply( spdf, function(R) sapply(rangeTraits(), function(x) x(R) ) )
+		rtr = lapply( spdf, function(R) sapply(metadata, function(x) x(R) ) )
 		rtr = data.frame(do.call(rbind, rtr))
 
 		  lapply( 

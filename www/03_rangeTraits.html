@@ -68,86 +68,106 @@
         <div id="content">
 <div class="paragraph"><p>&gt;</p></div>
 <div class="sect2">
-<h3 id="_body_size_distribution_of_the_new_world_wrens">Body size distribution of the New World Wrens</h3>
+<h3 id="_altidude_range_and_the_area_perimeter_ratio_of_the_new_world_wrens">Altidude range and the area perimeter ratio of the New World Wrens</h3>
 <div class="sect3">
-<h4 id="_sqlite_vs_r_mapping">SQLITE vs. R MAPPING.</h4>
+<h4 id="_range_traits_extraction">RANGE TRAITS EXTRACTION</h4>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
 <img src="media/note.png" alt="Note" />
 </td>
-<td class="content">The &#8220;FUN&#8221; in <tt>rangeMap.save()</tt> is either a <em>string</em> corresponding to an SQL &#8220;aggregate function&#8221; or
-an R function.
-<tt>global.bbox.save()</tt> gets a p4s argument and the ranges are re-projected to equal area before
-processing.<br /></td>
+<td class="content"><tt>processRanges()</tt> takes a <em>metadata</em> argument allowing for the extraction of
+range parameters (e.g. range extent, range shape etc) and/or the extraction of
+environmental parameters within the range (e.g. median temperature).
+The <em>metadata</em> argument accepts a named list of functions. <tt>rangeTraits</tt> is a
+convenience function for building up such a list.</td>
 </tr></table>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre><tt> require(rangeMapper)
+<pre><tt> #Start a new project
+ require(rangeMapper)
  dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
- # Breeding range vector files
  f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
- # Creating a global bbox using the  breeding range vector files; re-project to equal area
- projString =  CRS(" +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=km +no_defs")
+ projString =  CRS(" +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=m +no_defs")
  global.bbox.save(con = dbcon, bbox = f, p4s = projString)
- # upload grid size to 100 sqkm
- gridSize.save(dbcon, gridSize = 100)
- #  save canvas
+ gridSize.save(dbcon)
  canvas.save(dbcon)</tt></pre>
 </div></div>
-<div class="listingblock">
-<div class="title">#Import taxa and life history data</div>
-<div class="content">
-<pre><tt> data(wrens)
- head(wrens[, 3:6])</tt></pre>
-</div></div>
-<div class="literalblock">
-<div class="content">
-<pre><tt>        com_name           genus body_size body_mass
-1 boucard's wren Campylorhynchus      17.0      27.6
-2   spotted wren Campylorhynchus      17.0      30.1
-3   yucatan wren Campylorhynchus      18.0      35.5
-4    cactus wren Campylorhynchus      18.5      38.9
-5     giant wren Campylorhynchus      21.0      50.9
-6 bicolored wren Campylorhynchus      21.5      42.4</tt></pre>
-</div></div>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+#Area/Perimeter ratio
+</p>
+</li>
+</ol></div>
 <div class="listingblock">
 <div class="content">
-<pre><tt> bio.save(con = dbcon, loc = wrens ,  ID = "sci_name")</tt></pre>
+<pre><tt> APratio = function(x){
+        # area
+        A = sapply(slot(x, "polygons"),
+                function(x) slot(x, "area") )
+        # perimeter
+        a = lapply(slot(x, "polygons"),
+                function(x) slot(x, "Polygons") )
+        b = do.call(c, a)
+        a1 = lapply(b, function(x)
+                Line(coordinates(x)))
+        L = sapply(a1, LineLength)
+        # A-P ratio
+        2*(sqrt(pi*sum(A)))/sum(L)
+ }</tt></pre>
 </div></div>
-<div class="literalblock">
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+# Altitude range
+</p>
+</li>
+</ol></div>
+<div class="listingblock">
 <div class="content">
-<pre><tt>&gt;&gt; Table wrens saved as a  BIO_ table</tt></pre>
+<pre><tt> dem = readGDAL(system.file(package = "rangeMapper", "extdata", "etopo1", "etopo1_Americas.tif"),  silent =  TRUE)
+ # etopo1_Americas.tif data source:
+ readChar(system.file(package = "rangeMapper", "extdata", "etopo1", "data_source.txt"), 500)</tt></pre>
+</div></div>
+<div class="paragraph"><p>[1] "Amante, C. and B. W. Eakins, ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis, National Geophysical Data Center, NESDIS, NOAA, U.S. Department of Commerce, Boulder, CO, August 2008. <a href="http://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf\nImagery">http://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf\nImagery</a> of ETOPO1 Ice Surface by J. Varner and E. Lim, Cooperative Institute for Research in Environmental Sciences, at University of Colorado at Boulder and NOAA National Geophysical Data Center."</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> AltitRange = function(x) {
+        sel = which(!is.na(overlay(dem, x)))
+        if(length(sel) &gt; 0 ) {
+        demx = dem[sel, ]
+        res = diff(range(demx@data$band1, na.rm = TRUE))
+        } else res = NA
+        res
+ }</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt> # Process ranges
-  r = readOGR(f, "wrens", verbose = FALSE)
-  processRanges(spdf = r, con =  dbcon, ID = "sci_name")</tt></pre>
+ r = readOGR(f, "wrens", verbose = FALSE)
+ processRanges(spdf = r, con =  dbcon, ID = "sci_name", metadata  = rangeTraits(APratio=APratio, AltitRange=AltitRange) )</tt></pre>
 </div></div>
 <div class="listingblock">
-<div class="title"># Mapping using SQL aggregate functions</div>
+<div class="title"># Mapping metadata_ranges table</div>
 <div class="content">
-<pre><tt> rangeMap.save(dbcon, biotab = "wrens",FUN = "median", biotrait = "body_size",
-        tableName = "median_body_size")</tt></pre>
-</div></div>
-<div class="listingblock">
-<div class="title"># Mapping using R functions</div>
-<div class="content">
-<pre><tt> custom_function = function(x, ...) (sd(x, ...))
- rangeMap.save(dbcon, biotab = "wrens", FUN = custom_function, biotrait = "body_size",
-        tableName = "sd_body_size", overwrite = TRUE)</tt></pre>
+<pre><tt> # Convert metadata_ranges to a BIO table
+ metadata2bio(dbcon)
+ rangeMap.save(dbcon, biotab = "metadata_ranges", FUN = "median", biotrait = "APratio",
+        tableName = "Area_Perimeter_ratio")
+ rangeMap.save(dbcon, biotab = "metadata_ranges", FUN = "median", biotrait = "AltitRange",
+        tableName = "Altitude_range")</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
-<pre><tt> # Fetch and plot map
- sr = rangeMap.fetch(dbcon)
- plot(sr)</tt></pre>
+<pre><tt> # Fetch and plot maps
+ m = rangeMap.fetch(dbcon)
+ plot(m)</tt></pre>
 </div></div>
 <div class="imageblock">
 <div class="content">
-<img src="figs/02-006.jpg" alt="figs/02-006.jpg" />
+<img src="figs/03-006.jpg" alt="figs/03-006.jpg" />
 </div>
 </div>
 <div class="listingblock">
@@ -164,7 +184,7 @@ processing.<br /></td>
         <div id="footer">
 
         <div id="footer-text">
-Last updated 2011-11-25 11:26:01 W. Europe Standard Time
+Last updated 2011-11-25 11:26:50 W. Europe Standard Time
         </div>
 
 <div id="footer-badges">

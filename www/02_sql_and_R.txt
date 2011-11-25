@@ -1,12 +1,13 @@
-Body size distribution of the New World Wrens
----------------------------------------------
+
 :lang: en
 :encoding: iso-8859-1
 > 
 
 
-NOTE: SQLITE vs. R MAPPING. 
-The ``FUN'' in +rangeMap.save()+ is either a 'string' corresponding to an SQL ``aggregate function'' or 
+=== Body size distribution of the New World Wrens ===
+==== SQLITE vs. R MAPPING.  ==== 
+
+NOTE: The ``FUN'' in +rangeMap.save()+ is either a 'string' corresponding to an SQL ``aggregate function'' or 
 an R function. 
 +global.bbox.save()+ gets a p4s argument and the ranges are re-projected to equal area before 
 processing. +
@@ -25,8 +26,8 @@ processing. +
  canvas.save(dbcon) 
 ----
 
-Import taxa and life history data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.#Import taxa and life history data
+
 ----
  data(wrens)
  head(wrens[, 3:6])
@@ -45,19 +46,19 @@ Import taxa and life history data
 
 ----
  # Process ranges
-  r = readOGR(loc, "wrens", verbose = FALSE)
+  r = readOGR(f, "wrens", verbose = FALSE)
   processRanges(spdf = r, con =  dbcon, ID = "sci_name")
 ----
 
-Mapping using SQL aggregate functions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.# Mapping using SQL aggregate functions
+
 ----
  rangeMap.save(dbcon, biotab = "wrens",FUN = "median", biotrait = "body_size", 
  	tableName = "median_body_size")
 ----
 	
-Mapping using R functions
-^^^^^^^^^^^^^^^^^^^^^^^^^
+.# Mapping using R functions
+
 ----
  custom_function = function(x, ...) (sd(x, ...))
  rangeMap.save(dbcon, biotab = "wrens", FUN = custom_function, biotrait = "body_size", 

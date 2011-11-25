@@ -12,7 +12,7 @@ bldfun = function(nam, sweave = TRUE) {
 	if(sweave) 
 		Sweave(x, driver = RweaveAsciidoc, syntax = "SweaveSyntaxNoweb")
 
-	shell(paste("asciidoc.py --backend=xhtml11 -a icons -a iconsdir=media -a linkcss -a stylesdir=media -a stylesheet=style.css -a disable-javascript -a badges -a icons  -a max-width=1024px -a linkcss --conf-file=layout.conf", z) )
+	shell(paste("asciidoc.py --backend=xhtml11 --doctype=article -a icons -a iconsdir=media -a linkcss -a stylesdir=media -a stylesheet=style.css -a disable-javascript -a badges -a icons  -a max-width=1024px -a linkcss --conf-file=layout.conf", z) )
 	
 	options(opt)
 }
@@ -30,5 +30,6 @@ bldfun("bibliography", FALSE)
 #SWEAVE
 bldfun("01_canned")
 bldfun("02_sql_and_R")
+bldfun("03_rangeTraits")
 
 
