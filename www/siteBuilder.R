@@ -21,7 +21,8 @@ bldfun = function(nam, sweave = TRUE) {
 }
 
 # ASCIIDOC
-bldfun("index", FALSE)
+bldfun("index", FALSE) 
+
 bldfun("faq", FALSE)
 bldfun("gui", FALSE)
 bldfun("gallery", FALSE)
@@ -31,5 +32,7 @@ bldfun("bibliography", FALSE)
 bldfun("01_canned")
 bldfun("02_sql_and_R")
 bldfun("03_rangeTraits")
+bldfun("04_subsetting")
+bldfun("05_subsetting")
 
 

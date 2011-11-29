@@ -1,5 +1,7 @@
 body {
-  margin: 0;
+	margin: 0;
+
+
 }
 
 #layout-menu-box {
@@ -8,8 +10,10 @@ body {
   top: 0px;
   width: 160px;
   height: 100%;
+  overflow: hide;
   z-index: 1;
   background-color: #f4f4f4;
+
 }
 
 #layout-content-box {

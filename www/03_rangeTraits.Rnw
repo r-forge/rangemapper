@@ -25,7 +25,7 @@ gridSize.save(dbcon)
 canvas.save(dbcon) 
 @
 
-. #Area/Perimeter ratio
+.# Area/Perimeter ratio
 <<results=hide>>=
 APratio = function(x){
 	# area
@@ -43,8 +43,8 @@ APratio = function(x){
 }
 @
 
-. # Altitude range
-<<results=ascii>>=
+.# Altitude range
+<<results=hide>>=
 dem = readGDAL(system.file(package = "rangeMapper", "extdata", "etopo1", "etopo1_Americas.tif"),  silent =  TRUE)
 
 # etopo1_Americas.tif data source:

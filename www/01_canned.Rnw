@@ -5,7 +5,7 @@
 \SweaveOpts{prefix.string=figs/01}
 
 === Species richness of the New World Wrens
-==== An out of the box example
+==== AN OUT OF THE BOX EXAMPLE
 
 NOTE: The functions +gridSize.save()+ and +rangeMap.save()+, and implicitly +canvas.save()+ ,
 are called with their default arguments. 

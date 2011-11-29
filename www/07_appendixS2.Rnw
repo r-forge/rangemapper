@@ -1,0 +1,45 @@
+
+:lang: en
+:encoding: iso-8859-1
+\Sexpr{options(prompt=" ", continue=" ")}
+\SweaveOpts{prefix.string=figs/04}
+
+===  Appendix S2 ===
+==== Valcu, M., James. D, Kempenaers, B. rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)   ==== 
+
+NOTE: Updated given the latest version 
+
+.# title
+<<results=hide>>=
+@
+
+
+
+.# title, figure
+<<results=ascii,fig=true>>=
+@
+
+
+
+<<echo=false>>=
+print(version$version.string)
+print(paste("rangeMapper", packageDescription("rangeMapper")$Version))
+print(paste("website generated using ascii", packageDescription("ascii")$Version))
+@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

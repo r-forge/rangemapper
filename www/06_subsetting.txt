@@ -1,0 +1,97 @@
+
+:lang: en
+:encoding: iso-8859-1
+ 
+
+
+===  Unstudied and extinction-prone wren species ===
+==== SUBSETTING AT BOTH SPECIES AND ASSAMBLADGE LEVEL  ==== 
+
+NOTE:  +rangeMap.save()+ takes a named list as a 'subset' argument. Names refers to 'BIO' tables (i.e. species level) and/or 'MAP' and 'metadata_rages' tables (i.e. assambladge level) while the corresponding character strings contain the SQL 'WHERE' elements. 
+
+
+----
+ #Start a new project
+  require(rangeMapper)
+  dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
+  f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
+  projString =  CRS(" +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=km +no_defs")
+  global.bbox.save(con = dbcon, bbox = f, p4s = projString)
+  gridSize.save(dbcon)
+  canvas.save(dbcon)
+  r = readOGR(f, "wrens", verbose = FALSE)
+  processRanges(spdf = r, con =  dbcon, ID = "sci_name", metadata  = rangeTraits() )
+  data(wrens)
+  bio.save(con = dbcon, loc = wrens,  ID = "sci_name")
+----
+
+.# Clutch size is not known for a bunch of wren species. 
+----
+ mw = as.character(wrens[is.na(wrens$clutch_size), "sci_name"])
+ mw[1]
+----
+[1] "Campylorhynchus_albobrunneus"
+----
+ matrix(mw[-1], nrow = 6, ncol = 5)
+----
+     [,1]                           [,2]                      [,3]                        [,4]                    [,5]                     
+[1,] "Campylorhynchus_megalopterus" "Cistothorus_meridae"     "Thryothorus_sclateri"      "Troglodytes_tanneri"   "Henicorhina_negreti"    
+[2,] "Odontorchilus_cinereus"       "Thryothorus_albinucha"   "Thryothorus_leucopogon"    "Troglodytes_beani"     "Henicorhina_leucoptera" 
+[3,] "Odontorchilus_branickii"      "Thryothorus_atrogularis" "Thryothorus_nicefori"      "Troglodytes_sissonii"  "Microcerculus_philomela"
+[4,] "Hylorchilus_navai"            "Thryothorus_euophrys"    "Thryothorus_longirostris"  "Troglodytes_monticola" "Microcerculus_ustulatus"
+[5,] "Cinnycerthia_unirufa"         "Thryothorus_eisenmanni"  "Thryothorus_griseus"       "Troglodytes_ochraceus" "Microcerculus_bambla"   
+[6,] "Cinnycerthia_fulva"           "Thryothorus_mystacalis"  "Troglodytes_brunneicollis" "Troglodytes_rufulus"   "Cyphorhinus_thoracicus" 
+
+.# Restricted range species which are more prone to become extinct 
+----
+ meta = RMQuery(dbcon, "SELECT * FROM metadata_ranges")
+ plot(density(log(meta$Area)))
+ abline(v = quantile(log(meta$Area), 0.50), col = 2, lty = 2)
+ exp(quantile(log(meta$Area), 0.50))
+----
+     50% 
+182751.7 
+----
+ 
+----
+image::figs/04-003.jpg[]
+
+
+.# Mapping: Unstudied and extinction-prone wren species
+----
+ rangeMap.save(dbcon)
+  rangeMap.save(dbcon, biotab = "wrens", subset = list(BIO_wrens = "clutch_size is NULL", metadata_ranges = "Area < 182751" ),
+ 		tableName = "mistery_wrens_species_richness", overwrite = TRUE)
+ 
+----
+	
+----
+ # Fetch and plot maps
+ m = rangeMap.fetch(dbcon)
+ plot(m, scales = FALSE)
+----
+image::figs/04-005.jpg[]
+
+
+----
+[1] "R version 2.14.0 (2011-10-31)"
+[1] "rangeMapper 0.0-6.6"
+[1] "website generated using ascii 2.1"
+----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

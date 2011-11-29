@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="generator" content="AsciiDoc 8.6.6" />
 
 <title></title>
@@ -70,16 +70,66 @@
 <div id="layout-content">
 
         <div id="content">
-<div class="sect1">
-<h2 id="_bibliography">BIBLIOGRAPHY</h2>
-<div class="sectionbody">
-<div class="ulist"><ul>
-<li>
-<p>
-<strong>Valcu, M., James. D, Kempenaers, B.</strong> rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)
-</p>
-</li>
-</ul></div>
+<div class="paragraph"><p>&gt;</p></div>
+<div class="sect2">
+<h3 id="_large_wrens_species_richens">Large wrens species richens</h3>
+<div class="sect3">
+<h4 id="_subsetting_at_species_level">SUBSETTING AT SPECIES LEVEL</h4>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="media/note.png" alt="Note" />
+</td>
+<td class="content"><tt>rangeMap.save()</tt> takes a named list as a <em>subset</em> argument. Names refers to <em>BIO</em> tables (i.e. species level) and/or <em>MAP</em> and <em>metadata_rages</em> tables (i.e. assambladge level) while the corresponding character strings contain the SQL <em>WHERE</em> elements.</td>
+</tr></table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> #Start a new project
+ require(rangeMapper)
+ dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
+ f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
+ global.bbox.save(con = dbcon, bbox = f)
+ gridSize.save(dbcon)
+ canvas.save(dbcon)
+ r = readOGR(f, "wrens", verbose = FALSE)
+ processRanges(spdf = r, con =  dbcon, ID = "sci_name")
+ data(wrens)
+ bio.save(con = dbcon, loc = wrens,  ID = "sci_name")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> hist(wrens$body_mass)
+ abline(v = median(wrens$body_mass), col = 2, lty = 2)</tt></pre>
+</div></div>
+<div class="imageblock">
+<div class="content">
+<img src="figs/04-002.jpg" alt="figs/04-002.jpg" />
+</div>
+</div>
+<div class="listingblock">
+<div class="title"># Mapping</div>
+<div class="content">
+<pre><tt> rangeMap.save(dbcon, biotab = "wrens", subset = list(BIO_wrens = paste("body_mass &gt;", median(wrens$body_mass)) ),
+        tableName = "large_wrens_species_richness")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Fetch and plot maps
+ m = rangeMap.fetch(dbcon)
+ plot(m, scales = TRUE )</tt></pre>
+</div></div>
+<div class="imageblock">
+<div class="content">
+<img src="figs/04-004.jpg" alt="figs/04-004.jpg" />
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>[1] "R version 2.14.0 (2011-10-31)"
+[1] "rangeMapper 0.0-6.6"
+[1] "website generated using ascii 2.1"</tt></pre>
+</div></div>
 </div>
 </div>
         </div>
@@ -88,7 +138,7 @@
         <div id="footer">
 
         <div id="footer-text">
-Last updated 2011-11-29 17:46:07 W. Europe Standard Time
+Last updated 2011-11-29 17:47:18 W. Europe Standard Time
         </div>
 
 <div id="footer-badges">

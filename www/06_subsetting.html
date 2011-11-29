@@ -70,92 +70,92 @@
 <div id="layout-content">
 
         <div id="content">
-<div class="paragraph"><p>&gt;</p></div>
 <div class="sect2">
-<h3 id="_altidude_range_and_the_area_perimeter_ratio_of_the_new_world_wrens">Altidude range and the area perimeter ratio of the New World Wrens</h3>
+<h3 id="_unstudied_and_extinction_prone_wren_species">Unstudied and extinction-prone wren species</h3>
 <div class="sect3">
-<h4 id="_range_traits_extraction">RANGE TRAITS EXTRACTION</h4>
+<h4 id="_subsetting_at_both_species_and_assambladge_level">SUBSETTING AT BOTH SPECIES AND ASSAMBLADGE LEVEL</h4>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
 <img src="media/note.png" alt="Note" />
 </td>
-<td class="content"><tt>processRanges()</tt> takes a <em>metadata</em> argument allowing for the extraction of
-range parameters (e.g. range extent, range shape etc) and/or the extraction of
-environmental parameters within the range (e.g. median temperature).
-The <em>metadata</em> argument accepts a named list of functions. <tt>rangeTraits</tt> is a
-convenience function for building up such a list.</td>
+<td class="content"><tt>rangeMap.save()</tt> takes a named list as a <em>subset</em> argument. Names refers to <em>BIO</em> tables (i.e. species level) and/or <em>MAP</em> and <em>metadata_rages</em> tables (i.e. assambladge level) while the corresponding character strings contain the SQL <em>WHERE</em> elements.</td>
 </tr></table>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre><tt> #Start a new project
- require(rangeMapper)
- dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
- f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
- projString =  CRS(" +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=m +no_defs")
- global.bbox.save(con = dbcon, bbox = f, p4s = projString)
- gridSize.save(dbcon)
- canvas.save(dbcon)</tt></pre>
+  require(rangeMapper)
+  dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
+  f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
+  projString =  CRS(" +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=km +no_defs")
+  global.bbox.save(con = dbcon, bbox = f, p4s = projString)
+  gridSize.save(dbcon)
+  canvas.save(dbcon)
+  r = readOGR(f, "wrens", verbose = FALSE)
+  processRanges(spdf = r, con =  dbcon, ID = "sci_name", metadata  = rangeTraits() )
+  data(wrens)
+  bio.save(con = dbcon, loc = wrens,  ID = "sci_name")</tt></pre>
 </div></div>
 <div class="listingblock">
-<div class="title"># Area/Perimeter ratio</div>
+<div class="title"># Clutch size is not known for a bunch of wren species.</div>
 <div class="content">
-<pre><tt> APratio = function(x){
-        # area
-        A = sapply(slot(x, "polygons"),
-                function(x) slot(x, "area") )
-        # perimeter
-        a = lapply(slot(x, "polygons"),
-                function(x) slot(x, "Polygons") )
-        b = do.call(c, a)
-        a1 = lapply(b, function(x)
-                Line(coordinates(x)))
-        L = sapply(a1, LineLength)
-        # A-P ratio
-        2*(sqrt(pi*sum(A)))/sum(L)
- }</tt></pre>
+<pre><tt> mw = as.character(wrens[is.na(wrens$clutch_size), "sci_name"])
+ mw[1]</tt></pre>
 </div></div>
-<div class="listingblock">
-<div class="title"># Altitude range</div>
-<div class="content">
-<pre><tt> dem = readGDAL(system.file(package = "rangeMapper", "extdata", "etopo1", "etopo1_Americas.tif"),  silent =  TRUE)
- # etopo1_Americas.tif data source:
- readChar(system.file(package = "rangeMapper", "extdata", "etopo1", "data_source.txt"), 500)
- AltitRange = function(x) {
-        sel = which(!is.na(overlay(dem, x)))
-        if(length(sel) &gt; 0 ) {
-        demx = dem[sel, ]
-        res = diff(range(demx@data$band1, na.rm = TRUE))
-        } else res = NA
-        res
- }</tt></pre>
-</div></div>
+<div class="paragraph"><p>[1] "Campylorhynchus_albobrunneus"</p></div>
 <div class="listingblock">
 <div class="content">
-<pre><tt> # Process ranges
- r = readOGR(f, "wrens", verbose = FALSE)
- processRanges(spdf = r, con =  dbcon, ID = "sci_name", metadata  = rangeTraits(APratio=APratio, AltitRange=AltitRange) )</tt></pre>
+<pre><tt> matrix(mw[-1], nrow = 6, ncol = 5)</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>     [,1]                           [,2]                      [,3]                        [,4]                    [,5]
+[1,] "Campylorhynchus_megalopterus" "Cistothorus_meridae"     "Thryothorus_sclateri"      "Troglodytes_tanneri"   "Henicorhina_negreti"
+[2,] "Odontorchilus_cinereus"       "Thryothorus_albinucha"   "Thryothorus_leucopogon"    "Troglodytes_beani"     "Henicorhina_leucoptera"
+[3,] "Odontorchilus_branickii"      "Thryothorus_atrogularis" "Thryothorus_nicefori"      "Troglodytes_sissonii"  "Microcerculus_philomela"
+[4,] "Hylorchilus_navai"            "Thryothorus_euophrys"    "Thryothorus_longirostris"  "Troglodytes_monticola" "Microcerculus_ustulatus"
+[5,] "Cinnycerthia_unirufa"         "Thryothorus_eisenmanni"  "Thryothorus_griseus"       "Troglodytes_ochraceus" "Microcerculus_bambla"
+[6,] "Cinnycerthia_fulva"           "Thryothorus_mystacalis"  "Troglodytes_brunneicollis" "Troglodytes_rufulus"   "Cyphorhinus_thoracicus"</tt></pre>
 </div></div>
 <div class="listingblock">
-<div class="title"># Mapping metadata_ranges table</div>
+<div class="title"># Restricted range species which are more prone to become extinct</div>
 <div class="content">
-<pre><tt> # Convert metadata_ranges to a BIO table
- metadata2bio(dbcon)
- rangeMap.save(dbcon, biotab = "metadata_ranges", FUN = "median", biotrait = "APratio",
-        tableName = "Area_Perimeter_ratio")
- rangeMap.save(dbcon, biotab = "metadata_ranges", FUN = "median", biotrait = "AltitRange",
-        tableName = "Altitude_range")</tt></pre>
+<pre><tt> meta = RMQuery(dbcon, "SELECT * FROM metadata_ranges")
+ plot(density(log(meta$Area)))
+ abline(v = quantile(log(meta$Area), 0.50), col = 2, lty = 2)
+ exp(quantile(log(meta$Area), 0.50))</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>     50%
+182751.7</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt></tt></pre>
+</div></div>
+<div class="imageblock">
+<div class="content">
+<img src="figs/04-003.jpg" alt="figs/04-003.jpg" />
+</div>
+</div>
+<div class="listingblock">
+<div class="title"># Mapping: Unstudied and extinction-prone wren species</div>
+<div class="content">
+<pre><tt> rangeMap.save(dbcon)
+  rangeMap.save(dbcon, biotab = "wrens", subset = list(BIO_wrens = "clutch_size is NULL", metadata_ranges = "Area &lt; 182751" ),
+                tableName = "mistery_wrens_species_richness", overwrite = TRUE)</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt> # Fetch and plot maps
  m = rangeMap.fetch(dbcon)
- plot(m)</tt></pre>
+ plot(m, scales = FALSE)</tt></pre>
 </div></div>
 <div class="imageblock">
 <div class="content">
-<img src="figs/03-006.jpg" alt="figs/03-006.jpg" />
+<img src="figs/04-005.jpg" alt="figs/04-005.jpg" />
 </div>
 </div>
 <div class="listingblock">
@@ -172,7 +172,7 @@ convenience function for building up such a list.</td>
         <div id="footer">
 
         <div id="footer-text">
-Last updated 2011-11-29 17:47:14 W. Europe Standard Time
+Last updated 2011-11-29 17:49:58 W. Europe Standard Time
         </div>
 
 <div id="footer-badges">
