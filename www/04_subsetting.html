@@ -7,8 +7,9 @@
 
 <title></title>
 
-<link rel="stylesheet" href="media/asciidoc.css" type="text/css" />
-<link rel="stylesheet" href="media/layout2.css" type="text/css" />
+<link rel="stylesheet" href="style/asciidoc.css" type="text/css" />
+<link rel="stylesheet" href="style/layout2.css" type="text/css" />
+<link rel="stylesheet" href="style/tooltip.css" type="text/css" />
 
 <script type="text/javascript">
 
@@ -32,32 +33,26 @@
 
 <div id="layout-menu-box">
 
-        <div id="layout-menu">
-          <div>&#187;<a href="index.html">Home</a></div>
-          <div>&#187;<a href="faq.html">FAQ</a></div>
-          <div>&#187;<a href="gui.html">GUI</a></div>
-          <div>&#187;<a href="bibliography.html">Bibliography</a></div>
-          <div>&#187;<a href="gallery.html">Map&nbsp;gallery</a></div>
+<div id="layout-menu">
+<div>&#187;<a href="index.html">Home</a></div>
+<div>&#187;<a href="faq.html">FAQ</a></div>
+<div>&#187;<a href="gui.html">GUI</a></div>
+<div>&#187;<a href="bibliography.html">Bibliography</a></div>
+<div>&#187;<a href="gallery.html">Map&nbsp;gallery</a></div>
 
-          <div id="layout-menu-EXAMPLE"></div>
-          <div><a href="#" class="tooltip"> <span>To run the examples copy/paste the code chuncks into R. </span>EXAMPLES</a></div>
-
+<div id="layout-menu-EXAMPLE"> EXAMPLES </div>
 <div id="layout-menu-examples">
-
-<div><a href="01_canned.html"    class="tooltip"> <span>Large wrens species richness </span>Using defaults </a></div>
-<div><a href="02_sql_and_R.html" class="tooltip"> <span>Body size distribution of the New World Wrens</span>SQL vs. R </a></div>
-<div><a href="03_rangeTraits.html" class="tooltip"> <span>Altitude range and the area-perimeter ratio of the New World Wrens</span>Range traits</a></div>
-<div><a href="04_subsetting.html" class="tooltip"> <span>Large wrens species richness </span>Subsetting (1)</a></div>
-<div><a href="05_subsetting.html" class="tooltip"> <span>Species richness of the high altitude wrens</span>Subsetting (2)</a></div>
-<div><a href="06_subsetting.html" class="tooltip"> <span>Unstudied and extinction-prone wren species</span>Subsetting (3)</a></div>
-
-
+<div><a href="01_Species Richness.html">Species Richness</a></div>
+<div><a href="02_SQL & R.html">SQL & R</a></div>
+<div><a href="03_rangeTraits.html">rangeTraits</a></div>
+<div><a href="04_subsetting.html">subsetting</a></div>
+<div><a href="05_subsetting.html">subsetting</a></div>
+<div><a href="06_subsetting.html">subsetting</a></div>
+<div><a href="07_appendixS2.html">appendixS2</a></div>
 
 </div>
 
-
-        </div>
-
+</div>
 </div>
 
 <div id="layout-content-box">
@@ -70,7 +65,6 @@
 <div id="layout-content">
 
         <div id="content">
-<div class="paragraph"><p>&gt;</p></div>
 <div class="sect2">
 <h3 id="_large_wrens_species_richens">Large wrens species richens</h3>
 <div class="sect3">
@@ -78,7 +72,7 @@
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
-<img src="media/note.png" alt="Note" />
+<img src="style/note.png" alt="Note" />
 </td>
 <td class="content"><tt>rangeMap.save()</tt> takes a named list as a <em>subset</em> argument. Names refers to <em>BIO</em> tables (i.e. species level) and/or <em>MAP</em> and <em>metadata_rages</em> tables (i.e. assambladge level) while the corresponding character strings contain the SQL <em>WHERE</em> elements.</td>
 </tr></table>
@@ -138,7 +132,7 @@
         <div id="footer">
 
         <div id="footer-text">
-Last updated 2011-11-29 17:47:18 W. Europe Standard Time
+Last updated 2011-11-30 14:34:18 W. Europe Standard Time
         </div>
 
 <div id="footer-badges">

@@ -1,9 +1,0 @@
-
-
-== FAQ ==
-
-=== How do I install *rangeMapper*? ===
-To install the developement version of the package type: +
-+install.packages("rangeMapper", repos="http://R-Forge.R-project.org")+ +
-To install the stable release hosted on CRAN type: +
-+install.packages("rangeMapper")+

@@ -66,90 +66,30 @@
 
         <div id="content">
 <div class="sect2">
-<h3 id="_altidude_range_and_the_area_perimeter_ratio_of_the_new_world_wrens">Altidude range and the area perimeter ratio of the New World Wrens</h3>
+<h3 id="_appendix_s2">Appendix S2</h3>
 <div class="sect3">
-<h4 id="_range_traits_extraction">RANGE TRAITS EXTRACTION</h4>
+<h4 id="_valcu_m_james_d_kempenaers_b_rangemapper_a_platform_for_the_study_of_macroecology_of_life_history_traits_global_ecology_and_biogeography_in_press_2011">Valcu, M., James. D, Kempenaers, B. rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)</h4>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
 <img src="style/note.png" alt="Note" />
 </td>
-<td class="content"><tt>processRanges()</tt> takes a <em>metadata</em> argument allowing for the extraction of
-range parameters (e.g. range extent, range shape etc) and/or the extraction of
-environmental parameters within the range (e.g. median temperature).
-The <em>metadata</em> argument accepts a named list of functions. <tt>rangeTraits</tt> is a
-convenience function for building up such a list.</td>
+<td class="content">Updated given the latest version</td>
 </tr></table>
 </div>
 <div class="listingblock">
+<div class="title"># title</div>
 <div class="content">
-<pre><tt> #Start a new project
- require(rangeMapper)
- dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
- f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
- projString =  CRS(" +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=m +no_defs")
- global.bbox.save(con = dbcon, bbox = f, p4s = projString)
- gridSize.save(dbcon)
- canvas.save(dbcon)</tt></pre>
+<pre><tt> NA</tt></pre>
 </div></div>
 <div class="listingblock">
-<div class="title"># Area/Perimeter ratio</div>
+<div class="title"># title, figure</div>
 <div class="content">
-<pre><tt> APratio = function(x){
-        # area
-        A = sapply(slot(x, "polygons"),
-                function(x) slot(x, "area") )
-        # perimeter
-        a = lapply(slot(x, "polygons"),
-                function(x) slot(x, "Polygons") )
-        b = do.call(c, a)
-        a1 = lapply(b, function(x)
-                Line(coordinates(x)))
-        L = sapply(a1, LineLength)
-        # A-P ratio
-        2*(sqrt(pi*sum(A)))/sum(L)
- }</tt></pre>
-</div></div>
-<div class="listingblock">
-<div class="title"># Altitude range</div>
-<div class="content">
-<pre><tt> dem = readGDAL(system.file(package = "rangeMapper", "extdata", "etopo1", "etopo1_Americas.tif"),  silent =  TRUE)
- # etopo1_Americas.tif data source:
- readChar(system.file(package = "rangeMapper", "extdata", "etopo1", "data_source.txt"), 500)
- AltitRange = function(x) {
-        sel = which(!is.na(overlay(dem, x)))
-        if(length(sel) &gt; 0 ) {
-        demx = dem[sel, ]
-        res = diff(range(demx@data$band1, na.rm = TRUE))
-        } else res = NA
-        res
- }</tt></pre>
-</div></div>
-<div class="listingblock">
-<div class="content">
-<pre><tt> # Process ranges
- r = readOGR(f, "wrens", verbose = FALSE)
- processRanges(spdf = r, con =  dbcon, ID = "sci_name", metadata  = rangeTraits(APratio=APratio, AltitRange=AltitRange) )</tt></pre>
-</div></div>
-<div class="listingblock">
-<div class="title"># Mapping metadata_ranges table</div>
-<div class="content">
-<pre><tt> # Convert metadata_ranges to a BIO table
- metadata2bio(dbcon)
- rangeMap.save(dbcon, biotab = "metadata_ranges", FUN = "median", biotrait = "APratio",
-        tableName = "Area_Perimeter_ratio")
- rangeMap.save(dbcon, biotab = "metadata_ranges", FUN = "median", biotrait = "AltitRange",
-        tableName = "Altitude_range")</tt></pre>
-</div></div>
-<div class="listingblock">
-<div class="content">
-<pre><tt> # Fetch and plot maps
- m = rangeMap.fetch(dbcon)
- plot(m)</tt></pre>
+<pre><tt> NA</tt></pre>
 </div></div>
 <div class="imageblock">
 <div class="content">
-<img src="figs/03-006.jpg" alt="figs/03-006.jpg" />
+<img src="figs/04-002.jpg" alt="figs/04-002.jpg" />
 </div>
 </div>
 <div class="listingblock">
@@ -166,7 +106,7 @@ convenience function for building up such a list.</td>
         <div id="footer">
 
         <div id="footer-text">
-Last updated 2011-11-30 14:34:13 W. Europe Standard Time
+Last updated 2011-11-30 14:34:44 W. Europe Standard Time
         </div>
 
 <div id="footer-badges">

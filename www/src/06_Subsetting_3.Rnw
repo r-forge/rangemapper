@@ -1,0 +1,82 @@
+
+:lang: en
+:encoding: iso-8859-1
+\Sexpr{options(prompt=" ", continue=" ")}
+\SweaveOpts{prefix.string=figs/04}
+
+===  Unstudied and extinction-prone wren species ===
+==== SUBSETTING AT BOTH SPECIES AND ASSAMBLADGE LEVEL  ==== 
+
+NOTE:  +rangeMap.save()+ takes a named list as a 'subset' argument. Names refers to 'BIO' tables (i.e. species level) and/or 'MAP' and 'metadata_rages' tables (i.e. assambladge level) while the corresponding character strings contain the SQL 'WHERE' elements. 
+
+
+<<results=hide>>=
+#Start a new project
+ require(rangeMapper)
+ dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
+ f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
+ projString =  CRS(" +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=km +no_defs")
+ global.bbox.save(con = dbcon, bbox = f, p4s = projString)
+ gridSize.save(dbcon)
+ canvas.save(dbcon)
+ r = readOGR(f, "wrens", verbose = FALSE)
+ 
+ processRanges(spdf = r, con =  dbcon, ID = "sci_name", metadata  = rangeTraits() )
+ 
+ data(wrens)
+ bio.save(con = dbcon, loc = wrens,  ID = "sci_name")
+@
+
+.# Clutch size is not known for a bunch of wren species. 
+<<results=ascii>>=
+mw = as.character(wrens[is.na(wrens$clutch_size), "sci_name"])
+mw[1]
+matrix(mw[-1], nrow = 6, ncol = 5)
+@
+
+.# Restricted range species ( species with a high extinction risk)
+<<results=ascii,fig=true>>=
+
+meta = RMQuery(dbcon, "SELECT * FROM metadata_ranges")
+plot(density(log(meta$Area)))
+abline(v = quantile(log(meta$Area), 0.50), col = 2, lty = 2)
+exp(quantile(log(meta$Area), 0.50))
+
+@
+
+.# Mapping: Unstudied and extinction-prone wren species
+<<results=hide>>=
+rangeMap.save(dbcon)
+ rangeMap.save(dbcon, biotab = "wrens", subset = list(BIO_wrens = "clutch_size is NULL", metadata_ranges = "Area < 182751" ),
+		tableName = "mistery_wrens_species_richness", overwrite = TRUE)
+
+@
+	
+<<results=hide,fig=true>>=
+# Fetch and plot maps
+m = rangeMap.fetch(dbcon)
+plot(m, scales = FALSE)
+@
+
+<<echo=false>>=
+print(version$version.string)
+print(paste("rangeMapper", packageDescription("rangeMapper")$Version))
+print(paste("website generated using ascii", packageDescription("ascii")$Version))
+@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

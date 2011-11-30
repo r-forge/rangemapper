@@ -1,0 +1,65 @@
+
+:lang: en
+:encoding: iso-8859-1
+\Sexpr{options(prompt=" ", continue=" ")}
+\SweaveOpts{prefix.string=figs/01}
+
+=== Species richness of the New World Wrens
+==== Using defaults
+
+NOTE: The functions +gridSize.save()+ and +rangeMap.save()+, and implicitly +canvas.save()+ ,
+are called with their default arguments. 
++plot()+ uses the default colour scheme and scale class interval. 
++global.bbox.save()+ uses the extent of all the ranges to compute a global bounding box.
+
+<<results=hide>>=
+require(rangeMapper)
+
+dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
+
+# Breeding range vector files
+loc = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
+@
+
+.# Mapping using default parameters
+
+<<results=hide>>=
+global.bbox.save(con = dbcon, bbox = loc) 
+gridSize.save(dbcon) 
+canvas.save(dbcon) 
+
+r = readOGR(loc, "wrens", verbose = FALSE)
+processRanges(spdf = r, con =  dbcon, ID = "sci_name")
+
+# creates  "species_richness" map
+rangeMap.save(dbcon) 
+@
+
+<<results=hide,fig=true>>=
+# Fetch and plot species richness map
+sr = rangeMap.fetch(dbcon) 
+plot(sr) 
+@
+
+<<echo=false>>=
+print(version$version.string)
+print(paste("rangeMapper", packageDescription("rangeMapper")$Version))
+print(paste("website generated using ascii", packageDescription("ascii")$Version))
+@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="AsciiDoc 8.6.6" />
+
+<title></title>
+
+<link rel="stylesheet" href="style/asciidoc.css" type="text/css" />
+<link rel="stylesheet" href="style/layout2.css" type="text/css" />
+<link rel="stylesheet" href="style/tooltip.css" type="text/css" />
+
+<script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-25987540-1']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+</script>
+
+
+
+
+</head>
+
+<body style="max-width:1024px">
+
+<div id="layout-menu-box">
+
+<div id="layout-menu">
+<div>&#187;<a href="index.html">Home</a></div>
+<div>&#187;<a href="faq.html">FAQ</a></div>
+<div>&#187;<a href="gui.html">GUI</a></div>
+<div>&#187;<a href="bibliography.html">Bibliography</a></div>
+<div>&#187;<a href="gallery.html">Map&nbsp;gallery</a></div>
+
+<div id="layout-menu-EXAMPLE"> EXAMPLES </div>
+<div id="layout-menu-examples">
+<div><a href="01_Species_Richness.html">Species_Richness</a></div>
+<div><a href="02_SQL_and_R.html">SQL_and_R</a></div>
+<div><a href="03_Range_Traits.html">Range_Traits</a></div>
+<div><a href="04_Subsetting_1.html">Subsetting_1</a></div>
+<div><a href="05_Subsetting_2.html">Subsetting_2</a></div>
+<div><a href="06_Subsetting_3.html">Subsetting_3</a></div>
+<div><a href="96_appendix_S5.html">appendix_S5</a></div>
+<div><a href="97_appendix_S4.html">appendix_S4</a></div>
+<div><a href="98_appendix_S3.html">appendix_S3</a></div>
+<div><a href="99_appendix_S2.html">appendix_S2</a></div>
+
+</div>
+
+</div>
+</div>
+
+<div id="layout-content-box">
+
+        <div id="layout-banner">
+          <div id="layout-title">rangeMapper</div>
+          <div id="layout-description">A platform for the study of macroecology of life history traits</div>
+        </div>
+
+<div id="layout-content">
+
+        <div id="content">
+<div class="sect2">
+<h3 id="_appendix_s2">Appendix S2</h3>
+<div class="sect3">
+<h4 id="_supporting_information_in_em_valcu_m_james_d_kempenaers_b_rangemapper_a_platform_for_the_study_of_macroecology_of_life_history_traits_global_ecology_and_biogeography_in_press_2011_em">Supporting information in <em>Valcu, M., James. D, Kempenaers, B. rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)</em></h4>
+<div class="sect4">
+<h5 id="_case_study_1_different_biodiversity_hotspots_and_their_congruence">Case study 1: Different biodiversity hotspots and their congruence.</h5>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="style/note.png" alt="Note" />
+</td>
+<td class="content">This script is updated to run using the latest version of the package (see footnote).</td>
+</tr></table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Loads the package and its dependencies.
+ require(rangeMapper)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # SET UP PROJECT
+ td = tempdir()
+ #Initiates a new rangeMapper project (wrens.sqlite) to a temporary directory
+ dbcon = rangeMap.start(file = "wrens.sqlite", dir = td, overwrite = TRUE)
+ #Location of the vector(*.shp) breeding ranges on disk
+ branges = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Saves the global bounding box as the union of all species bounding boxes.
+ global.bbox.save(con = dbcon, bbox = branges)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Saves the grid size (i.e. the size of a canvas cell) using the default value
+ # The grid size can be specified by e.g. gridSize.save(dbcon, gridSize = 2.5)
+ gridSize.save(dbcon)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Saves the canvas grid using the global bunding box and the grid size.
+ canvas.save(dbcon)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Performs vector range maps interpolation with the canvas.
+  r = readOGR(branges, "wrens", verbose = FALSE)
+  processRanges(spdf = r, con =  dbcon, ID = "sci_name", metadata = rangeTraits() )</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Uploads to the existing project a data.frame containing life history data
+ data(wrens)
+ bio.save(con = dbcon, loc = wrens, ID = "sci_name")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title"># DEFINE HOTSPOTS PARAMETERS (i.e. the quantile of the given parameter used as a threshold value)</div>
+<div class="content">
+<pre><tt> P_richness = 0.75 # species richness probability
+ P_endemics = 0.35 # endemic species richness probability</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # HOTSPOTS OF SPECIES RICHNESS MAP
+ # 1) Save the species richeness (SR) map
+ rangeMap.save(dbcon, tableName = "species_richness")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # 2) Fetch the SR map and find the SR value corresponding with the probability
+  # previously defined by P_richness
+ sr = rangeMap.fetch(dbcon, "species_richness")
+ sr_threshold = quantile(sr$species_richness, probs = P_richness, na.rm = TRUE)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # 3) Save the SR hotspots map; only canvas cells with species_richness &gt;= sr_threshold will be included
+ rangeMap.save(dbcon, tableName = "species_richness_hotspots",subset =
+        list(MAP_species_richness = paste("species_richness &gt;=", sr_threshold)) )</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # HOTSPOTS OF ENDEMIC SPECIES MAP
+ # 1) Save endemics species richnes map
+ es = RMQuery(dbcon, "select Area from metadata_ranges")
+ es_threshold = quantile(es$Area, probs = P_endemics, na.rm = TRUE)
+ rangeMap.save(dbcon, tableName = "endemics_spRichness",subset =
+        list(metadata_ranges = paste("Area &lt;= ", es_threshold) ) )</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # 2) Save hotspots of endemics
+ er = rangeMap.fetch(dbcon, "endemics_spRichness")
+ er_threshold = quantile(er$endemics_spRichness, probs = P_richness, na.rm = TRUE)
+ rangeMap.save(dbcon, tableName = "endemics_hotspots", subset = list(
+        MAP_endemics_spRichness = paste("endemics_spRichness &gt;=", er_threshold) ) )</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title"># HOTSPOTS OF BODY MASS MAP</div>
+<div class="content">
+<pre><tt> #1) Save Coefficient of variation (CV_Mass) map using a function (FUN) defined
+  # on the fly. The ... argunent of the function will allow further arguments
+  # in this case 'na.rm = TRUE' to be passed to FUN.
+
+ rangeMap.save(dbcon,FUN = function(x,...) (sd(log(x),...)/mean(log(x),...)),
+        na.rm = TRUE, biotab = "wrens", biotrait = "body_mass",
+        tableName = "CV_Mass")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # 2) Find the 'CV_Mass' threshold which corresponds with 'P_richness'
+ bmr = rangeMap.fetch(dbcon, "CV_Mass")
+ bmr_threshold = quantile(bmr$CV_Mass, probs = P_richness, na.rm = TRUE)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # 3) Save bodyMass richness hotspots map using the computed threshold
+ rangeMap.save(dbcon, tableName = "bodyMass_richness_hotspots",subset = list(
+        MAP_CV_Mass = paste("body_mass &gt;=", bmr_threshold) ) )</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title"># FETCH MAPS &amp; PLOT</div>
+<div class="content">
+<pre><tt> SRmaps = rangeMap.fetch(dbcon, c("species_richness", "species_richness_hotspots",
+        "endemics_spRichness", "CV_Mass") )
+ plot(SRmaps, style = 'equal')</tt></pre>
+</div></div>
+<div class="imageblock">
+<div class="content">
+<img src="figs/99-017.jpg" alt="figs/99-017.jpg" />
+</div>
+</div>
+<div class="listingblock">
+<div class="title"># HOTSPOTS CONGRUENCE</div>
+<div class="content">
+<pre><tt> # 1) Find threshold values
+ sr = rangeMap.fetch(dbcon, "species_richness")
+ Q_richnes = quantile(sr$species_richness, probs = P_richness, na.rm = TRUE)
+ er = rangeMap.fetch(dbcon, "endemics_spRichness")
+ Q_endemics = quantile(er$endemics_spRichness, probs = P_richness, na.rm = TRUE)
+ bmr = rangeMap.fetch(dbcon, "CV_Mass")
+ Q_bodyMass = quantile(bmr$CV_Mass, probs = P_richness,na.rm = TRUE)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # 2) Save cumulative hotspot congruence satisfying all three criteria
+ rangeMap.save(dbcon, tableName = "cumul_congruence_hotspots",subset = list(
+        MAP_CV_Mass             = paste("body_mass&gt;=",Q_bodyMass),
+        MAP_species_richness    = paste("species_richness&gt;=",Q_richnes),
+        MAP_endemics_spRichness = paste("endemics_spRichness&gt;=",Q_endemics) ))</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> #3) species richness &amp; endemics richness congruence (two criteria are satified)
+ rangeMap.save(dbcon, tableName = "SR_ER_congruence_hotspots",subset = list(
+        MAP_species_richness    = paste("species_richness&gt;=",Q_richnes),
+        MAP_endemics_spRichness = paste("endemics_spRichness&gt;=",Q_endemics) ))</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # 4) endemics richness &amp; body mass diversity congruence
+ rangeMap.save(dbcon, tableName = "ER_BR_congruence_hotspots",
+         subset = list(
+         MAP_CV_Mass=paste("body_mass&gt;=",Q_bodyMass),
+         MAP_endemics_spRichness=paste("endemics_spRichness&gt;=",Q_endemics) ))</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # 5) species richness &amp; body mass diversity congruence
+ rangeMap.save(dbcon, tableName = "SR_BR_congruence_hotspots",
+         subset = list(
+         MAP_CV_Mass=paste("body_mass&gt;=",Q_bodyMass),
+         MAP_species_richness=paste("species_richness&gt;=",Q_richnes) ))</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # 6) Retrieve all the map objects.
+
+ m = rangeMap.fetch(dbcon, c("species_richness_hotspots","endemics_hotspots",
+        "bodyMass_richness_hotspots","cumul_congruence_hotspots",
+        "SR_ER_congruence_hotspots","SR_BR_congruence_hotspots",
+        "ER_BR_congruence_hotspots") )</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # 7) Compute hotspots congruence
+  # The data slot of the map 'm' can be queried for presence/absence using the 'is.na' function.
+
+ sr = length( which(!is.na(m$species_richness_hotspots)))
+ er = length( which(!is.na(m$endemics_hotspots)))
+ br = length( which(!is.na(m$bodyMass_richness_hotspots)))
+ srer = length( which(!is.na(na.omit(m$SR_ER_congruence_hotspots))) )
+ srbr = length( which(!is.na(na.omit(m$SR_BR_congruence_hotspots))) )
+ erbr = length( which(!is.na(na.omit(m$ER_BR_congruence_hotspots))) )
+ cum = length( which(!is.na(na.omit(m$cumul_congruence_hotspots))) )</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Print the results
+ # species richness &amp; body mass diversity congruence (%)
+ (srbr/(sr+br))*100</tt></pre>
+</div></div>
+<div class="paragraph"><p>[1] 18.29724</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> #  endemics richness &amp; body mass diversity congruence (%)
+ (erbr/(er+br))*100</tt></pre>
+</div></div>
+<div class="paragraph"><p>[1] 4.526749</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # species richness &amp; endemics richness congruence (%)
+ (srer/(sr+er))*100</tt></pre>
+</div></div>
+<div class="paragraph"><p>[1] 4.188482</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> #cumulative congruence (%)
+ (cum/(sr+er+br))*100</tt></pre>
+</div></div>
+<div class="paragraph"><p>[1] 1.366906</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>[1] "R version 2.14.0 (2011-10-31)"
+[1] "rangeMapper 0.0-6.6"
+[1] "website generated using ascii 2.1"</tt></pre>
+</div></div>
+</div>
+</div>
+</div>
+        </div>
+
+        <div id="footnotes"><hr /></div>
+        <div id="footer">
+
+        <div id="footer-text">
+Last updated 2011-11-30 16:09:44 W. Europe Standard Time
+        </div>
+
+<div id="footer-badges">
+<a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px"
+        src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</body>
+</html>

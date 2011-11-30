@@ -1,0 +1,18 @@
+:lang: en
+:encoding: iso-8859-1
+
+== Graphical user interface ==
+
+To get the latest version of the graphical user interface manual
+type:
+<<results=hide>>=
+require(rangeMapper)
+# vignette("rangeMapper")
+@ 
+
+<<echo=false>>=
+print(version$version.string)
+print(paste("rangeMapper", packageDescription("rangeMapper")$Version))
+print(paste("website generated using ascii", packageDescription("ascii")$Version))
+@
+

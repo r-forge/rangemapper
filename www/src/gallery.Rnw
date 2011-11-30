@@ -1,0 +1,7 @@
+:lang: en
+:encoding: iso-8859-1
+\Sexpr{options(prompt=" ", continue=" ")}
+\SweaveOpts{prefix.string=figs/01}
+
+== Map gallery ==
+WARNING: Under construction
