@@ -1,3 +1,5 @@
+/* http://colrd.com/palette/21852/?download=css */
+
 body {
 	margin: 0;
 
@@ -5,14 +7,14 @@ body {
 }
 
 #layout-menu-box {
-  overflow-x:hidden;
+ /*  overflow-x:hidden; */
   position: fixed;
   left: 0px;
   top: 0px;
   width: 160px;
   height: 100%;
   z-index: 1;
-  background-color: #f4f4f4;
+  background-color: #2b434f;
 
 }
 
@@ -28,65 +30,71 @@ h1 {
 
 #layout-banner {
   color: white;
-  background-color: #73a0c5;
+  background-color: #2b434f;
   font-family: sans-serif;
   text-align: left;
   padding: 0.8em 20px;
 }
 
+#layout-title, #layout-description, #layout-menu-EXAMPLE , #layout-menu, #layout-menu-examples{
+ 	font-family: "futura-pt-1","futura-pt-2","helvetica neue",helvetica,arial,sans-serif;
+
+}
+
 #layout-title {
-  font-family: monospace;
-  font-size: 3.5em;
-  font-weight: bold;
-  letter-spacing: 0.2em;
-  margin: 0;
-  background-image:url('wren.png');
-  background-repeat:no-repeat;
-  background-position: right bottom;
-  
+	font-weight: normal;
+	letter-spacing: 0.2em;
+	font-size: 3.5em;
+	margin: 0;
+	background-image:url('wren.png');
+	background-repeat:no-repeat;
+	background-position: right bottom;
+
 }
 
 #layout-description {
-  font-size: 1.2em;
+ font-size: 1.2em;
   letter-spacing: 0.1em;
 }
 
 #layout-menu {
   height: 100%;
-  border-right: 3px solid #eeeeee;
+  border-right: 0.5px solid #ede059;
   padding-top: 0.8em;
   padding-left: 15px;
   padding-right: 0.8em;
   font-size: 1.0em;
-  font-family: sans-serif;
-  font-weight: bold;
+
 }
 #layout-menu a {
   line-height: 2em;
   margin-left: 0.5em;
 }
+
 #layout-menu a:link, #layout-menu a:visited, #layout-menu a:hover {
-  color: #527bbd;
+  color: white;
   text-decoration: none;
 }
-#layout-menu a:hover {
-  color: navy;
+
+ #layout-menu a:hover {
+  color: #ede059;
   text-decoration: none;
 }
+
 #layout-menu-EXAMPLE {
-  color: #527bbd;
+  color: #ede059;
   padding-top: 0.5em;
   border-top: 2px solid silver;
   margin-top: 0.2em;
+  letter-spacing: 0.2em;
+  font-weight: bold;
 }
 
 #layout-menu-examples{
-	  height: 50%;
 	  padding-top: 0.1em;
-	  padding-left: 15px;
+	  padding-left: 0px;
 	  padding-right: 0.8em;
-	  font-family: "Arial Narrow", Arial, sans-serif;
-	  font-size: 0.8em;
+	  font-size: 0.9em;
   
 }
 

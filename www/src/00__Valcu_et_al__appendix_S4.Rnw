@@ -77,11 +77,9 @@ with(prm, errbar(gridSizes, slope, ci2.5, ci97.5) )
 @
 
 
-
-
-
-<<echo=false>>=
-print(version$version.string)
-print(paste("rangeMapper", packageDescription("rangeMapper")$Version))
-print(paste("website generated using ascii", packageDescription("ascii")$Version))
+<<results=ascii, echo=false>>=
+s1 = version$version.string
+s2 = paste("rangeMapper", packageDescription("rangeMapper")$Version)
+s3 = paste("website generated using ascii", packageDescription("ascii")$Version)
+ascii(rbind(s1, s2, s3))
 @

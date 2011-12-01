@@ -34,7 +34,7 @@ canvas.save(dbcon)
 
 <<results=ascii>>=
 data(wrens)
-head(wrens[, 3:6])
+ascii(head(wrens[, 3:6]))
 bio.save(con = dbcon, loc = wrens ,  ID = "sci_name")
 @
 
@@ -65,10 +65,11 @@ sr = rangeMap.fetch(dbcon)
 plot(sr)
 @
 
-<<echo=false>>=
-print(version$version.string)
-print(paste("rangeMapper", packageDescription("rangeMapper")$Version))
-print(paste("website generated using ascii", packageDescription("ascii")$Version))
+<<results=ascii, echo=false>>=
+s1 = version$version.string
+s2 = paste("rangeMapper", packageDescription("rangeMapper")$Version)
+s3 = paste("website generated using ascii", packageDescription("ascii")$Version)
+ascii(rbind(s1, s2, s3))
 @
 
 

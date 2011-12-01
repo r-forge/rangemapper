@@ -1,20 +1,45 @@
 
 
-
 layoutUpdate = function(layout.conf) {
-
+ #XX__level1__level2 (CSS should work for more than 2 levels!!)
+ # for now works only for menus with 2 levels
+ 
 	l = readLines(layout.conf)
 
 	p1 = l[1:grep('EXAMPLE_start', l)]
 	p2 = l[grep('EXAMPLE_stop', l):length(l)]
 	
 	f = list.files(pattern = "^[0-9]{2}_.*.Rnw$")
-	x = data.frame(fn = gsub(".Rnw", ".html", f ), nam = gsub("^[0-9]{2}_|.Rnw$", "", f) )
+	f = gsub(".Rnw$", "", f)
+	
+	u= sapply(strsplit(f, "__"), function(x) x[1])
+	u = split(f, u)
+	
+	# build up the menu
+	menu = vector()
+	for(i in 1:length(u)) {
+		ui = strsplit(u[[i]], "__")
+		nlev = unique(sapply(ui, length))-1
+		lev1 = ui[[1]][2]
 
-	markup = paste("<div><a href=", shQuote(x$fn), ">", x$nam, "</a></div>", sep  = "")
+		href = sapply(ui, function(x) paste(paste(x, collapse = "__"), ".html", sep = "") )
+		
+		if(nlev == 1) {
+			menu[[i]] = paste('<li class="menui0"><a class="menui0" href=', shQuote(href),'>', unlist(ui)[2] ,'</a></li>')
+			}
+		
+		if(nlev == 2) {
+			menui = paste('<li class="menui"><a class="menui" href=', shQuote(href),'>', sapply(ui, function(x) x[3]) ,'</a></li>')
+			menui = paste( c('<ul class="menum">', menui, '</ul>'), collapse = "\n")
+			menu0 = paste('<li class="menui0"> <a class="menui0" href="#"><span>',  ui[[1]][2], '</span></a>')
+			menu[[i]] = paste(c(menu0, menui, "</li>"), collapse = "\n")
+			}
+	}
+	menu = paste( c('<ul class="menu menum">', menu, '</ul>'), collapse = "\n")
+	
 
 	write.table(p1, file = "layout.conf", append = FALSE,  row.names = FALSE, col.names =  FALSE, quote = FALSE)
-	write.table(markup, file = "layout.conf", append = TRUE,  row.names = FALSE, col.names =  FALSE, quote = FALSE)
+	write.table(menu, file = "layout.conf", append = TRUE,  row.names = FALSE, col.names =  FALSE, quote = FALSE)
 	write.table(p2, file = "layout.conf", append = TRUE,  row.names = FALSE, col.names =  FALSE, quote = FALSE)
 
 }
@@ -52,11 +77,27 @@ do = function(nam, layout = "layout.conf",
 
 lapply( c("index", "faq", "gui","gallery", "bibliography"), do)
 
-ex = gsub(".Rnw", "", list.files("M:\\SOFTWARE\\R\\PACKAGES\\rangeMapper\\R-forge\\www\\src", pattern = "^[0-9]{2}_.*.Rnw$") )
+lapply(gsub(".Rnw", "", list.files("M:\\SOFTWARE\\R\\PACKAGES\\rangeMapper\\R-forge\\www\\src", pattern = "^[0-9]{2}_.*.Rnw$") ), do)
 
-lapply( ex , do)
 
-do("99_appendix_S2")
-do("98_appendix_S3")
-do("97_appendix_S4")
-do("96_appendix_S5")
+do("index")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

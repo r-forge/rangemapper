@@ -21,11 +21,12 @@ body {
 }
 
 a {
-  color: blue;
+  color: #0c2538;
   text-decoration: underline;
 }
 a:visited {
-  color: fuchsia;
+  color: #638270;
+  
 }
 
 em {
@@ -39,7 +40,7 @@ strong {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #527bbd;
+  color: #0c2538;
   margin-top: 1.2em;
   margin-bottom: 0.5em;
   line-height: 1.3;
@@ -133,7 +134,7 @@ div.content { /* Block element content. */
 
 /* Block element titles. */
 div.title, caption.title {
-  color: #527bbd;
+  color: #638270;
   font-weight: bold;
   text-align: left;
   margin-top: 1.0em;
@@ -361,7 +362,7 @@ div.toclevel4 {
 
 span.aqua { color: aqua; }
 span.black { color: black; }
-span.blue { color: blue; }
+span.#0c2538 { color: #0c2538; }
 span.fuchsia { color: fuchsia; }
 span.gray { color: gray; }
 span.green { color: green; }
@@ -378,7 +379,7 @@ span.yellow { color: yellow; }
 
 span.aqua-background { background: aqua; }
 span.black-background { background: black; }
-span.blue-background { background: blue; }
+span.#0c2538-background { background: #0c2538; }
 span.fuchsia-background { background: fuchsia; }
 span.gray-background { background: gray; }
 span.green-background { background: green; }
@@ -409,7 +410,7 @@ span.line-through { text-decoration: line-through; }
 tt {
   font-family: monospace;
   font-size: inherit;
-  color: navy;
+  color: #0c2538;
 }
 
 div.tableblock {
@@ -417,15 +418,16 @@ div.tableblock {
   margin-bottom: 1.5em;
 }
 div.tableblock > table {
-  border: 3px solid #527bbd;
+  border: 1.6px solid #2b434f;
 }
 thead, p.table.header {
   font-weight: bold;
-  color: #527bbd;
+  color: #0c2538;
 }
 p.table {
   margin-top: 0;
 }
+
 /* Because the table frame attribute is overriden by CSS in most browsers. */
 div.tableblock > table[frame="void"] {
   border-style: none;
@@ -440,15 +442,12 @@ div.tableblock > table[frame="vsides"] {
 }
 
 
-/*
- * html5 specific
- *
- * */
+/* html5 specific */
 
 .monospaced {
   font-family: monospace;
   font-size: inherit;
-  color: navy;
+  color: #0c2538;
 }
 
 table.tableblock {

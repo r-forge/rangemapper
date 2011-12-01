@@ -2,7 +2,7 @@
 :lang: en
 :encoding: iso-8859-1
 \Sexpr{options(prompt=" ", continue=" ")}
-\SweaveOpts{prefix.string=figs/04}
+\SweaveOpts{prefix.string=figs/05}
 
 === Species richness of the high altitude wrens  ===
 ==== SUBSETTING AT ASSAMBLADGE LEVEL  ==== 
@@ -41,10 +41,11 @@ m = rangeMap.fetch(dbcon)
 plot(m, scales = FALSE)
 @
 
-<<echo=false>>=
-print(version$version.string)
-print(paste("rangeMapper", packageDescription("rangeMapper")$Version))
-print(paste("website generated using ascii", packageDescription("ascii")$Version))
+<<results=ascii, echo=false>>=
+s1 = version$version.string
+s2 = paste("rangeMapper", packageDescription("rangeMapper")$Version)
+s3 = paste("website generated using ascii", packageDescription("ascii")$Version)
+ascii(rbind(s1, s2, s3))
 @
 
 

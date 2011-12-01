@@ -2,7 +2,7 @@
 :lang: en
 :encoding: iso-8859-1
 \Sexpr{options(prompt=" ", continue=" ")}
-\SweaveOpts{prefix.string=figs/04}
+\SweaveOpts{prefix.string=figs/06}
 
 ===  Unstudied and extinction-prone wren species ===
 ==== SUBSETTING AT BOTH SPECIES AND ASSAMBLADGE LEVEL  ==== 
@@ -29,9 +29,7 @@ NOTE:  +rangeMap.save()+ takes a named list as a 'subset' argument. Names refers
 
 .# Clutch size is not known for a bunch of wren species. 
 <<results=ascii>>=
-mw = as.character(wrens[is.na(wrens$clutch_size), "sci_name"])
-mw[1]
-matrix(mw[-1], nrow = 6, ncol = 5)
+ascii(wrens[is.na(wrens$clutch_size), c("sci_name", "genus", "clutch_size")])
 @
 
 .# Restricted range species ( species with a high extinction risk)
@@ -58,12 +56,12 @@ m = rangeMap.fetch(dbcon)
 plot(m, scales = FALSE)
 @
 
-<<echo=false>>=
-print(version$version.string)
-print(paste("rangeMapper", packageDescription("rangeMapper")$Version))
-print(paste("website generated using ascii", packageDescription("ascii")$Version))
+<<results=ascii, echo=false>>=
+s1 = version$version.string
+s2 = paste("rangeMapper", packageDescription("rangeMapper")$Version)
+s3 = paste("website generated using ascii", packageDescription("ascii")$Version)
+ascii(rbind(s1, s2, s3))
 @
-
 
 
 
