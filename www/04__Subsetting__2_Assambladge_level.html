@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="AsciiDoc 8.6.6" />
+
+<title></title>
+
+<link rel="stylesheet" href="style/asciidoc.css" type="text/css" />
+<link rel="stylesheet" href="style/layout2.css" type="text/css" />
+<link rel="stylesheet" href="style/dropdownMenu.css" type="text/css" />
+
+<script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-25987540-1']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+</script>
+
+
+
+
+</head>
+
+<body style="max-width:1024px">
+
+<div id="layout-menu-box">
+
+<div id="layout-menu">
+<div><a href="index.html">Home</a></div> <!-- &#187; -->
+<div><a href="faq.html">FAQ</a></div>
+<div><a href="gui.html">GUI</a></div>
+<div><a href="bibliography.html">Bibliography</a></div>
+<div><a href="gallery.html">Map&nbsp;gallery</a></div>
+
+<div id="layout-menu-EXAMPLE"> EXAMPLES </div>
+<div id="layout-menu-examples">
+<ul class="menu menum">
+<li class="menui0"> <a class="menui0" href="#"><span> Valcu_et_al </span></a>
+<ul class="menum">
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S2.html" > appendix_S2 </a></li>
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S3.html" > appendix_S3 </a></li>
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S4.html" > appendix_S4 </a></li>
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S5.html" > appendix_S5 </a></li>
+</ul>
+</li>
+<li class="menui0"><a class="menui0" href= "01__Species_Richness.html" > Species_Richness </a></li>
+<li class="menui0"><a class="menui0" href= "02__SQL_and_R.html" > SQL_and_R </a></li>
+<li class="menui0"><a class="menui0" href= "03__Range_Traits.html" > Range_Traits </a></li>
+<li class="menui0"> <a class="menui0" href="#"><span> Subsetting </span></a>
+<ul class="menum">
+<li class="menui"><a class="menui" href= "04__Subsetting__1_Species_level.html" > 1_Species_level </a></li>
+<li class="menui"><a class="menui" href= "04__Subsetting__2_Assambladge_level.html" > 2_Assambladge_level </a></li>
+<li class="menui"><a class="menui" href= "04__Subsetting__3_Complex.html" > 3_Complex </a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+
+</div>
+</div>
+
+<div id="layout-content-box">
+
+        <div id="layout-banner">
+          <div id="layout-title">rangeMapper</div>
+          <div id="layout-description">A platform for the study of macroecology of life history traits</div>
+        </div>
+
+<div id="layout-content">
+
+        <div id="content">
+<div class="sect2">
+<h3 id="_species_richness_of_the_high_altitude_wrens">Species richness of the high altitude wrens</h3>
+<div class="sect3">
+<h4 id="_subsetting_at_assambladge_level">SUBSETTING AT ASSAMBLADGE LEVEL</h4>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="style/tip.png" alt="Tip" />
+</td>
+<td class="content">This script runs with
+R version 2.14.0 (2011-10-31) &amp; rangeMapper 0.1-0</td>
+</tr></table>
+</div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="style/note.png" alt="Note" />
+</td>
+<td class="content"><tt>rangeMap.save()</tt> takes a named list as a <em>subset</em> argument. Names refers to <em>BIO</em> tables (i.e. species level) and/or <em>MAP</em> and <em>metadata_rages</em> tables (i.e. assambladge level) while the corresponding character strings contain the SQL <em>WHERE</em> elements. <tt>rangeMap.save()</tt> allows raster importing as well.</td>
+</tr></table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> #Start a new project
+ require(rangeMapper)
+ dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
+ f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
+ global.bbox.save(con = dbcon, bbox = f,
+  p4s = CRS("+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"))
+ gridSize.save(dbcon)
+ canvas.save(dbcon)
+ r = readOGR(f, "wrens", verbose = FALSE)
+ processRanges(spdf = r, con =  dbcon, ID = "sci_name")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title"># Import a raster using rangeMap.save</div>
+<div class="content">
+<pre><tt> r = system.file(package = "rangeMapper", "extdata", "etopo1", "etopo1_Americas.tif")
+ rangeMap.save(dbcon, path = r, tableName = 'meanAltitude', FUN = median, overwrite = TRUE)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title"># Mapping</div>
+<div class="content">
+<pre><tt> rangeMap.save(dbcon, biotab = "wrens", subset = list(MAP_meanAltitude = "meanAltitude &gt; 999"),
+        tableName = "highAltitude_wrens_species_richness")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Fetch and plot maps
+ m = rangeMap.fetch(dbcon)
+ plot(m, scales = FALSE)</tt></pre>
+</div></div>
+<div class="imageblock">
+<div class="content">
+<img src="figs/05-005.jpg" alt="figs/05-005.jpg" />
+</div>
+</div>
+<div class="tableblock">
+<table rules="none"
+width="100%"
+frame="void"
+cellspacing="0" cellpadding="4">
+<col width="100%" />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt><em>Website built with R version 2.14.0 (2011-10-31) and the package “ascii” version 2.1</em></tt></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+        </div>
+
+        <div id="footnotes"><hr /></div>
+        <div id="footer">
+
+        <div id="footer-text">
+Last updated 2011-12-02 19:31:31 W. Europe Standard Time
+        </div>
+
+<div id="footer-badges">
+<a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px"
+        src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</body>
+</html>

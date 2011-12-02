@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="AsciiDoc 8.6.6" />
+
+<title></title>
+
+<link rel="stylesheet" href="style/asciidoc.css" type="text/css" />
+<link rel="stylesheet" href="style/layout2.css" type="text/css" />
+<link rel="stylesheet" href="style/dropdownMenu.css" type="text/css" />
+
+<script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-25987540-1']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+</script>
+
+
+
+
+</head>
+
+<body style="max-width:1024px">
+
+<div id="layout-menu-box">
+
+<div id="layout-menu">
+<div><a href="index.html">Home</a></div> <!-- &#187; -->
+<div><a href="faq.html">FAQ</a></div>
+<div><a href="gui.html">GUI</a></div>
+<div><a href="bibliography.html">Bibliography</a></div>
+<div><a href="gallery.html">Map&nbsp;gallery</a></div>
+
+<div id="layout-menu-EXAMPLE"> EXAMPLES </div>
+<div id="layout-menu-examples">
+<ul class="menu menum">
+<li class="menui0"> <a class="menui0" href="#"><span> Valcu_et_al </span></a>
+<ul class="menum">
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S2.html" > appendix_S2 </a></li>
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S3.html" > appendix_S3 </a></li>
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S4.html" > appendix_S4 </a></li>
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S5.html" > appendix_S5 </a></li>
+</ul>
+</li>
+<li class="menui0"><a class="menui0" href= "01__Species_Richness.html" > Species_Richness </a></li>
+<li class="menui0"><a class="menui0" href= "02__SQL_and_R.html" > SQL_and_R </a></li>
+<li class="menui0"><a class="menui0" href= "03__Range_Traits.html" > Range_Traits </a></li>
+<li class="menui0"> <a class="menui0" href="#"><span> Subsetting </span></a>
+<ul class="menum">
+<li class="menui"><a class="menui" href= "04__Subsetting__1_Species_level.html" > 1_Species_level </a></li>
+<li class="menui"><a class="menui" href= "04__Subsetting__2_Assambladge_level.html" > 2_Assambladge_level </a></li>
+<li class="menui"><a class="menui" href= "04__Subsetting__3_Complex.html" > 3_Complex </a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+
+</div>
+</div>
+
+<div id="layout-content-box">
+
+        <div id="layout-banner">
+          <div id="layout-title">rangeMapper</div>
+          <div id="layout-description">A platform for the study of macroecology of life history traits</div>
+        </div>
+
+<div id="layout-content">
+
+        <div id="content">
+<div class="sect2">
+<h3 id="_appendix_s3">Appendix S3</h3>
+<div class="sect3">
+<h4 id="_supporting_information_in_em_valcu_m_james_d_kempenaers_b_rangemapper_a_platform_for_the_study_of_macroecology_of_life_history_traits_global_ecology_and_biogeography_in_press_2011_em">Supporting information in <em>Valcu, M., James. D, Kempenaers, B. rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)</em></h4>
+<div class="sect4">
+<h5 id="_case_study_2_geographical_variation_in_the_relationship_between_range_size_and_body_size">Case study 2: Geographical variation in the relationship between range size and body size</h5>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="style/tip.png" alt="Tip" />
+</td>
+<td class="content">This script runs with
+R version 2.14.0 (2011-10-31) &amp; rangeMapper 0.1-0</td>
+</tr></table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> require(rangeMapper)
+ # SET UP PROJECT
+ td = tempdir()
+ #Initiates a new rangeMapper project (wrens2.sqlite) to a temporary directory
+ dbcon = rangeMap.start(file = "wrens2.sqlite", overwrite = TRUE, dir = td)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> #Location of the vector(*.shp) breeding ranges on disk
+ branges = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Saves the global bounding box as the union of all species bounding boxes.
+ # For alternative methods to saving the global bounding box the see examples under ?rangeMapper
+ global.bbox.save(con = dbcon, bbox = branges)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Saves the grid size (i.e. the size of a canvas cell) using the default value
+ # The grid size can be specified by e.g. gridSize.save(dbcon, gridSize = 2.5)
+ gridSize.save(dbcon, gridSize = 2.5)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Saves the canvas grid using the global bunding box and the grid size.
+ canvas.save(dbcon)</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Performs vector range maps interpolation with the canvas.
+  r = readOGR(branges, "wrens", verbose = FALSE)
+  processRanges(spdf = r, con =  dbcon, ID = "sci_name", metadata = rangeTraits() )</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Uploads to the existing project a data.frame containing life history data.
+ data(wrens)
+ bio.save(con = dbcon, loc = wrens, ID = "sci_name")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Merge ranges parameters with life history data
+ # This is an example on how to directly query a rangeMapper project
+ RMQuery(dbcon, "CREATE TEMP VIEW IF NOT EXISTS
+        BIO_temp AS Select * FROM
+                BIO_wrens
+                        JOIN metadata_ranges ON sci_name = bioid")
+
+ # Then the temp. table is fetched and saved as a 'BIO' table</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Alternatively you can fetch both tables and perform the join operation in R using 'merge'.
+ wrens2 = RMQuery(dbcon, "select * from BIO_temp")
+ wrens2$log_body_mass = log(wrens2$body_mass)
+ bio.save(con = dbcon, loc = wrens2, ID = "sci_name")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title"># DEFINE NEW FUNCTIONS</div>
+<div class="content">
+<pre><tt> # The newly defined functions should take 'formula' &amp; 'data' as arguments and should return a numeric vector of length 1
+ # at this stage packages MASS and lme4 are need it.
+ if(!require('MASS')) stop("Package MASS is not available")
+ if(!require('lme4')) stop("Package lme4 is not available")</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Slope of a robust regression (rlm function in MASS package)
+  # ... allows for further arguments to be passed to rlm()
+  # using try allows the computation to move on to the next canvas cell without stopping the entire process
+  # the function will return NA if rlm does not return a coeficient.
+
+ rlm_slope = function (formula, data,...) {
+        x = try(as.numeric(
+                rlm(formula, data,...)$coefficients[2]), silent = TRUE)
+        if(inherits(x, "try-error")) x = NA
+        return(x)
+        }</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Slope of a mixed-effect model (lmer function in lme4 package)
+ lmer_slope = function (formula, data) {
+        fm = try(lmer(formula, data = data), silent = TRUE)
+        if (inherits(fm, "try-error"))
+                res = NA
+                        else res = fixef(fm)[2]
+        as.numeric(res)
+        }</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # CREATE MAPS using the user-defined functions
+ rangeMap.save(dbcon, FUN = rlm_slope, biotab = "wrens2", biotrait = "log_body_mass",
+        tableName = "rlm_slope_BM_rangeSize",
+        formula = scale(log(Area)) ~ scale(log_body_mass),maxit = 20)
+ rangeMap.save(dbcon, FUN = lmer_slope, biotab = "wrens2", biotrait = "log_body_mass",
+        tableName = "lmer_slope_BM_rangeSize",
+        formula = scale(log(Area)) ~ scale(log_body_mass)+(1|genus))</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title"># SHOW MAPS</div>
+<div class="content">
+<pre><tt> m= rangeMap.fetch(dbcon, c("rlm_slope_BM_rangeSize",
+        "lmer_slope_BM_rangeSize" ))
+ plot(m, style = "equal")</tt></pre>
+</div></div>
+<div class="imageblock">
+<div class="content">
+<img src="figs/98-015.jpg" alt="figs/98-015.jpg" />
+</div>
+</div>
+<div class="tableblock">
+<table rules="none"
+width="100%"
+frame="void"
+cellspacing="0" cellpadding="4">
+<col width="100%" />
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table"><tt><em>Website built with R version 2.14.0 (2011-10-31) and the package “ascii” version 2.1</em></tt></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+        </div>
+
+        <div id="footnotes"><hr /></div>
+        <div id="footer">
+
+        <div id="footer-text">
+Last updated 2011-12-02 19:28:43 W. Europe Standard Time
+        </div>
+
+<div id="footer-badges">
+<a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px"
+        src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</body>
+</html>
