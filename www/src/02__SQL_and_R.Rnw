@@ -7,6 +7,12 @@
 === Body size distribution of the New World Wrens ===
 ==== SQLITE vs. R MAPPING. 
 
+TIP: This script runs with
+<<results=ascii, echo=false>>= 
+sexpr(paste(version$version.string, "&", "rangeMapper", packageDescription("rangeMapper")$Version) )
+@
+
+
 NOTE: The ``FUN'' in +rangeMap.save()+ is either a 'string' corresponding to an SQL ``aggregate function'' or 
 an R function. 
 +global.bbox.save()+ gets a p4s argument and the ranges are re-projected to equal area before 
@@ -31,10 +37,15 @@ canvas.save(dbcon)
 @
 
 .#Import taxa and life history data
-
-<<results=ascii>>=
+<<results=hide, echo=true>>=
 data(wrens)
-ascii(head(wrens[, 3:6]))
+head(wrens[, 3:6])
+@
+<<results=ascii, echo=false>>=
+ascii(head(wrens[, 3:6]), include.rownames = FALSE, width = 60)
+@
+
+<<results=hide, echo=true>>=
 bio.save(con = dbcon, loc = wrens ,  ID = "sci_name")
 @
 
@@ -65,14 +76,14 @@ sr = rangeMap.fetch(dbcon)
 plot(sr)
 @
 
+
+
 <<results=ascii, echo=false>>=
-s1 = version$version.string
-s2 = paste("rangeMapper", packageDescription("rangeMapper")$Version)
-s3 = paste("website generated using ascii", packageDescription("ascii")$Version)
-ascii(rbind(s1, s2, s3))
+s = paste("_Website built with ", version$version.string, 
+		" and the package ", dQuote(packageDescription("ascii")$Package), " version ", packageDescription("ascii")$Version, "_", sep = "")
+ 
+ascii(s, style = 'm', grid = 'none',width = 0,frame = "none")
 @
-
-
 
 
 

@@ -8,8 +8,10 @@
 ==== Supporting information in 'Valcu, M., James. D, Kempenaers, B. rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)' 
 ===== Case study 2: Geographical variation in the relationship between range size and body size 
 
-NOTE: This script is updated to run using the latest version of the package (see footnote).
-
+TIP: This script runs with
+<<results=ascii, echo=false>>= 
+sexpr(paste(version$version.string, "&", "rangeMapper", packageDescription("rangeMapper")$Version) )
+@
 
 <<results=hide>>=
 require(rangeMapper)
@@ -117,16 +119,11 @@ plot(m, style = "equal")
 @
 
 
-
-
 <<results=ascii, echo=false>>=
-s1 = version$version.string
-s2 = paste("rangeMapper", packageDescription("rangeMapper")$Version)
-s3 = paste("website generated using ascii", packageDescription("ascii")$Version)
-ascii(rbind(s1, s2, s3))
+s = paste("_Website built with ", version$version.string, 
+		" and the package ", dQuote(packageDescription("ascii")$Package), " version ", packageDescription("ascii")$Version, "_", sep = "")
+ascii(s, style = 'm', grid = 'none',width = 0,frame = "none")
 @
-
-
 
 
 

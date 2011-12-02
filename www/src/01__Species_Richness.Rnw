@@ -5,7 +5,12 @@
 \SweaveOpts{prefix.string=figs/01}
 
 === Species richness of the New World Wrens
-==== Using defaults
+==== USING DEFAULTS
+
+TIP: This script runs with
+<<results=ascii, echo=false>>= 
+sexpr(paste(version$version.string, "&", "rangeMapper", packageDescription("rangeMapper")$Version) )
+@
 
 NOTE: The functions +gridSize.save()+ and +rangeMap.save()+, and implicitly +canvas.save()+ ,
 are called with their default arguments. 
@@ -42,12 +47,10 @@ plot(sr)
 @
 
 <<results=ascii, echo=false>>=
-s1 = version$version.string
-s2 = paste("rangeMapper", packageDescription("rangeMapper")$Version)
-s3 = paste("website generated using ascii", packageDescription("ascii")$Version)
-ascii(rbind(s1, s2, s3))
+s = paste("_Website built with ", version$version.string, 
+		" and the package ", dQuote(packageDescription("ascii")$Package), " version ", packageDescription("ascii")$Version, "_", sep = "")
+ascii(s, style = 'm', grid = 'none',width = 0,frame = "none")
 @
-
 
 
 

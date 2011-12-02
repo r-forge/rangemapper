@@ -7,6 +7,11 @@
 === Large wrens species richens ===
 ==== SUBSETTING AT SPECIES LEVEL  ==== 
 
+TIP: This script runs with
+<<results=ascii, echo=false>>= 
+sexpr(paste(version$version.string, "&", "rangeMapper", packageDescription("rangeMapper")$Version) )
+@
+
 NOTE:  +rangeMap.save()+ takes a named list as a 'subset' argument. Names refers to 'BIO' tables (i.e. species level) and/or 'MAP' and 'metadata_rages' tables (i.e. assambladge level) while the corresponding character strings contain the SQL 'WHERE' elements. 
 
 
@@ -47,10 +52,9 @@ plot(m, scales = TRUE )
 @
 
 <<results=ascii, echo=false>>=
-s1 = version$version.string
-s2 = paste("rangeMapper", packageDescription("rangeMapper")$Version)
-s3 = paste("website generated using ascii", packageDescription("ascii")$Version)
-ascii(rbind(s1, s2, s3))
+s = paste("_Website built with ", version$version.string, 
+		" and the package ", dQuote(packageDescription("ascii")$Package), " version ", packageDescription("ascii")$Version, "_", sep = "")
+ascii(s, style = 'm', grid = 'none',width = 0,frame = "none")
 @
 
 

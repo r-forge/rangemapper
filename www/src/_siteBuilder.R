@@ -1,8 +1,16 @@
 
+# layoutUpdate () 
+	# updates the examples in the vertical nav bar of the layout.conf  builds up a cascaded CSS menu based on the dropdownMenu.CSS
+	# only 2 levels are possible at the moment but it sould be easy to extend it to many.
+	# Rnw file names are of form  01__parent__children.Rnw
+#do()
+	# calls Sweave with driver = RweaveAsciidoc.
+	# runs asciidoc.py on the .txt file created by Sweave
+	# copies the files and images from src to target
 
-layoutUpdate = function(layout.conf) {
- #XX__level1__level2 (CSS should work for more than 2 levels!!)
- # for now works only for menus with 2 levels
+
+layoutUpdate <- function(layout.conf) {
+
  
 	l = readLines(layout.conf)
 
@@ -44,9 +52,7 @@ layoutUpdate = function(layout.conf) {
 
 }
 
-do = function(nam, layout = "layout.conf", 
-				src = "M:\\SOFTWARE\\R\\PACKAGES\\rangeMapper\\R-forge\\www\\src", 
-				target = dirname(src) ) {
+do <- function(nam, layout = "layout.conf", src, target = dirname(src) ) {
 	
 	setwd(src)
 	require(ascii)
@@ -69,18 +75,12 @@ do = function(nam, layout = "layout.conf",
 	
 	figs = list.files(paste(src, "figs", sep = .Platform$file.sep), full.names = TRUE)
 	file.copy(figs , paste(dirname(src), "figs", sep = .Platform$file.sep) )
-	file.remove( figs)
+	file.remove(figs)
 	
 }
 
 
 
-lapply( c("index", "faq", "gui","gallery", "bibliography"), do)
-
-lapply(gsub(".Rnw", "", list.files("M:\\SOFTWARE\\R\\PACKAGES\\rangeMapper\\R-forge\\www\\src", pattern = "^[0-9]{2}_.*.Rnw$") ), do)
-
-
-do("index")
 
 
 

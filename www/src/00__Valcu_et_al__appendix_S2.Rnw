@@ -8,8 +8,10 @@
 ==== Supporting information in 'Valcu, M., James. D, Kempenaers, B. rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)' 
 ===== Case study 1: Different biodiversity hotspots and their congruence. 
 
-NOTE: This script is updated to run using the latest version of the package (see footnote).
-
+TIP: This script runs with
+<<results=ascii, echo=false>>= 
+sexpr(paste(version$version.string, "&", "rangeMapper", packageDescription("rangeMapper")$Version) )
+@
 
 <<results=hide>>=
 # Loads the package and its dependencies.
@@ -195,12 +197,10 @@ cum = length( which(!is.na(na.omit(m$cumul_congruence_hotspots))) )
 
 
 <<results=ascii, echo=false>>=
-s1 = version$version.string
-s2 = paste("rangeMapper", packageDescription("rangeMapper")$Version)
-s3 = paste("website generated using ascii", packageDescription("ascii")$Version)
-ascii(rbind(s1, s2, s3))
+s = paste("_Website built with ", version$version.string, 
+		" and the package ", dQuote(packageDescription("ascii")$Package), " version ", packageDescription("ascii")$Version, "_", sep = "")
+ascii(s, style = 'm', grid = 'none',width = 0,frame = "none")
 @
-
 
 
 

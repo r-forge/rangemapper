@@ -45,10 +45,10 @@
 <ul class="menu menum">
 <li class="menui0"> <a class="menui0" href="#"><span> Valcu_et_al </span></a>
 <ul class="menum">
-<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S2.html" > appendix_S2 </a></li>
-<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S3.html" > appendix_S3 </a></li>
-<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S4.html" > appendix_S4 </a></li>
-<li class="menui"><a class="menui" href= "00__Valcu_et_al__appendix_S5.html" > appendix_S5 </a></li>
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__Appendix_S2.html" > Appendix_S2 </a></li>
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__Appendix_S3.html" > Appendix_S3 </a></li>
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__Appendix_S4.html" > Appendix_S4 </a></li>
+<li class="menui"><a class="menui" href= "00__Valcu_et_al__Appendix_S5.html" > Appendix_S5 </a></li>
 </ul>
 </li>
 <li class="menui0"><a class="menui0" href= "01__Species_Richness.html" > Species_Richness </a></li>
@@ -85,6 +85,15 @@
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
+<img src="style/tip.png" alt="Tip" />
+</td>
+<td class="content">This script runs with
+R version 2.14.0 (2011-10-31) &amp; rangeMapper 0.1-0</td>
+</tr></table>
+</div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
 <img src="style/note.png" alt="Note" />
 </td>
 <td class="content"><tt>rangeMap.save()</tt> takes a named list as a <em>subset</em> argument. Names refers to <em>BIO</em> tables (i.e. species level) and/or <em>MAP</em> and <em>metadata_rages</em> tables (i.e. assambladge level) while the corresponding character strings contain the SQL <em>WHERE</em> elements.</td>
@@ -108,206 +117,173 @@
 <div class="listingblock">
 <div class="title"># Clutch size is not known for a bunch of wren species.</div>
 <div class="content">
-<pre><tt> ascii(wrens[is.na(wrens$clutch_size), c("sci_name", "genus", "clutch_size")])</tt></pre>
+<pre><tt> wrens[is.na(wrens$clutch_size), c("sci_name", "genus", "clutch_size")]</tt></pre>
 </div></div>
 <div class="tableblock">
 <table rules="all"
-width="100%"
+width="60%"
 frame="border"
 cellspacing="0" cellpadding="4">
-<col width="25%" />
-<col width="25%" />
-<col width="25%" />
-<col width="25%" />
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
 <tbody>
 <tr>
-<td align="left" valign="top"><p class="table"></p></td>
 <td align="left" valign="top"><p class="table header">sci_name</p></td>
 <td align="left" valign="top"><p class="table header">genus</p></td>
 <td align="left" valign="top"><p class="table header">clutch_size</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">9</p></td>
 <td align="left" valign="top"><p class="table">Campylorhynchus_albobrunneus</p></td>
 <td align="left" valign="top"><p class="table">Campylorhynchus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">13</p></td>
 <td align="left" valign="top"><p class="table">Campylorhynchus_megalopterus</p></td>
 <td align="left" valign="top"><p class="table">Campylorhynchus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">14</p></td>
 <td align="left" valign="top"><p class="table">Odontorchilus_cinereus</p></td>
 <td align="left" valign="top"><p class="table">Odontorchilus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">15</p></td>
 <td align="left" valign="top"><p class="table">Odontorchilus_branickii</p></td>
 <td align="left" valign="top"><p class="table">Odontorchilus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">19</p></td>
 <td align="left" valign="top"><p class="table">Hylorchilus_navai</p></td>
 <td align="left" valign="top"><p class="table">Hylorchilus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">20</p></td>
 <td align="left" valign="top"><p class="table">Cinnycerthia_unirufa</p></td>
 <td align="left" valign="top"><p class="table">Cinnycerthia</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">23</p></td>
 <td align="left" valign="top"><p class="table">Cinnycerthia_fulva</p></td>
 <td align="left" valign="top"><p class="table">Cinnycerthia</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">25</p></td>
 <td align="left" valign="top"><p class="table">Cistothorus_meridae</p></td>
 <td align="left" valign="top"><p class="table">Cistothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">31</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus_albinucha</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">32</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus_atrogularis</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">35</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus_euophrys</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">36</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus_eisenmanni</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">38</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus_mystacalis</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">43</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus_sclateri</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">47</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus_leucopogon</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">50</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus_nicefori</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">57</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus_longirostris</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">58</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus_griseus</p></td>
 <td align="left" valign="top"><p class="table">Thryothorus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">61</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes_brunneicollis</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">63</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes_tanneri</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">64</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes_beani</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">66</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes_sissonii</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">68</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes_monticola</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">69</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes_ochraceus</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">71</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes_rufulus</p></td>
 <td align="left" valign="top"><p class="table">Troglodytes</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">75</p></td>
 <td align="left" valign="top"><p class="table">Henicorhina_negreti</p></td>
 <td align="left" valign="top"><p class="table">Henicorhina</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">77</p></td>
 <td align="left" valign="top"><p class="table">Henicorhina_leucoptera</p></td>
 <td align="left" valign="top"><p class="table">Henicorhina</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">79</p></td>
 <td align="left" valign="top"><p class="table">Microcerculus_philomela</p></td>
 <td align="left" valign="top"><p class="table">Microcerculus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">80</p></td>
 <td align="left" valign="top"><p class="table">Microcerculus_ustulatus</p></td>
 <td align="left" valign="top"><p class="table">Microcerculus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">81</p></td>
 <td align="left" valign="top"><p class="table">Microcerculus_bambla</p></td>
 <td align="left" valign="top"><p class="table">Microcerculus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">82</p></td>
 <td align="left" valign="top"><p class="table">Cyphorhinus_thoracicus</p></td>
 <td align="left" valign="top"><p class="table">Cyphorhinus</p></td>
 <td align="left" valign="top"><p class="table"></p></td>
@@ -334,14 +310,15 @@ cellspacing="0" cellpadding="4">
 </div></div>
 <div class="imageblock">
 <div class="content">
-<img src="figs/06-003.jpg" alt="figs/06-003.jpg" />
+<img src="figs/06-005.jpg" alt="figs/06-005.jpg" />
 </div>
 </div>
 <div class="listingblock">
 <div class="title"># Mapping: Unstudied and extinction-prone wren species</div>
 <div class="content">
 <pre><tt> rangeMap.save(dbcon)
-  rangeMap.save(dbcon, biotab = "wrens", subset = list(BIO_wrens = "clutch_size is NULL", metadata_ranges = "Area &lt; 182751" ),
+  rangeMap.save(dbcon, biotab = "wrens",
+        subset = list(BIO_wrens = "clutch_size is NULL", metadata_ranges = "Area &lt; 182751"),
                 tableName = "mistery_wrens_species_richness", overwrite = TRUE)</tt></pre>
 </div></div>
 <div class="listingblock">
@@ -352,24 +329,18 @@ cellspacing="0" cellpadding="4">
 </div></div>
 <div class="imageblock">
 <div class="content">
-<img src="figs/06-005.jpg" alt="figs/06-005.jpg" />
+<img src="figs/06-007.jpg" alt="figs/06-007.jpg" />
 </div>
 </div>
 <div class="tableblock">
-<table rules="all"
+<table rules="none"
 width="100%"
-frame="border"
+frame="void"
 cellspacing="0" cellpadding="4">
 <col width="100%" />
 <tbody>
 <tr>
-<td align="left" valign="top"><p class="table">R version 2.14.0 (2011-10-31)</p></td>
-</tr>
-<tr>
-<td align="left" valign="top"><p class="table">rangeMapper 0.0-6.6</p></td>
-</tr>
-<tr>
-<td align="left" valign="top"><p class="table">website generated using ascii 2.1</p></td>
+<td align="left" valign="top"><p class="table"><tt><em>Website built with R version 2.14.0 (2011-10-31) and the package “ascii” version 2.1</em></tt></p></td>
 </tr>
 </tbody>
 </table>
@@ -382,7 +353,7 @@ cellspacing="0" cellpadding="4">
         <div id="footer">
 
         <div id="footer-text">
-Last updated 2011-12-01 16:56:08 W. Europe Standard Time
+Last updated 2011-12-02 15:42:13 W. Europe Standard Time
         </div>
 
 <div id="footer-badges">

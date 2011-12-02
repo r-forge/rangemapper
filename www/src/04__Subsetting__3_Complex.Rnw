@@ -7,8 +7,12 @@
 ===  Unstudied and extinction-prone wren species ===
 ==== SUBSETTING AT BOTH SPECIES AND ASSAMBLADGE LEVEL  ==== 
 
-NOTE:  +rangeMap.save()+ takes a named list as a 'subset' argument. Names refers to 'BIO' tables (i.e. species level) and/or 'MAP' and 'metadata_rages' tables (i.e. assambladge level) while the corresponding character strings contain the SQL 'WHERE' elements. 
+TIP: This script runs with
+<<results=ascii, echo=false>>= 
+sexpr(paste(version$version.string, "&", "rangeMapper", packageDescription("rangeMapper")$Version) )
+@
 
+NOTE:  +rangeMap.save()+ takes a named list as a 'subset' argument. Names refers to 'BIO' tables (i.e. species level) and/or 'MAP' and 'metadata_rages' tables (i.e. assambladge level) while the corresponding character strings contain the SQL 'WHERE' elements. 
 
 <<results=hide>>=
 #Start a new project
@@ -28,8 +32,11 @@ NOTE:  +rangeMap.save()+ takes a named list as a 'subset' argument. Names refers
 @
 
 .# Clutch size is not known for a bunch of wren species. 
-<<results=ascii>>=
-ascii(wrens[is.na(wrens$clutch_size), c("sci_name", "genus", "clutch_size")])
+<<results=hide, echo=true>>=
+wrens[is.na(wrens$clutch_size), c("sci_name", "genus", "clutch_size")]
+@
+<<results=ascii, echo=false>>=
+ascii(wrens[is.na(wrens$clutch_size), c("sci_name", "genus", "clutch_size")], include.rownames = FALSE, width = 60)
 @
 
 .# Restricted range species ( species with a high extinction risk)
@@ -45,7 +52,8 @@ exp(quantile(log(meta$Area), 0.50))
 .# Mapping: Unstudied and extinction-prone wren species
 <<results=hide>>=
 rangeMap.save(dbcon)
- rangeMap.save(dbcon, biotab = "wrens", subset = list(BIO_wrens = "clutch_size is NULL", metadata_ranges = "Area < 182751" ),
+ rangeMap.save(dbcon, biotab = "wrens", 
+	subset = list(BIO_wrens = "clutch_size is NULL", metadata_ranges = "Area < 182751"),
 		tableName = "mistery_wrens_species_richness", overwrite = TRUE)
 
 @
@@ -57,10 +65,9 @@ plot(m, scales = FALSE)
 @
 
 <<results=ascii, echo=false>>=
-s1 = version$version.string
-s2 = paste("rangeMapper", packageDescription("rangeMapper")$Version)
-s3 = paste("website generated using ascii", packageDescription("ascii")$Version)
-ascii(rbind(s1, s2, s3))
+s = paste("_Website built with ", version$version.string, 
+		" and the package ", dQuote(packageDescription("ascii")$Package), " version ", packageDescription("ascii")$Version, "_", sep = "")
+ascii(s, style = 'm', grid = 'none',width = 0,frame = "none")
 @
 
 
