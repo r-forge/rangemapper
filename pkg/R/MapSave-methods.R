@@ -87,7 +87,7 @@ setMethod("rangeMapSave",
 		return(.dbtable.exists(object@CON, tableName))
 			
 		
-		#cat(strwrap(sql, width = 100))
+		cat(strwrap(sql, width = 100))
 		}
 	)						
 
@@ -113,10 +113,16 @@ setMethod("rangeMapSave",
 		# fetch table
 		d = RMQuery(object@CON, sql)
 		
+		if(nrow(d) == ) {
+			stop(x.Msg( paste("The map is going to be empty! Maybe the bioid in", sQuote(object@biotab), " BIO table was wrongly set.") )) }
+		
+		
 		# return list
 		split(d, d[, object@ID])
 }
 	
+	
+object = new("rangeMapSave", CON = con, biotab = "longev", biotrait = "scinam", tableName = "longevity_N_species")	
 	
 # agggregate method using R functions called directly on the data 
 setMethod("rangeMapSave",  

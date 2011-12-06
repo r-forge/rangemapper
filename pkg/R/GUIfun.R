@@ -1,50 +1,5 @@
 
 #UTILS
-x.Msg <- function(x.Msg=Sys.time(), tkMainWindow = "win", tkElement = "x.Msg", eol = "\n", keep = TRUE, clearup = FALSE, getTime = FALSE, envir = ".RangeMapper") {
-
-   x.Msg	= paste(x.Msg, collapse = eol)
-   x.Msg	= paste(" >>", x.Msg, collapse = " ")
-   
-   
-  if(getTime) x.Msg = paste( "<", Sys.time(), ">\n", x.Msg, sep = "")
-  
-  if(exists(envir)) env = eval(parse(text = envir)) else env = NULL
-  
-  # if  tcltk envir is set
-  if(is.environment(env) && exists(tkMainWindow, envir = env) && exists(tkElement, envir = env) ) {
-
-	  x.MsgWindow = get(tkElement, envir = env)
-	  mainWindow = get(tkMainWindow, envir = env)
-	  
-	# prepare  message container 
-	 if(! exists("sessionx.Msg", envir = env) ) assign("sessionx.Msg", list(), envir = env)
-	 
-	# clearup any existing messages from env	
-		if(clearup) {
-			tkdelete(x.MsgWindow, "0.0" , "1000.0" )
-			assign("sessionx.Msg", list(), envir = env)
-			}
-	# if x.Msg is to be kept then append it to sessionx.Msg 
-		if(keep) assign("sessionx.Msg", c( get("sessionx.Msg", envir = env), x.Msg ) , envir = env )
-			
-	#  print to GUI element
-		tkdelete(x.MsgWindow, "1.0" , "100.0" ) 
-		x.MsgList = get("sessionx.Msg", envir = env)
-		
-		lapply(x.MsgList , function(x) tkinsert(x.MsgWindow, "end" , paste(x,eol) ) )
-		
-		if(!keep) tkinsert(x.MsgWindow, "end" , paste(x.Msg,eol) ) 
-		
-		tkyview.moveto(get(tkElement, envir = env), 1)
-		tkfocus(get(tkMainWindow, envir = env ))
-		
-		tcl("update", "idletasks") 		 
-
-}	else   cat(x.Msg, eol)
-	
-    invisible(flush.console() )
-	
-} 
 
 x.make.env <- function(env = ".RangeMapper") {
 assign(env , new.env(), env = .GlobalEnv)
