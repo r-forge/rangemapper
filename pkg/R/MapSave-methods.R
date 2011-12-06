@@ -122,8 +122,6 @@ setMethod("rangeMapSave",
 }
 	
 	
-object = new("rangeMapSave", CON = con, biotab = "longev", biotrait = "scinam", tableName = "longevity_N_species")	
-	
 # agggregate method using R functions called directly on the data 
 setMethod("rangeMapSave",  
 	signature  = c(object = "rangeMapSave", FUN = "function", formula = "missing"), 
