@@ -113,7 +113,7 @@ setMethod("rangeMapSave",
 		# fetch table
 		d = RMQuery(object@CON, sql)
 		
-		if(nrow(d) == ) {
+		if(nrow(d) == 0) {
 			stop(x.Msg( paste("The map is going to be empty! Maybe the bioid in", sQuote(object@biotab), " BIO table was wrongly set.") )) }
 		
 		
