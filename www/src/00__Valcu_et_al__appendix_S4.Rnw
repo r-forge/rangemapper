@@ -5,7 +5,7 @@
 \SweaveOpts{prefix.string=figs/97}
 
 ===  Appendix S4 
-==== Supporting information in 'Valcu, M., James. D, Kempenaers, B. rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)'   
+==== Supporting information in *Valcu, M., Dale, J., Kempenaers, B.* 'rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)'   
 ===== Case study 3: The influence of grid size on the relationship between species richness and body size 
 
 TIP: This script runs with

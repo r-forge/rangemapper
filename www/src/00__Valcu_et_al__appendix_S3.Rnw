@@ -5,7 +5,7 @@
 \SweaveOpts{prefix.string=figs/98}
 
 ===  Appendix S3
-==== Supporting information in 'Valcu, M., James. D, Kempenaers, B. rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)' 
+==== Supporting information in *Valcu, M., Dale, J., Kempenaers, B.* 'rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)'
 ===== Case study 2: Geographical variation in the relationship between range size and body size 
 
 TIP: This script runs with
