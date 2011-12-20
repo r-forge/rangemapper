@@ -1,0 +1,9 @@
+:lang: en
+:encoding: iso-8859-1
+
+== Graphical user interface ==
+
+To get the latest version of the graphical user interface manual
+type:
+----
+> require(rangeMapper)

@@ -83,10 +83,11 @@
 <div id="layout-content">
 
         <div id="content">
+<div class="paragraph"><p>&gt;</p></div>
 <div class="sect2">
-<h3 id="_species_richness_of_the_high_altitude_wrens">Species richness of the high altitude wrens</h3>
+<h3 id="_using_natureserve_ranges">Using NatureServe ranges</h3>
 <div class="sect3">
-<h4 id="_subsetting_at_assambladge_level">SUBSETTING AT ASSAMBLADGE LEVEL</h4>
+<h4 id="_a_href_http_www_natureserve_org_http_www_natureserve_org_a"><a href="http://www.natureserve.org">http://www.natureserve.org</a></h4>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
@@ -99,45 +100,79 @@ R version 2.14.0 (2011-10-31) &amp; rangeMapper 0.1-1</td>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
-<img src="style/note.png" alt="Note" />
+<img src="style/tip.png" alt="Tip" />
 </td>
-<td class="content"><tt>rangeMap.save()</tt> takes a named list as a <em>subset</em> argument. Names refers to <em>BIO</em> tables (i.e. species level) and/or <em>MAP</em> and <em>metadata_rages</em> tables (i.e. assambladge level) while the corresponding character strings contain the SQL <em>WHERE</em> elements. <tt>rangeMap.save()</tt> allows raster importing as well.</td>
+<td class="content">Data provided by NatureServe in collaboration with
+Robert Ridgely, James Zook, The Nature Conservancy - Migratory Bird Program,
+Conservation International - CABS, World Wildlife Fund - US, and
+Environment Canada - WILDSPACE.
+Ridgely, R. S., T. F. Allnutt, T. Brooks, D. K. McNicol, D. W. Mehlman, B. E. Young, and J. R. Zook. 2007.
+Digital Distribution Maps of the Birds of the Western Hemisphere, version 3.0. NatureServe, Arlington, Virginia, USA.</td>
 </tr></table>
 </div>
 <div class="listingblock">
+<div class="title"># Start a project</div>
 <div class="content">
-<pre><tt> #Start a new project
- require(rangeMapper)
- dbcon = rangeMap.start(file = "wrens.sqlite",dir = tempdir() , overwrite = TRUE)
- f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
- global.bbox.save(con = dbcon, bbox = f,
-  p4s = CRS("+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"))
- gridSize.save(dbcon)
- canvas.save(dbcon)
- r = readOGR(f, "wrens", verbose = FALSE)
- processRanges(spdf = r, con =  dbcon, ID = "sci_name")</tt></pre>
+<pre><tt> require(rangeMapper)
+ dbcon = rangeMap.start(file = "wrens.sqlite", dir = tempdir() , overwrite = TRUE)</tt></pre>
 </div></div>
 <div class="listingblock">
-<div class="title"># Import a raster using rangeMap.save</div>
+<div class="title"># Download  range vector files</div>
 <div class="content">
-<pre><tt> r = system.file(package = "rangeMapper", "extdata", "etopo1", "etopo1_Americas.tif")
- rangeMap.save(dbcon, path = r, tableName = 'meanAltitude', FUN = median, overwrite = TRUE)</tt></pre>
+<pre><tt> wd = setwd(tempdir())
+ download.file("http://www.natureserve.org/getData/dataSets/birdMapData/Falconidae.zip", "Falconidae.zip")
+ unzip("Falconidae.zip")</tt></pre>
 </div></div>
 <div class="listingblock">
-<div class="title"># Mapping</div>
+<div class="title"># Combine all ranges in one "SpatialPolygonsDataFrame"</div>
 <div class="content">
-<pre><tt> rangeMap.save(dbcon, biotab = "wrens", subset = list(MAP_meanAltitude = "meanAltitude &gt; 999"),
-        tableName = "highAltitude_wrens_species_richness")</tt></pre>
+<pre><tt>   R = list() # a container for all ranges
+  lst = selectShpFiles("Falconidae")
+  for(i in 1:nrow(lst)) {
+                  ri = readOGR(lst$dsn[i], lst$layer[i], verbose = FALSE)
+                  ri = spChFIDs(ri,  paste(i, 1:length(ri), sep = "." ) )
+                  print(i)
+                 R[[i]] = ri
+  }
+ R = do.call(rbind, R)
+ # see http://www.natureserve.org/getData/Metadata_Birds_ver_3.0_Oct_07.pdf
+ proj4string(R) = CRS("+proj=longlat +datum=NAD83")
+ setwd(wd)</tt></pre>
 </div></div>
 <div class="listingblock">
 <div class="content">
-<pre><tt> # Fetch and plot maps
- m = rangeMap.fetch(dbcon)
- plot(m, scales = FALSE)</tt></pre>
+<pre><tt> plot(R, border = "grey", axes = TRUE)</tt></pre>
 </div></div>
 <div class="imageblock">
 <div class="content">
-<img src="figs/05-005.jpg" alt="figs/05-005.jpg" />
+<img src="figs/05.1-005.jpg" alt="figs/05.1-005.jpg" />
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><tt> # Check out the field names
+ print(names(R))</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt> [1] "ENGL_NAME"  "SCI_NAME"   "AUTHORITY"  "FAMILY"     "PRESENCE"
+ [6] "ORIGIN"     "COMPILER"   "SCALE"      "TAX_COM"    "DIST_COM"
+[11] "REFERENCES" "REVIEWERS"</tt></pre>
+</div></div>
+<div class="listingblock">
+<div class="title"># Mapping species richness</div>
+<div class="content">
+<pre><tt> global.bbox.save(con = dbcon, bbox = R)
+ gridSize.save(dbcon)
+ canvas.save(dbcon)
+ processRanges(spdf = R, con =  dbcon, ID = "SCI_NAME")
+ rangeMap.save(dbcon)
+ sr = rangeMap.fetch(dbcon)
+ plot(sr)</tt></pre>
+</div></div>
+<div class="imageblock">
+<div class="content">
+<img src="figs/05.1-007.jpg" alt="figs/05.1-007.jpg" />
 </div>
 </div>
 <div class="tableblock">
@@ -161,7 +196,7 @@ cellspacing="0" cellpadding="4">
         <div id="footer">
 
         <div id="footer-text">
-Last updated 2011-12-20 10:58:38 W. Europe Standard Time
+Last updated 2011-12-20 10:59:48 W. Europe Standard Time
         </div>
 
 <div id="footer-badges">
