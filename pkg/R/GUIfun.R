@@ -59,7 +59,7 @@ x.yn <- function(text = "Choose!", yn = c("YES", "NO"), title) {
 	return(as.integer(tclvalue(select)))
 }
 
-x.img <- function(gif, file=system.file("ico", paste(gif, "gif", sep = "."), package="rangeMapper")) {
+x.img <- function(gif, file = system.file("ico", paste(gif, "gif", sep = "."), package="rangeMapper")) {
 tkimage.create("photo",file=file)
  }
 
@@ -146,6 +146,7 @@ x.tkdbBrowse.active.proj <- function() {
 		if(exists("out")) rm(out, envir = .GlobalEnv)
 
 }
+
 
 # MAIN GUI ELEMENTS 
 x.dbopen <- function(new = TRUE) {

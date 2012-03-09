@@ -226,7 +226,7 @@ setMethod("rangeMapImport",
 
 	# build table and index
 	x.Msg("Creating table and indexes...")
-	RMQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@tableName, "NUMERIC)"))
+	RMQuery(object@CON, paste("CREATE TABLE" ,tableName, "(", object@ID, "INTEGER,",object@tableName, "FLOAT)"))
 	RMQuery(object@CON, paste("CREATE INDEX", paste(tableName, "id", sep = "_") , "ON", tableName, "(id)") )
 	dbWriteTable(object@CON, tableName, o, row.names = FALSE, append = TRUE)
 	
