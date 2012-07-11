@@ -24,6 +24,15 @@ rangeTraits <- function(..., use.default = TRUE) {
 
 }
 
+.extractPolyCoords <- function(x, FUN) {
+			res = lapply( unlist(lapply(slot(x, "polygons"), function(P) slot(P, "Polygons"))), function(cr) slot(cr, "coords") )
+			if(!missing(FUN))
+			res = lapply(res, function(x) apply(x ,2, mean) )
+			
+			SpatialPoints(do.call("rbind", res), proj4string =  CRS(proj4string(x)))
+			
+			
+}
 
 .rangeOverlay <- function(spdf, canvas, name) {
 	#SpatialPolygonsDataFrame
@@ -32,15 +41,23 @@ rangeTraits <- function(..., use.default = TRUE) {
 	
 	overlayRes = which(!is.na(overlay(spdf, canvas)[, 1]))
 	
-	if(length(overlayRes) > 0) { # do grid interpolation
+	if(length(overlayRes) > 0) { 	# do grid interpolation
 		sp = canvas[overlayRes, ]
 		o = data.frame(id = sp$id, bioid = rep(name, nrow(sp)) ) 
 		}
 		
-	if(length(overlayRes) == 0) { # the polygon is smaller than a grid cell: snap to the nearest point
-			ctr = apply(coordinates(spdf),2, mean)
-			nn = spDistsN1(canvas, ctr)
-			sp = canvas[which(nn == min(nn) ), ]
+	if(length(overlayRes) == 0) { 	# the polygons are smaller than the grid cells:  snap to the nearest points
+			xy = .extractPolyCoords(spdf, FUN = mean)
+			nn = spDists(canvas, xy)
+			mins = apply(nn, 2, min)
+			res = vector(mode = 'numeric', length = length(mins))
+			for(i in 1:length(res)) {
+				res[i] = which(nn[,i] == mins[i])
+				}
+			res = unique(res)
+			
+			sp = canvas[res, ]
+			
 			o = data.frame(id = sp$id, bioid = rep(name, nrow(sp@coords)) )
 		} 
 	
@@ -48,7 +65,6 @@ rangeTraits <- function(..., use.default = TRUE) {
 
 }
 
-		
 setGeneric("rangeMapProcess", function(object,spdf, dir, ID,metadata, parallel)  standardGeneric("rangeMapProcess") )
 
 

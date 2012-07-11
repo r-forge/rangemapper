@@ -1,10 +1,10 @@
 Package: rangeMapper
-Version: 0.1-2
-Date: 2011-Dec-06
+Version: 0.1-3
+Date: 2012-Jul-11
 Title: A platform for the study of macroecology of life history traits
 Author: Mihai Valcu  <valcu@orn.mpg.de>, James Dale  <J.Dale@massey.ac.nz> 
 Maintainer: Mihai Valcu  <valcu@orn.mpg.de>
-Depends: R (>= 2.13.0), methods, utils,  RSQLite,RSQLite.extfuns, sp, rgdal, maptools, lattice, RColorBrewer, tcltk, tcltk2, pixmap, classInt
+Depends: R (>= 2.14.0), methods, utils,  RSQLite,RSQLite.extfuns, sp, rgdal, maptools, lattice, RColorBrewer, tcltk, tcltk2, pixmap, classInt
 Suggests: raster
 SystemRequirements: Bwidget, Tktable
 Description: A package to manipulate species range (extent-of-occurrence) maps, mainly tools for easy generation of biodiversity (species richness) or life-history traits maps. 
