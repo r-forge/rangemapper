@@ -14,7 +14,7 @@
 	chunk2 = paste("The latest version of", dQuote("AppendixS2_S5.R"), "accompanying\n", dQuote(Citation), 
 		"can be found at\n", strsplit(dsc$URL, ",")[[1]][[2]] )
 
-	chunk3 = paste("Changes from the version 0.0-6 are documented in\n", system.file(package = pkg, "NEWS") )
+	chunk3 = paste("Changes are documented in\n", system.file(package = pkg, "NEWS") )
 		
 	packageStartupMessage(markline,chunk1 ,markline,  chunk2, markline, chunk3, markline)
 	

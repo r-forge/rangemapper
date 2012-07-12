@@ -295,7 +295,7 @@ setMethod("canvasFetch",
 		
 		cnv = RMQuery(object@CON, 'SELECT * FROM canvas' )
 
-		if(nrow(cnv) == 0) stop(x.Msg("The canvas is empty!"))
+		if(nrow(cnv) == 0) stop(x.Msg("The canvas is empty, did you run canvas.save()?"))
 
 		coordinates(cnv) = ~ x + y
 

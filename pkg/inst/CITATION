@@ -8,9 +8,9 @@ citEntry(entry = "article",
            as.person("Bart Kempenaers")
            ),
          journal = "Global Ecology and Biogeography (in press)",
-         year= 2011,
+         year= 2012,
 	 textVersion = paste(
-		"Valcu, M., James. D, Kempenaers, B.(2011).",
+		"Valcu, M., James. D, Kempenaers, B.(2012).",
 		"rangeMapper: A platform for the study of macroecology of life history traits.",
 	        "in press")
          )

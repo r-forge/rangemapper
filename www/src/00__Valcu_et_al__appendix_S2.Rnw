@@ -5,12 +5,17 @@
 \SweaveOpts{prefix.string=figs/99}
 
 ===  Appendix S2
-==== Supporting information in *Valcu, M., Dale, J., Kempenaers, B.* 'rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)' 
+==== Supporting information in *Valcu, M., Dale, J., Kempenaers, B.* 'rangeMapper: A platform for the study of macroecology of life history traits, Global Ecology and Biogeography, in press (2011)'
+
+ 
 ===== Case study 1: Different biodiversity hotspots and their congruence. 
 
 TIP: This script runs with
 <<results=ascii, echo=false>>= 
+
 sexpr(paste(version$version.string, "&", "rangeMapper", packageDescription("rangeMapper")$Version) )
+## tools::pkgDepends(pkg = "rangeMapper")
+
 @
 
 <<results=hide>>=

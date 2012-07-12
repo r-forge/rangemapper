@@ -1,14 +1,35 @@
 
+setGeneric("vertices", function(object, FUN)  standardGeneric("vertices") )
+
+setMethod("vertices", "SpatialPolygonsDataFrame", 
+	function(object, FUN) {
+			d = lapply( unlist(lapply(slot(object, "polygons"), function(P) slot(P, "Polygons"))), function(cr) slot(cr, "coords") )
+			d = lapply(d, function(x) x[-nrow(x), , drop = FALSE])
+			d = mapply("cbind", 1:length(d), d, SIMPLIFY = FALSE)
+			if(!missing(FUN))
+				d = lapply(d, function(x) apply(x ,2, FUN) )
+			
+			d = data.frame(do.call("rbind", d))
+			
+			coordinates(d) = ~ X2+X3
+			proj4string(d) = CRS(proj4string(object))
+			names(d) = "id"
+			d
+						
+				
+})
+
+
 
 rangeTraits <- function(..., use.default = TRUE) {
 
-	Area = function(spdf) sum(sapply(slot(spdf, "polygons"), function(x) slot(x, "area") ))
-	Median_x = function(spdf) median(coordinates(spdf)[, 1])
-	Median_y = function(spdf) median(coordinates(spdf)[, 2])
-	Min_x = function(spdf) min(coordinates(spdf)[, 1])
-	Min_y = function(spdf) min(coordinates(spdf)[, 2])
-	Max_x = function(spdf) max(coordinates(spdf)[, 1])
-	Max_y = function(spdf) max(coordinates(spdf)[, 2])
+	Area     = function(spdf) sum(sapply(slot(spdf, "polygons"), function(x) slot(x, "area") ))
+	Median_x = function(spdf) median(coordinates(vertices(spdf))[, 1])
+	Median_y = function(spdf) median(coordinates(vertices(spdf))[, 2])
+	Min_x    = function(spdf) min(coordinates(vertices(spdf))[, 1])
+	Min_y    = function(spdf) min(coordinates(vertices(spdf))[, 2])
+	Max_x    = function(spdf) max(coordinates(vertices(spdf))[, 1])
+	Max_y    = function(spdf) max(coordinates(vertices(spdf))[, 2])
 
 	
 	res = list(Area = Area, Median_x = Median_x, Median_y = Median_y, Min_x = Min_x, Min_y = Min_y, Max_x = Max_x, Max_y = Max_y)
@@ -19,19 +40,7 @@ rangeTraits <- function(..., use.default = TRUE) {
 		 if( !all(sapply(x, is.function))) stop (dQuote("..."), " elements should be functions.")
 		 if(use.default) res = c(res, x)
 	}
-	
 	res
-
-}
-
-.extractPolyCoords <- function(x, FUN) {
-			res = lapply( unlist(lapply(slot(x, "polygons"), function(P) slot(P, "Polygons"))), function(cr) slot(cr, "coords") )
-			if(!missing(FUN))
-			res = lapply(res, function(x) apply(x ,2, mean) )
-			
-			SpatialPoints(do.call("rbind", res), proj4string =  CRS(proj4string(x)))
-			
-			
 }
 
 .rangeOverlay <- function(spdf, canvas, name) {
@@ -47,7 +56,7 @@ rangeTraits <- function(..., use.default = TRUE) {
 		}
 		
 	if(length(overlayRes) == 0) { 	# the polygons are smaller than the grid cells:  snap to the nearest points
-			xy = .extractPolyCoords(spdf, FUN = mean)
+			xy = vertices(spdf, FUN = mean)
 			nn = spDists(canvas, xy)
 			mins = apply(nn, 2, min)
 			res = vector(mode = 'numeric', length = length(mins))

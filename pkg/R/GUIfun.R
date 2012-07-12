@@ -2,7 +2,7 @@
 #UTILS
 
 x.make.env <- function(env = ".RangeMapper") {
-assign(env , new.env(), env = .GlobalEnv)
+assign(env , new.env(), envir = .GlobalEnv)
 }
 
 x.get <- function(x, mode = "any", envir = .RangeMapper) {
