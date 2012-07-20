@@ -4,6 +4,7 @@ setGeneric("vertices", function(object, FUN)  standardGeneric("vertices") )
 setMethod("vertices", "SpatialPolygonsDataFrame", 
 	function(object, FUN) {
 			d = lapply( unlist(lapply(slot(object, "polygons"), function(P) slot(P, "Polygons"))), function(cr) slot(cr, "coords") )
+			d = lapply(d, function(x) { dimnames(x)[[2]] = c('x', 'y'); x} )
 			d = lapply(d, function(x) x[-nrow(x), , drop = FALSE])
 			d = mapply("cbind", 1:length(d), d, SIMPLIFY = FALSE)
 			if(!missing(FUN))
@@ -11,7 +12,7 @@ setMethod("vertices", "SpatialPolygonsDataFrame",
 			
 			d = data.frame(do.call("rbind", d))
 			
-			coordinates(d) = ~ X2+X3
+			coordinates(d) = ~ x+y
 			proj4string(d) = CRS(proj4string(object))
 			names(d) = "id"
 			d
