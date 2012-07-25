@@ -28,7 +28,7 @@ setMethod("rangeMapStart",
 				sqliteQuickSQL(CON, verSql)
 				}
 		
-			if(!object@overwrite && file.exists) stop(x.Msg(paste("File", object@file, "allready exsits!")))
+			if(!object@overwrite && file.exists) stop(x.Msg(paste("File", object@file, "already exists!")))
 		
 		   
 			} 
