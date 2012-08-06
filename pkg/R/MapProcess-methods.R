@@ -20,8 +20,6 @@ setMethod("vertices", "SpatialPolygonsDataFrame",
 				
 })
 
-
-
 rangeTraits <- function(..., use.default = TRUE) {
 
 	Area     = function(spdf) sum(sapply(slot(spdf, "polygons"), function(x) slot(x, "area") ))
@@ -76,7 +74,6 @@ rangeTraits <- function(..., use.default = TRUE) {
 }
 
 setGeneric("rangeMapProcess", function(object,spdf, dir, ID,metadata, parallel)  standardGeneric("rangeMapProcess") )
-
 
  # Method 1.1 :  Each range file is a separate shp file. No metadata
 setMethod("rangeMapProcess",  
