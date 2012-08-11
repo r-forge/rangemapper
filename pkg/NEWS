@@ -1,4 +1,9 @@
 
+Changes in version 0.1-7
+NEW FEATURES
+	o   method metadataUpdate() to compute taxa-level metadata  once a project is set.
+	o   A new utility function, rangeFetch(), to fetch a range from a rangeMapper project.
+
 Changes in version 0.1-5
 
 BUG FIXES

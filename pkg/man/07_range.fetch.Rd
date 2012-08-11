@@ -1,5 +1,5 @@
-\name{range.fetch}
-\alias{range.fetch}
+\name{rangeFetch}
+\alias{rangeFetch}
 
 \title{Range extractor}
 \description{
@@ -13,7 +13,7 @@ Fetch an arbitrary range from a rangeMapper project.
 	}
 
 \usage{
-range.fetch(rangeMap, bioid)
+rangeFetch(rangeMap, bioid)
 }
 
 \value{
@@ -36,6 +36,7 @@ Valcu, M., Dale, J. and Kempenaers, B. (in press)  rangeMapper: A platform for t
 
 
 \examples{
+wd = setwd(tempdir())
 require(rangeMapper)
 spdf = readOGR(system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined"), "wrens", verbose = FALSE)
 dbcon = rangeMap.start(file = "wrens.sqlite", overwrite = TRUE, dir = tempdir() )
@@ -46,10 +47,10 @@ canvas.save(dbcon)
 processRanges(spdf = spdf, con =  dbcon, ID = "sci_name" )
 rangeMap.save(dbcon)
 
-house_wren = range.fetch(rmo, "Troglodytes_aedon")
+house_wren = rangeFetch(rmo, "Troglodytes_aedon")
 image(rangeMap.fetch(dbcon))
 plot(house_wren, add = TRUE, border = 'blue', lwd = 2)
-
+setwd(wd)
 
 
 

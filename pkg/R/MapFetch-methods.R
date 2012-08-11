@@ -46,7 +46,7 @@ rangeMap.fetch <- function(con, maps) {
 
 }
 
-range.fetch <- function(rangeMap, bioid) {
+rangeFetch <- function(rangeMap, bioid) {
 				
 		if( nrow(RMQuery(rangeMap@CON, paste("SELECT * from canvas limit 1"))) == 0)
 			stop('Empty project!')

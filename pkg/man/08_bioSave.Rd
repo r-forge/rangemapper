@@ -47,9 +47,9 @@ Valcu, M., Dale, J. and Kempenaers, B. (in press)  rangeMapper: A platform for t
 
 \examples{
 require(rangeMapper)
-wd = tempdir()
+wd = setwd(tempdir())
 r = readOGR(system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined"), "wrens", verbose = FALSE)
-dbcon = rangeMap.start(file = "wrens.sqlite", overwrite = TRUE, dir = wd )
+dbcon = rangeMap.start(file = "wrens.sqlite", overwrite = TRUE, dir = tempdir() )
 global.bbox.save(con = dbcon, bbox = r)
 gridSize.save(dbcon)  
 canvas.save(dbcon) 
@@ -65,6 +65,7 @@ bio.save(con = dbcon, loc = Troglodytes,  ID = "sci_name")
 #metadata2bio(dbcon)
 
 summary(rangeMap("wrens.sqlite"))$BIO_tables
+setwd(wd)
 
 }
 

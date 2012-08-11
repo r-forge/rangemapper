@@ -336,40 +336,26 @@ if(missing(fun) )
 			stop(x.Msg(sQuote(fun), "is not a known sqlite aggregate function!" ))
 	}
 
-
-.sqlRemoveField <- function(con, table.name, col.name) {
+.dbRemoveField <- function(con, table.name, col.name) {
 	
-	
+	# table def (type and indexes)
 	tinfo = RMQuery(con, paste("pragma table_info(" , shQuote(table.name),")" ))
-	tinfo = tinfo[tinfo$name != col.name, ]
 	
-	indexSQL = RMQuery(con, paste("select * from sqlite_master where type = 'index' and tbl_name = '", table.name, "'", sep = ""))$sql
-	
-	
-	
-	 dbBeginTransaction(db)
-	 rs = dbSendQuery(con, paste("ALTER TABLE" ,table.name, "RENAME TO temptab") )
-	dbClearResult(rs)
-	  
-	  
-	  dbCommit(db)
-	
-	
-	ALTER TABLE "main"."metadata_ranges" RENAME TO "oXHFcGcd04oXHFcGcd04_metadata_ranges"
-	CREATE TABLE "main"."metadata_ranges" ("bioid" CHAR)
-	INSERT INTO "main"."metadata_ranges" SELECT "bioid" FROM "main"."oXHFcGcd04oXHFcGcd04_metadata_ranges"
-	DROP TABLE "main"."oXHFcGcd04oXHFcGcd04_metadata_ranges"
-	
-	
-	
-	
-	
+	if( is.element(col.name, tinfo$name) ) {
+		tinfo = tinfo[tinfo$name != col.name, ]
+		indexSQL = RMQuery(con, paste("select * from sqlite_master where type = 'index' and tbl_name = '", table.name, "'", sep = ""))$sql
+		# do ALTER, CREATE, INSERT FROM SELECT, DROP
+		dbBeginTransaction(con)
+		dbSendQuery(con, paste("ALTER TABLE" ,table.name, "RENAME TO temptab") )
+		dbSendQuery(con, paste("CREATE TABLE" ,table.name, '(', paste(tinfo$name, tinfo$type, collapse = ',') , ')'))
+		dbSendQuery(con, paste("INSERT INTO" ,table.name, 'SELECT ', paste(tinfo$name, collapse = ',') , 'FROM temptab'))
+		dbSendQuery(con, " DROP TABLE temptab")
+		if(length(indexSQL > 1)) lapply(indexSQL, function(x) try(RMQuery(con, x), silent = TRUE) )
+		
+		dbCommit(con)
+		} else FALSE 
+
 	}
-
-
-
-
-
 
 
 

@@ -2,17 +2,18 @@
 import(methods)
 import(utils) 
 import(sp) 
-import(raster) 
 
 exportClasses(rangeMapStart, rangeMap,SpatialPixelsRangeMap)
 
 exportMethods(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapExport, rangeMapStart, summary, plot, vertices)
 
+exportMethods(metadataUpdate)
+
 export(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapExport, rangeMapStart, vertices)
 
 export(bio.save, bio.merge, metadata2bio, global.bbox.save, global.bbox.fetch, canvas.fetch, canvas.save, gridSize.save ,gridSize.fetch, rm.rangeMapper,  selectShpFiles, rangeMap.fetch, processRanges, rangeMap.save, rangeMap.start, rangeMap.open, rangeMap.export,rangeTraits, RMQuery, brewer.pal.get, tkColorPalette, tkMakeColorPalette, tkdbBrowse)
 
-export(range.fetch)
+export(rangeFetch, metadata.update)
 
 export(rangeMapper, rangeMap)
 

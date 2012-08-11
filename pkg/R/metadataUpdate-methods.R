@@ -1,18 +1,18 @@
 
 
-setGeneric("metadataUpdate", function(object, FUN,name, raster,vector, parallel, ...)  standardGeneric("metadataUpdate") )
+setGeneric("metadataUpdate", function(object, FUN,name, map, parallel, ...)  standardGeneric("metadataUpdate") )
 
- # Method 1: using  a RasterLayer object
+ # Method 1: using  a SpatialGridDataFrame object
 setMethod("metadataUpdate",  
 		signature = c(object = 'rangeMap', FUN = 'function', name = 'character', 
-					 raster = 'SpatialGridDataFrame', vector = 'missing' , parallel = 'missing'), 
-		definition = function(object, FUN, name, raster, ...){ # ... goes to FUN
+					 map = 'SpatialGridDataFrame', parallel = 'missing'), 
+		definition = function(object, FUN, name, map, ...){ # ... goes to FUN
 			Startprocess = Sys.time()
 			
 			# only use 1st band of the raster
-			if(length(names(raster)) > 1) {
-				warning( paste("The raster has more than one band, only", dQuote(names(raster)[1]), "will be used!") )
-			raster = raster[names(raster)[1]]
+			if(length(names(map)) > 1) {
+				warning( paste("The SpatialGridDataFrame has more than one band, only", dQuote(names(map)[1]), "will be used!") )
+			map = map[names(map)[1]]
 			}
 			
 			# check if metadata_ranges is populated
@@ -36,16 +36,14 @@ setMethod("metadataUpdate",
 
 			for( i in 1:length(mr) ) {
 				idi = mr[i]
-				ri = range.fetch(object, idi)
-				sraster = raster[!is.na(over(raster, ri)), ] #  SpatialGridDataFrame subset
+				ri = rangeFetch(object, idi)
+				sraster = map[!is.na(over(map, ri)), ] #  SpatialGridDataFrame subset
 				x = as.numeric(sraster@data[,1])
 				res = FUN(x, ...) #apply FUN
 				
 				if( any(length(res) > 1 | res%in%c(-Inf, Inf)) ) {
+					.dbRemoveField(object@CON, 'metadata_ranges', name)
 					stop( paste("FUN returned ", dQuote(res), ". It should only return a non-infinite numeric vector of length 1.", sep = '') )
-				
-				
-				
 				}
 				
 				if(!is.na(res)) 
@@ -57,12 +55,15 @@ setMethod("metadataUpdate",
 	x.Msg( paste("Done in ", round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), keep = TRUE )
 	} 
 )
-	
 
-# Method 2: using  a Spatial object, sp::over, and rgeos methods
 
-	
-	
+# user level function calling metadataUpdate
+metadata.update  <- function(rangeMap, FUN, name, map, overwrite = FALSE, ...) {
+	if(overwrite) 
+	 .dbRemoveField(rangeMap@CON, 'metadata_ranges', name)
+	metadataUpdate(object = rangeMap, name = name, FUN = FUN, map = map, ...)
+}				
+
 	
 	
 	
