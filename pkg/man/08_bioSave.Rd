@@ -64,7 +64,7 @@ bio.save(con = dbcon, loc = Troglodytes,  ID = "sci_name")
 #bio.merge(dbcon, "wrensNew")
 #metadata2bio(dbcon)
 
-summary(new("rangeMap", CON = dbcon) )$BIO_tables
+summary(rangeMap("wrens.sqlite"))$BIO_tables
 
 }
 

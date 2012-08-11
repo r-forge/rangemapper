@@ -280,8 +280,9 @@ RMQuery <- function (con, statement) {
 	indx = RMQuery(con, 
 		paste("select * from sqlite_master where type = 'index' and tbl_name = '", 
 				table.name, "'", sep = ""))$name
-				
-	RMQuery(con, paste("PRAGMA index_info(",indx, ")" ))$name
+	if(length(indx)  == 0)	res = NA else	
+	res = RMQuery(con, paste("PRAGMA index_info(",indx, ")" ))$name
+	res
 }
 
 .dbtable.exists <- function(con, table.name) {
@@ -291,7 +292,7 @@ RMQuery <- function (con, statement) {
 	
 	}
 
-.dbfield.exists <-function(con, table.name, col.name) {
+.dbfield.exists <- function(con, table.name, col.name) {
 	# returns TRUE if the column is part of table
 	stopifnot(.dbtable.exists(con, table.name))
 	
@@ -336,7 +337,34 @@ if(missing(fun) )
 	}
 
 
-
+.sqlRemoveField <- function(con, table.name, col.name) {
+	
+	
+	tinfo = RMQuery(con, paste("pragma table_info(" , shQuote(table.name),")" ))
+	tinfo = tinfo[tinfo$name != col.name, ]
+	
+	indexSQL = RMQuery(con, paste("select * from sqlite_master where type = 'index' and tbl_name = '", table.name, "'", sep = ""))$sql
+	
+	
+	
+	 dbBeginTransaction(db)
+	 rs = dbSendQuery(con, paste("ALTER TABLE" ,table.name, "RENAME TO temptab") )
+	dbClearResult(rs)
+	  
+	  
+	  dbCommit(db)
+	
+	
+	ALTER TABLE "main"."metadata_ranges" RENAME TO "oXHFcGcd04oXHFcGcd04_metadata_ranges"
+	CREATE TABLE "main"."metadata_ranges" ("bioid" CHAR)
+	INSERT INTO "main"."metadata_ranges" SELECT "bioid" FROM "main"."oXHFcGcd04oXHFcGcd04_metadata_ranges"
+	DROP TABLE "main"."oXHFcGcd04oXHFcGcd04_metadata_ranges"
+	
+	
+	
+	
+	
+	}
 
 
 

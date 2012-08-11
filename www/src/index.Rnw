@@ -15,7 +15,7 @@ and spatial classes (http://cran.r-project.org/package=sp[sp], http://cran.r-pro
 s = paste("_Website built with ", version$version.string, 
 		" and the package ", dQuote(packageDescription("ascii")$Package), " version ", packageDescription("ascii")$Version, "_", sep = "")
  
-ascii(s, style = 'm', grid = 'none',width = 0,frame = "none")
+ascii(s, style = 'm', grid = 'none', width = 0, frame = "none")
 @
 
 

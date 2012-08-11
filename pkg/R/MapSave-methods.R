@@ -178,7 +178,7 @@ setMethod("rangeMapSave",
 		return(.dbtable.exists(object@CON, tableName))
 			
 		}
-	)
+)
 
 # IMPORT RASTER	
 	
@@ -213,7 +213,7 @@ setMethod("rangeMapImport",
 	rstp@data$ptid = as.numeric(rownames(rstp@data)) # add point id
 	
 	x.Msg(paste("Performing overlay: canvas polygons over", filenam, "...") )	
-	o = overlay(cnv, rstp)
+	o = overlay(cnv, rstp) # #TODO change with over
 	o$ptid = as.numeric(rownames(o))
 
 	o = merge(o, rstp@data, by = "ptid")

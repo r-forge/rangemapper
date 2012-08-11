@@ -3,16 +3,18 @@
 \alias{rangeMap.start}
 \alias{rangeMapStart}
 \alias{rangeMap.open}
+\alias{rangeMap}
 
 \title{Initiate/open a new rangeMapper project}
 
 \description{
-Initiate/open a new rangeMapper project using an object of class \code{\link{rangeMapStart-class}} 
+Initiate/open a new rangeMapper project using a \code{\link{rangeMapStart-class} object} 
 }
 
 \usage{
 rangeMap.start(\dots)
 rangeMap.open(path, verbose)
+rangeMap(path)
 }
 
 \arguments{
@@ -22,7 +24,8 @@ rangeMap.open(path, verbose)
 }
 
 \value{
-An sqlite connection is returned.
+rangeMap.start() and rangeMap.open() returns an sqlite connection.
+rangeMap() returns a \code{\link{rangeMap-class}} object.
 }
 
 \author{Mihai Valcu \email{valcu@orn.mpg.de}}
@@ -38,7 +41,8 @@ td = setwd(tempdir())
 
 dbcon = rangeMap.start(file = "test.sqlite", overwrite = TRUE, dir = tempdir() )
 summary(dbcon)
-summary(new("rangeMap", CON = dbcon) )
+
+summary(rangeMap("test.sqlite"))
 
 dbcon = rangeMap.open(path = "test.sqlite")
 summary(dbcon)

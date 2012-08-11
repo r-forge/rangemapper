@@ -35,6 +35,12 @@ setMethod("rangeMapStart",
 	)
 
 # user level functions 
+
+rangeMap <- function(path) {
+	new("rangeMap", CON = dbConnect(dbDriver("SQLite"), dbname= path) )
+	
+	}
+
 rangeMap.start <- function(...) {
 
 	obj = new("rangeMapStart", ... )

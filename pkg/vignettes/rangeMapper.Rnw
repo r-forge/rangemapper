@@ -13,6 +13,7 @@
 {\end{list}}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 \title{rangeMapper graphical user interface package vignette}
 \author{
 Mihai Valcu\footnote{

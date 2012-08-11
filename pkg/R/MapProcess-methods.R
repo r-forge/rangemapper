@@ -47,7 +47,7 @@ rangeTraits <- function(..., use.default = TRUE) {
 	# canvas 	SpatialPointsDataFrame
 	# name character, length 2
 	
-	overlayRes = which(!is.na(overlay(spdf, canvas)[, 1]))
+	overlayRes = which(!is.na(overlay(spdf, canvas)[, 1])) #TODO change with over
 	
 	if(length(overlayRes) > 0) { 	# do grid interpolation
 		sp = canvas[overlayRes, ]
