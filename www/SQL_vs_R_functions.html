@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="generator" content="AsciiDoc 8.6.6" />
+	<title>rangeMapper</title> 
+	<meta name="description" content="rangeMapper: A platform for the study of macroecology of life history traits">
+	<meta name="author" content="Mihai Valcu">
+	<meta name="keywords" content="macroecology, GIS, species richness, life history traits, rangeMapper, Aves,R, spatial analysis" />
+	<link rel="stylesheet" href="style/style.css" type="text/css" />
+	
+	<!-- google-analytics -->
+	<script type="text/javascript">
+
+			  var _gaq = _gaq || [];
+			  _gaq.push(["_setAccount", "UA-25987540-1"]);
+			  _gaq.push(["_trackPageview"]);
+
+			  (function() {
+					var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+					ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+					var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+			  })();
+	</script>
+	
+	<script src="style/syntaxHighlighter.js"> </script>
+	
+	</head>
+	<body style="max-width:1024px">	
+	
+<div id="layout-leftBar"> <ul id="layout-leftBar" class="level1">
+ <h4> rangeMapper </h4>
+ <li><a href= "index.html" > home </a> </li>
+ <li><a href= "FAQ.html" > FAQ </a> </li>
+ <li><a href= "gui.html" > gui </a> </li>
+ <li><a href= "bibliography.html" > bibliography </a> </li>
+ <h4> Examples </h4>
+ <li><a href= "Species_Richness.html" > Species_Richness </a> </li>
+ <li><a href= "SQL_vs_R_functions.html" > SQL_vs_R_functions </a> </li>
+ <li class="submenu"><a> Range Traits </a> <ul class="level2"> <li><a href= "Range_Traits.html" > Range_Traits </a></li>
+<li><a href= "Range_Traits2.html" > Range_Traits2 </a></li> </ul> </li>
+ <li class="submenu"><a> Subsetting </a> <ul class="level2"> <li><a href= "Species_level.html" > Species_level </a></li>
+<li><a href= "Assambladge_level.html" > Assambladge_level </a></li>
+<li><a href= "Species&Assambladge_level.html" > Species&Assambladge_level </a></li> </ul> </li>
+ <h4> Case studies </h4>
+ <li class="submenu"><a> Valcu_et_al_2012 </a> <ul class="level2"> <li><a href= "appendix_S2.html" > appendix_S2 </a></li>
+<li><a href= "appendix_S2.html" > appendix_S2 </a></li>
+<li><a href= "appendix_S3.html" > appendix_S3 </a></li>
+<li><a href= "appendix_S4.html" > appendix_S4 </a></li>
+<li><a href= "appendix_S5.html" > appendix_S5 </a></li> </ul> </li>
+ <li><a href= "Falconidae.html" > Falconidae </a> </li>
+ </ul></div>
+
+<div id="layout-content-box"> <div id="layout-banner"> <div id="layout-title">rangeMapper</div><div id="layout-description">A platform for the study of macroecology of life history traits</div></div>
+<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.1-7) </h6>
+
+<p>Body size distribution of the New World Wrens</p>
+
+<pre><code class="r">require(rangeMapper)
+dbcon = rangeMap.start(file = &quot;wrens.sqlite&quot;, dir = tempdir(), overwrite = TRUE)
+
+# Breeding range vector files
+f = system.file(package = &quot;rangeMapper&quot;, &quot;extdata&quot;, &quot;wrens&quot;, &quot;vector_combined&quot;)
+
+# Creating a global bbox using the breeding range vector files; re-project
+# to equal area
+projString = CRS(&quot; +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=km +no_defs&quot;)
+global.bbox.save(con = dbcon, bbox = f, p4s = projString)
+
+# upload grid size to 100 sqkm
+gridSize.save(dbcon, gridSize = 100)
+
+# save canvas
+canvas.save(dbcon)
+</code></pre>
+
+<p>Import taxa and life history data</p>
+
+<pre><code class="r">data(wrens)
+head(wrens[, 3:6])
+</code></pre>
+
+<pre><code class="r">head(wrens[, 3:6])
+</code></pre>
+
+<pre><code>##         com_name           genus body_size body_mass
+## 1 boucard&#39;s wren Campylorhynchus      17.0      27.6
+## 2   spotted wren Campylorhynchus      17.0      30.1
+## 3   yucatan wren Campylorhynchus      18.0      35.5
+## 4    cactus wren Campylorhynchus      18.5      38.9
+## 5     giant wren Campylorhynchus      21.0      50.9
+## 6 bicolored wren Campylorhynchus      21.5      42.4
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+<pre><code class="r">bio.save(con = dbcon, loc = wrens, ID = &quot;sci_name&quot;)
+
+</code></pre>
+
+<pre><code class="r"># Process ranges
+r = readOGR(f, &quot;wrens&quot;, verbose = FALSE)
+processRanges(spdf = r, con = dbcon, ID = &quot;sci_name&quot;)
+</code></pre>
+
+<p>Mapping using SQL aggregate functions</p>
+
+<pre><code class="r">rangeMap.save(dbcon, biotab = &quot;wrens&quot;, FUN = &quot;median&quot;, biotrait = &quot;body_size&quot;, 
+    tableName = &quot;median_body_size&quot;)
+</code></pre>
+
+<p>Mapping using R functions</p>
+
+<pre><code class="r">custom_function = function(x, ...) (sd(x, ...))
+rangeMap.save(dbcon, biotab = &quot;wrens&quot;, FUN = custom_function, biotrait = &quot;body_size&quot;, 
+    tableName = &quot;sd_body_size&quot;, overwrite = TRUE)
+
+</code></pre>
+
+<pre><code class="r"># Fetch and plot map
+sr = rangeMap.fetch(dbcon)
+plot(sr)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-8"/> </p>
+
+<p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
+                <footer> Last update <code>09/06/2012 17:09</code> , <a href='mailto:valcu@orn.mpg.de'>Mihai Valcu</a> </footer> </p>
+
+</div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>

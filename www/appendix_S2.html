@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="generator" content="AsciiDoc 8.6.6" />
+	<title>rangeMapper</title> 
+	<meta name="description" content="rangeMapper: A platform for the study of macroecology of life history traits">
+	<meta name="author" content="Mihai Valcu">
+	<meta name="keywords" content="macroecology, GIS, species richness, life history traits, rangeMapper, Aves,R, spatial analysis" />
+	<link rel="stylesheet" href="style/style.css" type="text/css" />
+	
+	<!-- google-analytics -->
+	<script type="text/javascript">
+
+			  var _gaq = _gaq || [];
+			  _gaq.push(["_setAccount", "UA-25987540-1"]);
+			  _gaq.push(["_trackPageview"]);
+
+			  (function() {
+					var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+					ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+					var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+			  })();
+	</script>
+	
+	<script src="style/syntaxHighlighter.js"> </script>
+	
+	</head>
+	<body style="max-width:1024px">	
+	
+<div id="layout-leftBar"> <ul id="layout-leftBar" class="level1">
+ <h4> rangeMapper </h4>
+ <li><a href= "index.html" > home </a> </li>
+ <li><a href= "FAQ.html" > FAQ </a> </li>
+ <li><a href= "gui.html" > gui </a> </li>
+ <li><a href= "bibliography.html" > bibliography </a> </li>
+ <h4> Examples </h4>
+ <li><a href= "Species_Richness.html" > Species_Richness </a> </li>
+ <li><a href= "SQL_vs_R_functions.html" > SQL_vs_R_functions </a> </li>
+ <li class="submenu"><a> Range Traits </a> <ul class="level2"> <li><a href= "Range_Traits.html" > Range_Traits </a></li>
+<li><a href= "Range_Traits2.html" > Range_Traits2 </a></li> </ul> </li>
+ <li class="submenu"><a> Subsetting </a> <ul class="level2"> <li><a href= "Species_level.html" > Species_level </a></li>
+<li><a href= "Assambladge_level.html" > Assambladge_level </a></li>
+<li><a href= "Species&Assambladge_level.html" > Species&Assambladge_level </a></li> </ul> </li>
+ <h4> Case studies </h4>
+ <li class="submenu"><a> Valcu_et_al_2012 </a> <ul class="level2"> <li><a href= "appendix_S2.html" > appendix_S2 </a></li>
+<li><a href= "appendix_S3.html" > appendix_S3 </a></li>
+<li><a href= "appendix_S4.html" > appendix_S4 </a></li>
+<li><a href= "appendix_S5.html" > appendix_S5 </a></li> </ul> </li>
+ <li><a href= "Falconidae.html" > Falconidae </a> </li>
+ </ul></div>
+
+<div id="layout-content-box"> <div id="layout-banner"> <div id="layout-title">rangeMapper</div><div id="layout-description">A platform for the study of macroecology of life history traits</div></div>
+<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.1-7) </h6>
+
+<h2>Appendix S2</h2>
+
+<p>Supporting information in  <em>Valcu, M., Dale, J., and Kempenaers, B. (2012). <br/>
+rangeMapper: a platform for the study of macroecology of life-history traits. <br/>
+Global Ecology and Biogeography 21, 945-951.</em></p>
+
+<h2>Case study 1: Different biodiversity hotspots and their congruence. </h2>
+
+<pre><code class="r"># Loads the package and its dependencies.
+require(rangeMapper)
+</code></pre>
+
+<pre><code class="r"># SET UP PROJECT 
+td = tempdir()
+#Initiates a new rangeMapper project (wrens.sqlite) to a temporary directory 
+dbcon = rangeMap.start(file = &quot;wrens.sqlite&quot;, dir = td, overwrite = TRUE)
+
+#Location of the vector(*.shp) breeding ranges on disk
+branges = system.file(package = &quot;rangeMapper&quot;, &quot;extdata&quot;, &quot;wrens&quot;, &quot;vector_combined&quot;)
+</code></pre>
+
+<pre><code class="r"># Saves the global bounding box as the union of all species bounding boxes.
+global.bbox.save(con = dbcon, bbox = branges)
+</code></pre>
+
+<pre><code class="r"># Saves the grid size (i.e. the size of a canvas cell) using the default value
+# The grid size can be specified by e.g. gridSize.save(dbcon, gridSize = 2.5) 
+gridSize.save(dbcon)
+</code></pre>
+
+<pre><code class="r"># Saves the canvas grid using the global bunding box and the grid size.
+canvas.save(dbcon)
+</code></pre>
+
+<pre><code class="r"># Performs vector range maps interpolation with the canvas.
+ r = readOGR(branges, &quot;wrens&quot;, verbose = FALSE)
+ processRanges(spdf = r, con =  dbcon, ID = &quot;sci_name&quot;, metadata = rangeTraits() )
+</code></pre>
+
+<pre><code class="r"># Uploads to the existing project a data.frame containing life history data
+data(wrens)
+bio.save(con = dbcon, loc = wrens, ID = &quot;sci_name&quot;)
+</code></pre>
+
+<p>DEFINE HOTSPOTS PARAMETERS (i.e. the quantile of the given parameter used as a threshold value) </p>
+
+<pre><code class="r">P_richness = 0.75 # species richness probability
+P_endemics = 0.35 # endemic species richness probability
+</code></pre>
+
+<pre><code class="r"># HOTSPOTS OF SPECIES RICHNESS MAP
+# 1) Save the species richeness (SR) map
+rangeMap.save(dbcon, tableName = &quot;species_richness&quot;)
+</code></pre>
+
+<pre><code class="r"># 2) Fetch the SR map and find the SR value corresponding with the probability 
+ # previously defined by P_richness
+sr = rangeMap.fetch(dbcon, &quot;species_richness&quot;)
+sr_threshold = quantile(sr$species_richness, probs = P_richness, na.rm = TRUE)
+</code></pre>
+
+<pre><code class="r"># 3) Save the SR hotspots map; only canvas cells with species_richness &gt;= sr_threshold will be included
+rangeMap.save(dbcon, tableName = &quot;species_richness_hotspots&quot;,
+    subset = list(MAP_species_richness = 
+        paste(&quot;species_richness &gt;=&quot;, sr_threshold)) )
+</code></pre>
+
+<pre><code class="r"># HOTSPOTS OF ENDEMIC SPECIES MAP
+# 1) Save endemics species richnes map
+es = RMQuery(dbcon, &quot;select Area from metadata_ranges&quot;)
+es_threshold = quantile(es$Area, probs = P_endemics, na.rm = TRUE)
+
+rangeMap.save(dbcon, tableName = &quot;endemics_spRichness&quot;,subset = 
+    list(metadata_ranges = paste(&quot;Area &lt;= &quot;, es_threshold) ) )
+</code></pre>
+
+<pre><code class="r"># 2) Save hotspots of endemics  
+er = rangeMap.fetch(dbcon, &quot;endemics_spRichness&quot;)
+er_threshold = quantile(er$endemics_spRichness, probs = P_richness, na.rm = TRUE)
+
+rangeMap.save(dbcon, tableName = &quot;endemics_hotspots&quot;, subset = list(
+    MAP_endemics_spRichness = paste(&quot;endemics_spRichness &gt;=&quot;, er_threshold) ) )
+</code></pre>
+
+<p>HOTSPOTS OF BODY MASS MAP</p>
+
+<pre><code class="r">#1) Save Coefficient of variation (CV_Mass) map using a function (FUN) defined 
+ # on the fly. The ... argunent of the function will allow further arguments
+ # in this case &#39;na.rm = TRUE&#39; to be passed to FUN.
+
+rangeMap.save(dbcon,
+    FUN = function(x,...) (sd(log(x),...)/mean(log(x),...)),
+    na.rm = TRUE, biotab = &quot;wrens&quot;, biotrait = &quot;body_mass&quot;,
+    tableName = &quot;CV_Mass&quot;)
+
+
+</code></pre>
+
+<pre><code class="r"># 2) Find the &#39;CV_Mass&#39; threshold which corresponds with &#39;P_richness&#39;
+bmr = rangeMap.fetch(dbcon, &quot;CV_Mass&quot;)
+bmr_threshold = quantile(bmr$CV_Mass, probs = P_richness, na.rm = TRUE)
+</code></pre>
+
+<pre><code class="r"># 3) Save bodyMass richness hotspots map using the computed threshold
+rangeMap.save(dbcon, tableName = &quot;bodyMass_richness_hotspots&quot;,
+    subset = list(MAP_CV_Mass = 
+        paste(&quot;body_mass &gt;=&quot;, bmr_threshold) ) )
+</code></pre>
+
+<p>FETCH MAPS &amp; PLOT</p>
+
+<pre><code class="r">SRmaps = rangeMap.fetch(dbcon, c(&quot;species_richness&quot;, &quot;species_richness_hotspots&quot;, 
+    &quot;endemics_spRichness&quot;, &quot;CV_Mass&quot;))
+plot(SRmaps, style = &quot;equal&quot;)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-17"/> </p>
+
+<p>HOTSPOTS CONGRUENCE </p>
+
+<pre><code class="r"># 1) Find threshold values 
+sr = rangeMap.fetch(dbcon, &quot;species_richness&quot;)
+Q_richnes = quantile(sr$species_richness, probs = P_richness, na.rm = TRUE)
+
+er = rangeMap.fetch(dbcon, &quot;endemics_spRichness&quot;)
+Q_endemics = quantile(er$endemics_spRichness, probs = P_richness, na.rm = TRUE)
+
+bmr = rangeMap.fetch(dbcon, &quot;CV_Mass&quot;)
+Q_bodyMass = quantile(bmr$CV_Mass, probs = P_richness,na.rm = TRUE)
+
+</code></pre>
+
+<pre><code class="r"># 2) Save cumulative hotspot congruence satisfying all three criteria
+rangeMap.save(dbcon, tableName = &quot;cumul_congruence_hotspots&quot;,subset = list(
+    MAP_CV_Mass             = paste(&quot;body_mass&gt;=&quot;,Q_bodyMass),
+    MAP_species_richness    = paste(&quot;species_richness&gt;=&quot;,Q_richnes),
+    MAP_endemics_spRichness = paste(&quot;endemics_spRichness&gt;=&quot;,Q_endemics) ))
+</code></pre>
+
+<pre><code class="r">#3) species richness &amp; endemics richness congruence (two criteria are satified)
+rangeMap.save(dbcon, tableName = &quot;SR_ER_congruence_hotspots&quot;,subset = list(
+    MAP_species_richness    = paste(&quot;species_richness&gt;=&quot;,Q_richnes),
+    MAP_endemics_spRichness = paste(&quot;endemics_spRichness&gt;=&quot;,Q_endemics) ))
+</code></pre>
+
+<pre><code class="r"># 4) endemics richness &amp; body mass diversity congruence              
+rangeMap.save(dbcon, tableName = &quot;ER_BR_congruence_hotspots&quot;,
+     subset = list(
+     MAP_CV_Mass=paste(&quot;body_mass&gt;=&quot;,Q_bodyMass),
+     MAP_endemics_spRichness=paste(&quot;endemics_spRichness&gt;=&quot;,Q_endemics) ))
+</code></pre>
+
+<pre><code class="r"># 5) species richness &amp; body mass diversity congruence  
+rangeMap.save(dbcon, tableName = &quot;SR_BR_congruence_hotspots&quot;,
+     subset = list(
+     MAP_CV_Mass=paste(&quot;body_mass&gt;=&quot;,Q_bodyMass),
+     MAP_species_richness=paste(&quot;species_richness&gt;=&quot;,Q_richnes) ))
+</code></pre>
+
+<pre><code class="r"># 6) Retrieve all the map objects.
+
+m = rangeMap.fetch(dbcon, c(&quot;species_richness_hotspots&quot;,&quot;endemics_hotspots&quot;,
+    &quot;bodyMass_richness_hotspots&quot;,&quot;cumul_congruence_hotspots&quot;,
+    &quot;SR_ER_congruence_hotspots&quot;,&quot;SR_BR_congruence_hotspots&quot;,
+    &quot;ER_BR_congruence_hotspots&quot;) )
+</code></pre>
+
+<pre><code class="r"># 7) Compute hotspots congruence 
+ # The data slot of the map &#39;m&#39; can be queried for presence/absence using the &#39;is.na&#39; function.
+
+sr = length( which(!is.na(m$species_richness_hotspots)))
+er = length( which(!is.na(m$endemics_hotspots)))
+br = length( which(!is.na(m$bodyMass_richness_hotspots)))
+
+srer = length( which(!is.na(na.omit(m$SR_ER_congruence_hotspots))) )
+srbr = length( which(!is.na(na.omit(m$SR_BR_congruence_hotspots))) )
+erbr = length( which(!is.na(na.omit(m$ER_BR_congruence_hotspots))) )
+
+cum = length( which(!is.na(na.omit(m$cumul_congruence_hotspots))) )
+</code></pre>
+
+<pre><code class="r"># Print the results species richness &amp; body mass diversity congruence (%)
+(srbr/(sr + br)) * 100
+</code></pre>
+
+<pre><code>## [1] 18.36
+</code></pre>
+
+<pre><code class="r">
+# endemics richness &amp; body mass diversity congruence (%)
+(erbr/(er + br)) * 100
+</code></pre>
+
+<pre><code>## [1] 5.306
+</code></pre>
+
+<pre><code class="r">
+# species richness &amp; endemics richness congruence (%)
+(srer/(sr + er)) * 100
+</code></pre>
+
+<pre><code>## [1] 4.583
+</code></pre>
+
+<pre><code class="r">
+# cumulative congruence (%)
+(cum/(sr + er + br)) * 100
+</code></pre>
+
+<pre><code>## [1] 1.649
+</code></pre>
+
+<p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
+                <footer> Last update <code>09/06/2012 17:26</code> , <a href='mailto:valcu@orn.mpg.de'>Mihai Valcu</a> </footer> </p>
+
+</div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>
