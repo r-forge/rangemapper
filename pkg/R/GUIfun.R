@@ -223,7 +223,7 @@ x.global.bbox.save <- function() {
 	dbcon = x.get("con")
 		if(is.null(dbcon)) stop(x.Msg("There is no active project!"))
 
-	Dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory")
+	Dir = choose.dir(default = getwd(), caption = "Select ranges directory")
 	
 	global.bbox.save(con = dbcon , bbox = Dir)
 	
@@ -283,11 +283,11 @@ x.processRanges <- function() {
 	selectVal = x.yn(text = "Save range centroid and range extent?") 
 
 	if(selectVal == 1) {
-		processRanges(con = dbcon,dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory"), metadata = rangeTraits())	
+		processRanges(con = dbcon,dir = choose.dir(default = getwd(), caption = "Select ranges directory"), metadata = rangeTraits())	
 		}	
 	
 	if(selectVal == 0) {
-		processRanges(con = dbcon,dir = tk_choose.dir(default = getwd(), caption = "Select ranges directory"))		} 
+		processRanges(con = dbcon,dir = choose.dir(default = getwd(), caption = "Select ranges directory"))		} 
 
 }
 
@@ -570,7 +570,9 @@ x.mapImport <- function() {
 	if(is.null(dbcon)) stop(x.Msg("There is no active project!"))
 
 
-	rangeMap.save(dbcon , path = tk_choose.files(caption = "Select file to import", multi = FALSE))
+	path = tk_choose.files(caption = "Select file to import", multi = FALSE)
+	
+	rangeMap.save(dbcon , path = path, tableName = make.db.names(dbcon, basename(path)), FUN = mean, overwrite = TRUE)
 	
 	
 	

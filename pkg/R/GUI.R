@@ -3,11 +3,11 @@ x.tooltips <- function(tip) {
 
 switch(tip,
 # bar 1
-Create      = "START PROJECT\n A new sqlite database will be created.\n Type ?db.ini for more info.",
+Create      = "START PROJECT\n A new sqlite database will be created.\n Type ?rangeMap.start for more info.",
 Open        = "OPEN PROJECT\n Connect to an existing sqlite database",
 Bbox        = "COMPUTE CANVAS EXTENT\n Compute the global bounding box of the project.\n Type ?global.bbox for more info.",
-gridSize    = "INPUT GRID SIZE\n This is the cell size (i.e. the distance between two neighboring points) in map units. \n Type ?gridSize for more info.",
-canvasUpload= "COMPUTE CANVAS\n Compute canvas using the bounding box and the grid size.\n Type ?canvas for more info.",
+gridSize    = "INPUT GRID SIZE\n This is the cell size (i.e. the distance between two neighboring points) in map units. \n Type ?gridSize.save for more info.",
+canvasUpload= "COMPUTE CANVAS\n Compute canvas using the bounding box and the grid size.\n Type ?canvas.save for more info.",
 Ranges      = "PROCESS RANGES\n Perform polygons intersection with the canvas.\n Type ?processRanges for more info.",
 Bio         = "IMPORT 'BIO' data\n Import the table (.csv format, ';' separated) containing the variables to be mapped.\n You will need to choose the column corresponding to the names of the range files.\n Type ?bio.save for more info.",   
 # bar 2
@@ -17,7 +17,7 @@ Fun         = "CHOOSE OR DEFINE THE FUNCTION to be applied at each pixel.",
 Subset      = "CHOOSE ONE OR MORE SUBSETS using existing BIO, MAP or metadata_ranges table", 
 saveMap     = "SAVE A MAP of a chosen variable.\n Type ?rangeMap.save for more info.", 
 palette    = "CHOOSE A COLOR PALETTE.\n Type ?tkColorPalette for more info.", 
-Map         = "DISPLAY A MAP on the default device.\n Type ?rangeMap.plot and ?spplot for more info.\n Type ?classInt::classIntervals for more info on class intervals construction", 
+Map         = "DISPLAY A MAP on the default device.\n Type ?spplot for more info.\n Type ?classInt::classIntervals for more info on class intervals construction", 
 # bar 3
 OffGui      = "CLOSE RANGEMAPPER GUI! \n To re-open rangeMapper type 'rangeMapper()' at the R prompter",
 OffAll      = "Quit rangeMapper AND R!")

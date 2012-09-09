@@ -56,7 +56,7 @@ If \emph{bbox} and \emph{p4s} are missing then an unprojected global bounding bo
 	
 
 \references{
-Valcu, M., Dale, J. and Kempenaers, B. (in press)  rangeMapper: A platform for the study of macroecology of life history traits.
+Valcu, M., Dale, J. and Kempenaers, B. (2012)  rangeMapper: A platform for the study of macroecology of life history traits. 21(9). (DOI: 10.1111/j.1466-8238.2011.00739.x)
 }
 	
 \seealso{

@@ -324,7 +324,7 @@ upper_quartile= "upper_quartile",
 sum           = "total",
 max           = "max",
 min           = "min",
-count         = "total")
+count         = "count")
  
 class(funs) = "simple.list"
 

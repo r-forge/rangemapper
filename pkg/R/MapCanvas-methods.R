@@ -57,9 +57,9 @@ setMethod("rangeMapBbox",
 		definition = function(object,bbox, p4s) {
 	if(! .is.empty(object@CON, object@BBOX) ) stop(x.Msg("Bounding box was allready saved for this project."))
 	
-	bb = structure(c(-180, 180, -90,90), 
+	bb = structure(c(-180, 180, -90, 90), 
 		.Names = c("xmin", "xmax", "ymin", "ymax"), 
-		p4s = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs ")
+		p4s = NA) # "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "
 	
 	x.Msg(paste("Using unprojected global bouging box [", paste(bb, collapse = ","), "]..." ) )
 	
