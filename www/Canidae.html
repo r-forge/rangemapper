@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="generator" content="AsciiDoc 8.6.6" />
+	<title>rangeMapper</title> 
+	<meta name="description" content="rangeMapper: A platform for the study of macroecology of life history traits">
+	<meta name="author" content="Mihai Valcu">
+	<meta name="keywords" content="macroecology, GIS, species richness, life history traits, rangeMapper, Aves,R, spatial analysis" />
+	<link rel="stylesheet" href="style/style.css" type="text/css" />
+	
+	<!-- google-analytics -->
+	<script type="text/javascript">
+
+			  var _gaq = _gaq || [];
+			  _gaq.push(["_setAccount", "UA-25987540-1"]);
+			  _gaq.push(["_trackPageview"]);
+
+			  (function() {
+					var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+					ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+					var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+			  })();
+	</script>
+	
+	<script src="style/syntaxHighlighter.js"> </script>
+	
+	</head>
+	<body style="max-width:1024px">	
+	
+<div id="layout-leftBar"> <ul id="layout-leftBar" class="level1">
+ <h4> rangeMapper </h4>
+ <li><a href= "index.html" > home </a> </li>
+ <li><a href= "FAQ.html" > FAQ </a> </li>
+ <li><a href= "gui.html" > gui </a> </li>
+ <li><a href= "Bibliography.html" > Bibliography </a> </li>
+ <h4> Examples </h4>
+ <li class="submenu"><a> Getting started </a> <ul class="level2"> <li><a href= "Species_Richness.html" > Species_Richness </a></li>
+<li><a href= "on-the-fly reprojection.html" > on-the-fly reprojection </a></li>
+<li><a href= "Range_Traits.html" > Range_Traits </a></li>
+<li><a href= "Range_Traits2.html" > Range_Traits2 </a></li> </ul> </li>
+ <li class="submenu"><a> Aggregate assambladges </a> <ul class="level2"> <li><a href= "SQL_functions.html" > SQL_functions </a></li>
+<li><a href= "R_functions.html" > R_functions </a></li> </ul> </li>
+ <li class="submenu"><a> Subsetting </a> <ul class="level2"> <li><a href= "Species.html" > Species </a></li>
+<li><a href= "Assambladge.html" > Assambladge </a></li>
+<li><a href= "Species & Assambladge.html" > Species & Assambladge </a></li> </ul> </li>
+ <h4> Case studies </h4>
+ <li class="submenu"><a> Valcu et al 2012 </a> <ul class="level2"> <li><a href= "appendix_S2.html" > appendix_S2 </a></li>
+<li><a href= "appendix_S3.html" > appendix_S3 </a></li>
+<li><a href= "appendix_S4.html" > appendix_S4 </a></li>
+<li><a href= "appendix_S5.html" > appendix_S5 </a></li> </ul> </li>
+ <li class="submenu"><a> NatureServe </a> <ul class="level2"> <li><a href= "Canidae.html" > Canidae </a></li>
+<li><a href= "Falconidae.html" > Falconidae </a></li> </ul> </li>
+ </ul></div>
+
+<div id="layout-content-box"> <div id="layout-banner"> <div id="layout-title">rangeMapper</div><div id="layout-description">A platform for the study of macroecology of life history traits</div></div>
+<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.1-7) </h6>
+
+<p>Mapping   <a href="http://www.natureserve.org">NatureServe</a>   ranges<br/>
+Data provided by NatureServe in collaboration with  Robert Ridgely, James Zook, <br/>
+The Nature Conservancy - Migratory Bird Program, Conservation International - CABS, <br/>
+World Wildlife Fund - US, and Environment Canada - WILDSPACE.<br/>
+Ridgely, R. S., T. F. Allnutt, T. Brooks, D. K. McNicol, D. W. Mehlman, <br/>
+B. E. Young, and J. R. Zook. 2007. <br/>
+Digital Distribution Maps of the Birds of the Western Hemisphere, <br/>
+version 3.0. NatureServe, Arlington, Virginia, USA._ </p>
+
+<pre><code class="r">require(rangeMapper)
+</code></pre>
+
+<p>Download  range vector files</p>
+
+<pre><code class="r">fs = &quot;http://www.natureserve.org/getData/dataSets/mammalMapData/Canidae.zip&quot;
+if(!file.exists(&#39;Canidae.zip&#39;)) download.file(fs, &quot;Canidae.zip&quot;)
+unzip(&quot;Canidae.zip&quot;)
+</code></pre>
+
+<p>Process one shp file at a time (slow, only reccomended for very large shp files)</p>
+
+<pre><code class="r">dbcon = rangeMap.start(file = &quot;dogs.sqlite&quot;, dir = tempdir() , overwrite = TRUE)
+global.bbox.save(con = dbcon, bbox = getwd() )
+gridSize.save(dbcon) 
+canvas.save(dbcon) 
+processRanges(dir = getwd(), con =  dbcon)
+</code></pre>
+
+<p>Mapping species richness </p>
+
+<pre><code class="r">rangeMap.save(dbcon)
+sr = rangeMap.fetch(dbcon)
+plot(sr)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-4"/> </p>
+
+<p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
+                <footer> Last update <code>09/09/2012 12:58</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
+
+</div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>

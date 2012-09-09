@@ -33,13 +33,13 @@
  <li><a href= "index.html" > home </a> </li>
  <li><a href= "FAQ.html" > FAQ </a> </li>
  <li><a href= "gui.html" > gui </a> </li>
- <li><a href= "bibliography.html" > bibliography </a> </li>
+ <li><a href= "Bibliography.html" > Bibliography </a> </li>
  <h4> Examples </h4>
- <li class="submenu"><a> Getting started </a> <ul class="level2"> <li><a href= "Range_Traits.html" > Range_Traits </a></li>
-<li><a href= "Species_Richness.html" > Species_Richness </a></li>
+ <li class="submenu"><a> Getting started </a> <ul class="level2"> <li><a href= "Species_Richness.html" > Species_Richness </a></li>
 <li><a href= "on-the-fly reprojection.html" > on-the-fly reprojection </a></li>
+<li><a href= "Range_Traits.html" > Range_Traits </a></li>
 <li><a href= "Range_Traits2.html" > Range_Traits2 </a></li> </ul> </li>
- <li class="submenu"><a> aggregate assambladges </a> <ul class="level2"> <li><a href= "SQL_functions.html" > SQL_functions </a></li>
+ <li class="submenu"><a> Aggregate assambladges </a> <ul class="level2"> <li><a href= "SQL_functions.html" > SQL_functions </a></li>
 <li><a href= "R_functions.html" > R_functions </a></li> </ul> </li>
  <li class="submenu"><a> Subsetting </a> <ul class="level2"> <li><a href= "Species.html" > Species </a></li>
 <li><a href= "Assambladge.html" > Assambladge </a></li>
@@ -49,7 +49,8 @@
 <li><a href= "appendix_S3.html" > appendix_S3 </a></li>
 <li><a href= "appendix_S4.html" > appendix_S4 </a></li>
 <li><a href= "appendix_S5.html" > appendix_S5 </a></li> </ul> </li>
- <li><a href= "Falconidae.html" > Falconidae </a> </li>
+ <li class="submenu"><a> NatureServe </a> <ul class="level2"> <li><a href= "Canidae.html" > Canidae </a></li>
+<li><a href= "Falconidae.html" > Falconidae </a></li> </ul> </li>
  </ul></div>
 
 <div id="layout-content-box"> <div id="layout-banner"> <div id="layout-title">rangeMapper</div><div id="layout-description">A platform for the study of macroecology of life history traits</div></div>
@@ -65,7 +66,7 @@ Digital Distribution Maps of the Birds of the Western Hemisphere, <br/>
 version 3.0. NatureServe, Arlington, Virginia, USA._ </p>
 
 <pre><code class="r">require(rangeMapper)
-dbcon = rangeMap.start(file = &quot;wrens.sqlite&quot;, dir = tempdir() , overwrite = TRUE)
+dbcon = rangeMap.start(file = &quot;falcons.sqlite&quot;, dir = tempdir() , overwrite = TRUE)
 </code></pre>
 
 <p>Download  range vector files</p>
@@ -81,7 +82,6 @@ unzip(&quot;Falconidae.zip&quot;)
 
 lst = selectShpFiles(&quot;Falconidae&quot;)
 
-
 for(i in 1:nrow(lst)) {
       ri = readOGR(lst$dsn[i], lst$layer[i], verbose = FALSE)
       ri = spChFIDs(ri,  paste(i, 1:length(ri), sep = &quot;.&quot; ) )
@@ -94,17 +94,12 @@ R = do.call(rbind, R)
 # see http://www.natureserve.org/getData/Metadata_Birds_ver_3.0_Oct_07.pdf
 proj4string(R) = CRS(&quot;+proj=longlat +datum=NAD83&quot;) 
 
-setwd(wd)
-
 </code></pre>
 
 <pre><code class="r">plot(R, border = &quot;grey&quot;, axes = TRUE)
 </code></pre>
 
 <p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-4"/> </p>
-
-<pre><code class="r">
-</code></pre>
 
 <pre><code class="r"># Check out the field names
 strwrap(names(R), width = 20)
@@ -120,15 +115,95 @@ strwrap(names(R), width = 20)
 <pre><code class="r">global.bbox.save(con = dbcon, bbox = R) 
 gridSize.save(dbcon) 
 canvas.save(dbcon) 
-processRanges(spdf = R, con =  dbcon, ID = &quot;SCI_NAME&quot;)
-rangeMap.save(dbcon) 
-sr = rangeMap.fetch(dbcon) 
-plot(sr) 
 </code></pre>
 
-<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-6"/> </p>
+<p>Process ranges  using  all ranges  previously converted into one  SpatialPolygonsDataFrame </p>
+
+<pre><code class="r">processRanges(spdf = R, con = dbcon, ID = &quot;SCI_NAME&quot;)
+</code></pre>
+
+<pre><code>##  &gt;&gt; Processsing ranges, please wait!... 
+##  &gt;&gt; Identifing ranges... 
+## 
+  |                                                                       
+  |                                                                 |   0% &gt;&gt; Processing ranges... 
+## 
+  |                                                                       
+  |..                                                               |   4%
+  |                                                                       
+  |.....                                                            |   7%
+  |                                                                       
+  |.......                                                          |  11%
+  |                                                                       
+  |.........                                                        |  14%
+  |                                                                       
+  |............                                                     |  18%
+  |                                                                       
+  |..............                                                   |  21%
+  |                                                                       
+  |................                                                 |  25%
+  |                                                                       
+  |...................                                              |  29%
+  |                                                                       
+  |.....................                                            |  32%
+  |                                                                       
+  |.......................                                          |  36%
+  |                                                                       
+  |..........................                                       |  39%
+  |                                                                       
+  |............................                                     |  43%
+  |                                                                       
+  |..............................                                   |  46%
+  |                                                                       
+  |................................                                 |  50%
+  |                                                                       
+  |...................................                              |  54%
+  |                                                                       
+  |.....................................                            |  57%
+  |                                                                       
+  |.......................................                          |  61%
+  |                                                                       
+  |..........................................                       |  64%
+  |                                                                       
+  |............................................                     |  68%
+  |                                                                       
+  |..............................................                   |  71%
+  |                                                                       
+  |.................................................                |  75%
+  |                                                                       
+  |...................................................              |  79%
+  |                                                                       
+  |.....................................................            |  82%
+  |                                                                       
+  |........................................................         |  86%
+  |                                                                       
+  |..........................................................       |  89%
+  |                                                                       
+  |............................................................     |  93%
+  |                                                                       
+  |...............................................................  |  96%
+  |                                                                       
+  |.................................................................| 100%
+##  &gt;&gt; Writing to project. 
+##  &gt;&gt; 28 ranges updated to database; Elapsed time: 0.4 mins 
+</code></pre>
+
+<pre><code class="r">rangeMap.save(dbcon)
+sr = rangeMap.fetch(dbcon)
+plot(sr)
+</code></pre>
+
+<pre><code>## Warning: n greater than number of different finite values\nn reset to
+## number of different finite values
+</code></pre>
+
+<pre><code>## Warning: n same as number of different finite values\neach different
+## finite value is a separate class
+</code></pre>
+
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAAH4CAMAAACR9g9NAAAAMFBMVEUAAABObbBWqa9eTqFuxKSeAEG04KK6J0jU7ZznWkj1dEb4/LT9tWf+0H3/9rH///88xtQoAAAACXBIWXMAAAsSAAALEgHS3X78AAAMwUlEQVR4nO3d63qbvBZFYffw9bzr+7/bneVmEVnSAoE5COYYf6o4lk14aR8VO+Z2J8luR28AHRPwogEvGvCiAS8a8KIBLxrwogEvGvCiAS8a8KIBLxrwogEvGvCiAS8a8KIBLxrwogEvGvCiAS8a8KIBLxrwogEvGvCiAS8a8KIBLxrwogEvGvCiAS8a8KIBLxrwogEvGvCipfA3Om0BYCP8JofWqfvylv/5Uhtv5zv8f1nALw140YC/bjlP4dQjdB7w8wMeeOCVAl4U3hr1q42PRK4F/LKAFw140YAXDXjxnhjDo6EzdKsB3l/HefqyHGt2Yfh/4rc78LUuB//xiu3jLrc78NUuB/98l9v9/PDF3l+kUCM8k/dQI3zy5gzgheCTP4AHHvjKI18IvjqjHJ+m1ZiawHtEt4AHHnjggV/rgYA/pHUp0om9ejYH/LxHq41PGfDzHq02PmXAz3u02viUicFXb/xSnosJH8Fvqz5LNKE26eiA14b/ngV88Ah+W/VZogm1SUcHPPDAA38VeKu6x2v44dEQTZz/iC3PsFPAAw888MADH8wox219mtPnpNnPEN7hZZ4mtvwBejsAgAceeOCBBz6YUY7Dqqb246a2uXN8Y/b916pt67DNtR/CmcJHG3v0IeCBBx74XQO+2NZhm2s/BPDFeLo5pkVf32u68+tHxCqN7o2DF3rAb9jo3gAeeOCBvwr8KM0s+Mj2a1p056dtivZ4tWZf/6LJroa9Mz7wwAMPPPDABzPKcTXgq10fvlpkVzXLXdM9vvywmYXffEDYDxf5PX0dPeqi3bks4IEHHnjggQ9mlOPRRp3S7xVrtXTHrodv25Q+fVpBMXUQLNnv/8qfZfkjzQ54bfifWcADX59RjkcDvtq14QeefA8vM1sF3vGt6AAYbfaOXvFwWSXggQceeOCBD2aU4+mmnOw+BcvTjVljr8ssa0f4gw8A4J8CfmpGOZ4OeOCr2X2evvCiCcAvD/ingJ+aUY7bKoAz+FkPtOER0HI0NG/rKLo/0kuH1fyABz6Ct/Fw1TngZeCN/Hb/QAb+0vDZtWXva8Gnpdiz4X3STvi1g2H29kZH0PJDanmN/9QnxsBLwd+yGeV4fsD3D3/LZ5Tj+QHfPXxyMekV32W7aPLko+7bpFd6ezP8Dvh7/z/eAh74FQN+VsADvyX8BtDh02xW9AyTdrPAdzoKgAceeOCBBz6YUY6PzF/waDb8mtWEPvkM28Gvjw888MALwv/KAh74+oxyfGTAz+4a8HmhdQTffAA0lXP1hm4BDzzwwAMPfDCjHPdULvEtzZHT8TYHwOKjpThs1t9FwAMPPPDAAx/MKMe9ZTsztfwWFeGPfgj6euDp9oY/SH7n1wMeeOCBBx74YEY57jHfX6Pwo/hjB0CoMQu96ZFsgbcuPvDAAw888MAHM8pxrzXBj+I3Oy4Gz2/fYbcADzzwwAMPfDCjHPca8NV04Idm4ec0+ctnoWc6Hs2fKZ+8ccADDzzwwAMfzCjHPZbv3KYDoICvvjcmer9MdBBY1QkHBTzwwAvC/8kCHvj6jHLcY05XhY8OAp/0eRa6O/rYwat33HERFwU88MADDzzwwYxy3GOT4FHz0Zs7GNwDHnjggQce+GBGOe41d5wPvyr+8IhH74/3gAceeOCBB/7fXVa7tuz+AV9tGn7da8se02C5SF8K/vnassDLwD/fBXjggQf+6vA+azX0o3dD2vVX9RbwRdf/f7wFfBHwwF8Y3mq2Lt5pC3wyoxz3HvBPAQ888MBfEX5oCr34lZqXFni9gXvAAw888MCrwP8vC3jg6zPK8amaBe/4sw+AXtEt4IEHHnjggQ9mlONTZZb+57ex8iMjd60eDD2eqcsDHnjggQce+GBGOT5FX97ycYrv67cmfH+AUV/guwp4D3jggQf+svB5+SKvutj78ZZ/s/mRe1/gAQ888MADD3wwoxyfMrf1cXWBZ/D5wq4p4LsNeOCBBx74eEY5PmXAi8JbDm+58Q9fyaer+vSOTQHfdcADDzzwwNdnlONTl+MPOfzft2bD9xzwj4AHHvjRGeX41MnC/81Sg88rFnW2U5pn5+/t2WwzXwj4asBHM8rxpQI+mlGOLxXw0YxyfKl+1Irwh70WPVqPBwDw1YCPZpTjSwV8NKMcXyrgoxnl+FL9tnxh527RCZzhyGh++A7eggt8NeCjGeX4UgEfzSjHlwr4aEY5vlTAp9efSmeU4+tl+H72zvFt59iH/dr37WVM+/pxlDQ/qoN/TtroBxhrCv52z3mBvzS8X1sWeDH4jzvwT70kvPLf+LR0gWfwtpP8bN6jozdwbsC3JQev/E99mh58MKMcXzvgReFrpQu+v7bSsyPC/jx6w1oCfnnAiwa8aMALZzvLX8x5vC3X4Ged0Dko4F8LeNGAFw14+nhV50Twv7OAXxLwogEvGvCiAS/eJLy/h8fW0btsURnwGwS8aMCLBrxgtveiX4n+5X1/y24w+D/v+Sk/uzjtDqtD4FcOeNGAFw148czU/XwNN8D/fMvfq+tv3/Hs+7742zDgNwp40YAXDXh6NMCm4Cm8L/p+vvfd22Z7gN8p4EUDXjTgRQNeNP/clL/D4D07EH4mfa9lj/DfW+ttD/A7BbxowIsGvGhPizk/O5cu+Dxf5P3n2dHwK2mdBR/wOwW8aMCLBrxowwkcczNg283+gWnpq3P2vQHez+ikR4Z9/fr2AL9TncLnF1wCfu2AFw14wdz0cYLGv8hfpMnxh8WcY6erv9fxgd8h4EUDXjTgBfNPyBjWZjlyrer9WNydKuBFA1404EUDXjQjs998Hhbpi+HTV+d8Zb/8IAB+404Lz+XHXuus8Ld7zgv8rM4GP1xUmL/xr2Un5gx+WNzl775x6PS24czdz0rp7enZvXm/WM3f+I0DXjTgRTsrPKv6F7O96b8w84Q/eGW3PfUnKF0lFi/v+Wt+o9vF/+M3DnjRgBcNeME+v+cXnQ9N06/HvB/56i81LtDTb1S3DfgNA1404EUDXjg7eWP4JlBdv81Gz+GrC7v8iCi2C/iNA160zuG/ZQG/VsCLBrxwdo2a4RU6w7UX1lLD5tJJBTrwvQW8aMCLBrxohm74DwpfwDXBpyvAmnF+QFR/+bq6TcDvEPCiAS8a8MLZSZzH2fDUM4X3A6J6ZqcAzo6aED7cHuB3CnjRgBcNeNF8gfcoda35jpajV+FHF3YW8DsFvGjAiwa8aMAL9+lJ//1Unl9aLv8t6OHIqK3kqyv6HH50W4DfMeBFA1404JWzU3hfs9LLyz0t5KIzeFX0/OgY3Qzg9w540YAXDXjhavj+SaVV4OgbwJ8r4EXrBz7fCuA3DXjx/LNSbJfbP7RP1zDJgYG/TsCLBrxowIvmH5fhu93wJz2b8CefGvgjA1404EUDXjTgRavBu+9g6L8OHeEDf76AF61v+OwyVMCvV9fwtzvwW/XpPd/t9mvUv98bkFPsGv58dCuCH64pe8t5gV+vDuHT7wO/VT3D3/LrSQO/Xh3Df9yn9hXwr5XDm6NfK+Jv+nFm6WenhM16auCPrHP42oxyTPMDXjTgRfMTOH4SJ4UfPhstha8t6JY9NfBHBrxowIsGvGgpvL1Ak5p/S1+xiRZ4y58a+CMDXjTgRTse/nMW8LsEvGhj8B+n77KAP3/Aiwa8aMAL5q/M2e62/0il8NWDwLK35jR9YulkwB8V8KIBLxrwouXwqe/weYM1eO+1pwf+qIAXDXjRgBettqh7Qo/w13l64I8KeNGAFw140dx0Ej4/ANZ5euCPCnjRgBcNeNGAF61mOgpvrff0wB8V8KIBLxrwokXwVfz1nx74owJeNOBF6wP+Uxbwm+avygEvFvCiAS8a8KLl8Dn+xugW8EcEvGjAiwa8aMCL5r8yleP7AbDDJgB/RMCLBrxoZ4DPrjoH/BrZC6A19B03YQr+ds95gX+9juHT60sCv3Ydwxd3qX4J/LJOAZ/jAv9ahh4t7nbcjOnFXX1G8E2a7CTwxcWkgX+xk8BHM8oxtQW8aLZ7ay/SAH/xgBcNeNGAF60Gf8BmAL93wIsGvGjAi9YX/Jcs4Lfo6brNB67oLeB3DHjRgBcNeOWAFw140YAXDXi9wsXdAdsC/I4BLxrwogGvXA5/0GYAv3fAiwa8aMALl+IftAnAHxHwogEvGvCiAS+aofufnLkTCnjRgBcNeLoDLxrwogEv2jnh6bQFgG3wJBTwogEvGvCiAS8a8KIBLxrwogEvGvCiAS8a8KIBLxrwogEvGvCiAS8a8KIBLxrwogEvGvCiAS8a8KIBLxrwogEvGvCiAS8a8KIBLxrwogEvGvCiAS8a8KIBLxrwogEvGvCiAS/a/wEoK6QoW6DjBAAAAABJRU5ErkJggg==" alt="plot of chunk unnamed-chunk-7"/> </p>
 
 <p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
-                <footer> Last update <code>09/09/2012 09:56</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
+                <footer> Last update <code>09/09/2012 12:58</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
 
 </div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>
