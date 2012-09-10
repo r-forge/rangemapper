@@ -119,91 +119,15 @@ canvas.save(dbcon)
 
 <p>Process ranges  using  all ranges  previously converted into one  SpatialPolygonsDataFrame </p>
 
-<pre><code class="r">processRanges(spdf = R, con = dbcon, ID = &quot;SCI_NAME&quot;)
-</code></pre>
-
-<pre><code>##  &gt;&gt; Processsing ranges, please wait!... 
-##  &gt;&gt; Identifing ranges... 
-## 
-  |                                                                       
-  |                                                                 |   0% &gt;&gt; Processing ranges... 
-## 
-  |                                                                       
-  |..                                                               |   4%
-  |                                                                       
-  |.....                                                            |   7%
-  |                                                                       
-  |.......                                                          |  11%
-  |                                                                       
-  |.........                                                        |  14%
-  |                                                                       
-  |............                                                     |  18%
-  |                                                                       
-  |..............                                                   |  21%
-  |                                                                       
-  |................                                                 |  25%
-  |                                                                       
-  |...................                                              |  29%
-  |                                                                       
-  |.....................                                            |  32%
-  |                                                                       
-  |.......................                                          |  36%
-  |                                                                       
-  |..........................                                       |  39%
-  |                                                                       
-  |............................                                     |  43%
-  |                                                                       
-  |..............................                                   |  46%
-  |                                                                       
-  |................................                                 |  50%
-  |                                                                       
-  |...................................                              |  54%
-  |                                                                       
-  |.....................................                            |  57%
-  |                                                                       
-  |.......................................                          |  61%
-  |                                                                       
-  |..........................................                       |  64%
-  |                                                                       
-  |............................................                     |  68%
-  |                                                                       
-  |..............................................                   |  71%
-  |                                                                       
-  |.................................................                |  75%
-  |                                                                       
-  |...................................................              |  79%
-  |                                                                       
-  |.....................................................            |  82%
-  |                                                                       
-  |........................................................         |  86%
-  |                                                                       
-  |..........................................................       |  89%
-  |                                                                       
-  |............................................................     |  93%
-  |                                                                       
-  |...............................................................  |  96%
-  |                                                                       
-  |.................................................................| 100%
-##  &gt;&gt; Writing to project. 
-##  &gt;&gt; 28 ranges updated to database; Elapsed time: 0.4 mins 
-</code></pre>
-
-<pre><code class="r">rangeMap.save(dbcon)
-sr = rangeMap.fetch(dbcon)
-plot(sr)
-</code></pre>
-
-<pre><code>## Warning: n greater than number of different finite values\nn reset to
-## number of different finite values
-</code></pre>
-
-<pre><code>## Warning: n same as number of different finite values\neach different
-## finite value is a separate class
+<pre><code class="r">processRanges(spdf = R, con =  dbcon, ID = &quot;SCI_NAME&quot;)
+rangeMap.save(dbcon) 
+sr = rangeMap.fetch(dbcon) 
+plot(sr) 
 </code></pre>
 
 <p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-7"/> </p>
 
 <p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
-                <footer> Last update <code>09/09/2012 12:58</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
+                <footer> Last update <code>09/10/2012 09:23</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
 
 </div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>
