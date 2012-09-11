@@ -2,13 +2,14 @@
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<meta name="generator" content="AsciiDoc 8.6.6" />
+
 	<title>rangeMapper</title> 
 	<meta name="description" content="rangeMapper: A platform for the study of macroecology of life history traits">
 	<meta name="author" content="Mihai Valcu">
 	<meta name="keywords" content="macroecology, GIS, species richness, life history traits, rangeMapper, Aves,R, spatial analysis" />
-	<link rel="stylesheet" href="style/style.css" type="text/css" />
 	
+	<link rel="stylesheet" href="style/style.css" type="text/css" />
+		
 	<!-- google-analytics -->
 	<script type="text/javascript">
 
@@ -24,6 +25,11 @@
 	</script>
 	
 	<script src="style/syntaxHighlighter.js"> </script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script src="scripts/galleria/galleria-1.2.8.min.js"></script>
+	
+	
+	
 	
 	</head>
 	<body style="max-width:1024px">	
@@ -54,7 +60,7 @@
  </ul></div>
 
 <div id="layout-content-box"> <div id="layout-banner"> <div id="layout-title">rangeMapper</div><div id="layout-description">A platform for the study of macroecology of life history traits</div></div>
-<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.1-7) </h6>
+<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.1-9) </h6>
 
 <h2>Appendix S3</h2>
 
@@ -191,6 +197,6 @@ plot(m, style = &quot;equal&quot;)
 <p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-14"/> </p>
 
 <p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
-                <footer> Last update <code>09/11/2012 09:42</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
+                <footer> Last update <code>09/11/2012 13:58</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
 
 </div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>

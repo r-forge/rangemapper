@@ -2,13 +2,14 @@
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<meta name="generator" content="AsciiDoc 8.6.6" />
+
 	<title>rangeMapper</title> 
 	<meta name="description" content="rangeMapper: A platform for the study of macroecology of life history traits">
 	<meta name="author" content="Mihai Valcu">
 	<meta name="keywords" content="macroecology, GIS, species richness, life history traits, rangeMapper, Aves,R, spatial analysis" />
-	<link rel="stylesheet" href="style/style.css" type="text/css" />
 	
+	<link rel="stylesheet" href="style/style.css" type="text/css" />
+		
 	<!-- google-analytics -->
 	<script type="text/javascript">
 
@@ -24,6 +25,11 @@
 	</script>
 	
 	<script src="style/syntaxHighlighter.js"> </script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script src="scripts/galleria/galleria-1.2.8.min.js"></script>
+	
+	
+	
 	
 	</head>
 	<body style="max-width:1024px">	
@@ -54,7 +60,7 @@
  </ul></div>
 
 <div id="layout-content-box"> <div id="layout-banner"> <div id="layout-title">rangeMapper</div><div id="layout-description">A platform for the study of macroecology of life history traits</div></div>
-<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.1-7) </h6>
+<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.1-9) </h6>
 
 <p>SPECIES RICHNESS OF THE NEW WORLD WRENS: Using default arguments for most of the functions</p>
 
@@ -109,6 +115,6 @@ plot(sr)
 <p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-5"/> </p>
 
 <p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
-                <footer> Last update <code>09/11/2012 09:42</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
+                <footer> Last update <code>09/11/2012 13:58</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
 
 </div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>

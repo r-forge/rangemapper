@@ -2,13 +2,14 @@
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<meta name="generator" content="AsciiDoc 8.6.6" />
+
 	<title>rangeMapper</title> 
 	<meta name="description" content="rangeMapper: A platform for the study of macroecology of life history traits">
 	<meta name="author" content="Mihai Valcu">
 	<meta name="keywords" content="macroecology, GIS, species richness, life history traits, rangeMapper, Aves,R, spatial analysis" />
-	<link rel="stylesheet" href="style/style.css" type="text/css" />
 	
+	<link rel="stylesheet" href="style/style.css" type="text/css" />
+		
 	<!-- google-analytics -->
 	<script type="text/javascript">
 
@@ -24,6 +25,11 @@
 	</script>
 	
 	<script src="style/syntaxHighlighter.js"> </script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script src="scripts/galleria/galleria-1.2.8.min.js"></script>
+	
+	
+	
 	
 	</head>
 	<body style="max-width:1024px">	
@@ -61,7 +67,29 @@
   (<a href="http://cran.r-project.org/package=DBI">DBI</a>, <a href="http://cran.r-project.org/package=RSQLite">RSQLite</a>) and spatial classes (<a href="http://cran.r-project.org/package=sp">sp</a>, <a href="http://cran.r-project.org/package=raster">raster</a> ).</p>
 </blockquote>
 
-<p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
-                <footer> Last update <code>09/11/2012 09:42</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
+<div id="galleria">
+<img src="gallery/Valcu_et_all_2012_species_richness.png" data-title="Bird species richness" 
+    data-description="Valcu et al (2012) Figure 4a. Global distribution of avian species richness (N = 8434 species), '+proj=goode +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs' ">
 
-</div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>
+<img src="gallery/Valcu_et_all_2012_log10_body_mass.png" data-title="Bird body mass" 
+    data-description="Valcu et al (2012) Figure 4b. Global distribution of log10 median body mass(N = 8434 species) , '+proj=goode +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs' ">
+
+<img src="gallery/figure_S1a.png" data-title="Endemic species richness" 
+data-description="Valcu et al (2012) Figure S1 a. Avian endemic species richness ">
+
+<img src="gallery/figure_S1b.png" data-title="Avian body mass relative diversity" 
+data-description="Valcu et al (2012) Figure S1 b. Coefficient of variation of log10 body masss">
+
+    
+    
+    
+    
+</div>
+
+<script>
+// Load the classic theme
+Galleria.loadTheme('scripts/galleria/themes/classic/galleria.classic.min.js');
+// Initialize Galleria
+Galleria.run('#galleria');
+</script>
+
