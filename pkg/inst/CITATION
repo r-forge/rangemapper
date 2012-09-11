@@ -7,13 +7,17 @@ citEntry(entry = "article",
            as.person("James Dale"), 
            as.person("Bart Kempenaers")
            ),
-         journal = "Global Ecology and Biogeography (in press)",
+         journal = "Global Ecology and Biogeography",
+		 volume = 21,
+		number = 9,
          year= 2012,
+		 
 	 textVersion = paste(
 		"Valcu, M., James. D, Kempenaers, B.(2012).",
 		"rangeMapper: A platform for the study of macroecology of life history traits.",
-	        "in press")
+			"GEB,21(9)")
          )
+
 
 
 
