@@ -1,3 +1,4 @@
+if(getRversion() >= '2.15.1') utils::globalVariables(c('CON')) 
 
 
 setGeneric("rangeMapExport", function(object,dirName, ...)  	    standardGeneric("rangeMapExport") )

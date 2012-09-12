@@ -97,80 +97,18 @@ bio.save(con = dbcon, loc = wrens,  ID = "sci_name")
 # Process species ranges
 r = readOGR(f, "wrens", verbose = FALSE)
 
-processRanges(spdf = r, con =  dbcon, metadata = rangeTraits(), ID = "sci_name" )
+processRanges(spdf = r, con =  dbcon, ID = "sci_name" )
 
-###################################################################
-
-# Save MAPs
-rangeMap.save(dbcon) #species richness is the default
 
 #Using sqlite aggregate functions
 rangeMap.save(dbcon, FUN = "median" , biotab = "wrens", 
 			biotrait = "body_size", tableName = "body_size")
 
-#Using an  R function which does not require a formula argument
-rangeMap.save(dbcon, FUN = mean , biotab = "wrens", 
-	biotrait = "clutch_size", tableName = "clutch_size", 
-		na.rm = TRUE, overwrite = TRUE)
-
-###################################################################		
-		
-#Using an user defined R function which has a formula argument
- # and subsetting
-# Map of log(body_mass) ~ clutch_size only for species richness > 10
-
-lmSlope = function (formula, data) {
-    fm = try(lm(formula, data = data), silent = TRUE)
-	if (inherits(fm, "try-error")) 
-		res = NA else 
-			res = coef(fm)[2]
-    as.numeric(res)
-}
-
-rangeMap.save(dbcon, FUN = lmSlope, biotab = "wrens", 
-	biotrait = "body_mass", 
-	tableName = "slope_body_mass_clutchSize", 
-	formula = log(body_mass) ~ clutch_size , overwrite = TRUE, 
-	list(MAP_species_richness = "species_richness > 5")
-	)
-
-###################################################################
-	
-# rangeMap.save can be also used to  import raster maps the current project
-r = system.file(package = "rangeMapper", 
-	"extdata", "etopo1", "etopo1_Americas.tif")
-
-# etopo1_Americas.tif data source:
-strwrap(readChar(system.file(package = "rangeMapper", "extdata", "etopo1", "data_source.txt"), 500))
-	
-rangeMap.save(dbcon, path = r, tableName = 'meanAltitude', 
-	FUN = mean , overwrite = TRUE)
-
-###################################################################	
-	
-# rangeMap.save takes a subset argument on both 
-# metadata_ranges, MAP and BIO tables:
-
-# clutch size of the highland species
-rangeMap.save(dbcon, biotab = "wrens", biotrait = "clutch_size", 
-	tableName = "highlandClutch", overwrite = TRUE, 
-	subset = list(MAP_meanAltitude = "meanAltitude > 2000") )
-
-# clutch size of restricted range lowland species 
-rangeMap.save(dbcon, biotab = "wrens", biotrait = "clutch_size", 
-	tableName = "endemicsLowlandClutch", overwrite = TRUE, 
-		subset = list(MAP_meanAltitude = "meanAltitude < 1000",
-					 metadata_ranges = "Area < 100000000000") )
-
-###################################################################					 
-
 # Fetch maps
 
-summary(rangeMap.fetch(dbcon) ) # all maps
-	
-summary(rangeMap.fetch(dbcon, 'species_richness') )	# one map	
+summary(rangeMap.fetch(dbcon) )
 
-
+# more examples at: http://rangemapper.r-forge.r-project.org
 
 
 }

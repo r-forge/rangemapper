@@ -1,4 +1,6 @@
 
+
+
 x.Msg <- function(x.Msg=Sys.time(), tkMainWindow = "win", tkElement = "x.Msg", eol = "\n", keep = TRUE, clearup = FALSE, getTime = FALSE, envir = ".RangeMapper") {
 
    x.Msg	= paste(x.Msg, collapse = eol)
@@ -57,43 +59,45 @@ brewer.pal.get <- function(palette = NULL) {
 
 # tclttk	
 tkMakeColorPalette <- function(n) {
-top  =  tktoplevel()
-tkwm.title(top,"Choose one or more colors")
-
-cols = vector(mode = "list", length = 4)	  
-out <<- vector(mode = "character")	  
-
-PickColor  =  function(colCanvas) {
-	  color  =  tclvalue(tcl("tk_chooseColor"))
-	  if (nchar(color) > 0) { tkconfigure(colCanvas, bg = color)
-	  out <<- c(out, color)
-	  }
-}
-
-for(i in 1:length(cols))
- cols[[i]] = tkcanvas(top,width = 50,height = 36)
-
-tkgrid(cols[[1]], tkbutton(top,text="Choose 1st color", height= 2, command = function() PickColor(cols[[1]]) ) )
-tkgrid(cols[[2]], tkbutton(top,text="Choose 2nd color", height= 2, command = function() PickColor(cols[[2]]) ) )
-tkgrid(cols[[3]], tkbutton(top,text="Choose 3rd color", height= 2, command = function() PickColor(cols[[3]]) ) )
-tkgrid(cols[[4]], tkbutton(top,text="Choose 4th color", height= 2, command = function() PickColor(cols[[4]]) ) )
-
-	onOK = function() {
-		if(length(out) >= 1) {
+	if(missing(n)) n = 8
+	if(!exists(".RangeMapper")) x.make.env()	
 		
-		out <<- colorRampPalette(out, space = "Lab")(n)
-		
-		tkdestroy(top)
-		}
+	top  =  tktoplevel()
+	tkwm.title(top,"Choose one or more colors")
+
+	cols = vector(mode = "list", length = 4)	  
+
+	x.put("out", vector(mode = "character"))
+
+	PickColor  =  function(colCanvas) {
+		  color  =  tclvalue(tcl("tk_chooseColor"))
+		  if (nchar(color) > 0) { tkconfigure(colCanvas, bg = color)
+			  x.put("out", c(x.get("out"), color))
+			}
 	}
 
-tkgrid(tkbutton(top, text = "OK", width = 6, command = onOK ),sticky = "e")
- 
-tkwait.window(top)
+	for(i in 1:length(cols))
+	 cols[[i]] = tkcanvas(top,width = 50,height = 36)
 
-return(out)
+	tkgrid(cols[[1]], tkbutton(top,text="Choose 1st color", height= 2, command = function() PickColor(cols[[1]]) ) )
+	tkgrid(cols[[2]], tkbutton(top,text="Choose 2nd color", height= 2, command = function() PickColor(cols[[2]]) ) )
+	tkgrid(cols[[3]], tkbutton(top,text="Choose 3rd color", height= 2, command = function() PickColor(cols[[3]]) ) )
+	tkgrid(cols[[4]], tkbutton(top,text="Choose 4th color", height= 2, command = function() PickColor(cols[[4]]) ) )
 
-}
+		onOK = function() {
+			if(length(x.get("out")) >= 1) {
+				x.put("out", c(x.get("out"), colorRampPalette(x.get("out"), space = "Lab")(n)))
+				tkdestroy(top)
+				}
+		}
+
+	tkgrid(tkbutton(top, text = "OK", width = 6, command = onOK ),sticky = "e")
+	 
+	tkwait.window(top)
+
+	return(x.get("out"))
+
+	}
 	
 tkColorPalette <- function(pal, name, palette.size = 45, envir = .GlobalEnv) { 
 

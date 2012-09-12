@@ -1,4 +1,7 @@
 
+if(getRversion() >= '2.15.1') utils::globalVariables(c('dbcon')) 
+
+
 setGeneric("bioSave", function(object, ...)  	standardGeneric("bioSave") )
 
 setMethod("bioSave",  

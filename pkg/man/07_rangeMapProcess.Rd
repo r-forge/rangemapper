@@ -57,12 +57,11 @@ wd = tempdir()
 
 \dontrun{ 
 # Multiple files (one file per range)
-# takes about 45secs on a Intel Core2 @3.16GHz with 4 GB of RAM.
 rdr= system.file(package = "rangeMapper", "extdata", "wrens", "vector")
 dbcon = rangeMap.start(file = "wrens.sqlite", overwrite = TRUE, dir = wd)
 global.bbox.save(con = dbcon, bbox = rdr)
 gridSize.save(dbcon) ; canvas.save(dbcon) 
-processRanges(dir = rdr, con =  dbcon)
+system.time(processRanges(dir = rdr, con =  dbcon))
 }
 
 # One file containing all the ranges
@@ -73,8 +72,8 @@ global.bbox.save(con = dbcon, bbox = r)
 gridSize.save(dbcon)  
 canvas.save(dbcon) 
 
-system.time(processRanges(spdf = r, con =  dbcon, metadata = rangeTraits(), ID = "sci_name" ))
-# ~ 13 times faster than processing individual ranges.
+system.time(processRanges(spdf = r, con =  dbcon, ID = "sci_name" ))
+# ~ 12 times faster than processing individual ranges.
 
 }
 

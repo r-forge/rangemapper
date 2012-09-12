@@ -53,7 +53,7 @@ dbcon = rangeMap.start(file = "wrens.sqlite", overwrite = TRUE, dir = tempdir() 
 global.bbox.save(con = dbcon, bbox = r)
 gridSize.save(dbcon)  
 canvas.save(dbcon) 
-processRanges(spdf = r, con =  dbcon, metadata = rangeTraits(), ID = "sci_name" )
+processRanges(spdf = r, con =  dbcon, ID = "sci_name" )
 
 # Upload BIO tables
 data(wrens)

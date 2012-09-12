@@ -1,3 +1,5 @@
+if(getRversion() >= '2.15.1') utils::globalVariables(c('.RangeMapper')) 
+
 
 #UTILS
 
@@ -143,7 +145,6 @@ x.tkdbBrowse.active.proj <- function() {
 		if(is.null(dbcon)) stop(x.Msg("There is no active project!"))
 	
 	tkdbBrowse(dbcon)
-		if(exists("out")) rm(out, envir = .GlobalEnv)
 
 }
 
@@ -223,7 +224,9 @@ x.global.bbox.save <- function() {
 	dbcon = x.get("con")
 		if(is.null(dbcon)) stop(x.Msg("There is no active project!"))
 
-	Dir = choose.dir(default = getwd(), caption = "Select ranges directory")
+	chdr = if(.Platform$OS.type == "windows")	choose.dir else tk_choose.dir
+		
+	Dir = chdr(default = getwd(), caption = "Select ranges directory")
 	
 	global.bbox.save(con = dbcon , bbox = Dir)
 	
@@ -276,6 +279,7 @@ x.canvas.save <- function() {
 	}	
 		
 x.processRanges <- function() {
+	chdr = if(.Platform$OS.type == "windows")	choose.dir else tk_choose.dir
 	
 	dbcon = x.get("con")
 	if(is.null(dbcon)) stop(x.Msg("There is no active project!"))
@@ -283,11 +287,12 @@ x.processRanges <- function() {
 	selectVal = x.yn(text = "Save range centroid and range extent?") 
 
 	if(selectVal == 1) {
-		processRanges(con = dbcon,dir = choose.dir(default = getwd(), caption = "Select ranges directory"), metadata = rangeTraits())	
+	
+		processRanges(con = dbcon,dir =chdr(default = getwd(), caption = "Select ranges directory"), metadata = rangeTraits())	
 		}	
 	
 	if(selectVal == 0) {
-		processRanges(con = dbcon,dir = choose.dir(default = getwd(), caption = "Select ranges directory"))		} 
+		processRanges(con = dbcon,dir = chdr(default = getwd(), caption = "Select ranges directory"))		} 
 
 }
 
@@ -439,15 +444,15 @@ x.chooseSubset <- function() {
 	for(i in 1:length(tabs) ) {
 		tkgrid(tklabel(top, text = names(tabs[i])), sticky="w", column  = 0, row = i)
 		
-		text[[i]] <- tclVar(queryTxt[i])
-		textField[[i]] <- tkentry(top,width = "75", textvariable=text[[i]])
+		Text[[i]] <- tclVar(queryTxt[i])
+		textField[[i]] <- tkentry(top,width = "75", textvariable=Text[[i]])
 		
 		tk2tip(textField[[i]], SQL[[i]])
 		tkgrid(textField[[i]], sticky="w", column  = 1, row = i)
 		}
 	
 	OnOK <- function() {
-		Out <<- text
+		x.put("out", Text )
 		tkdestroy(top)
 	}
 	
@@ -458,7 +463,7 @@ x.chooseSubset <- function() {
 	tkfocus(top)
 	tkwait.window(top)
 	
-	Res = 	lapply(Out, function(x) tclvalue(x))
+	Res = 	lapply(x.get('out'), function(x) tclvalue(x))
 	Res = Res[unlist(lapply(Res, nchar))>0]
 	
 
@@ -551,7 +556,7 @@ x.rangeMap.rm <- function(table.type) {
 	if(is.null(dbcon)) stop(x.Msg("There is no active project!"))
 
 	nam = as.character(tkdbBrowse(dbcon, prefix = table.type, tables.name.only = TRUE)$dbtable)
-	if(exists("out")) rm(out, envir = .GlobalEnv)
+
 
 	table.nam = paste(table.type, nam, sep = "_")
 	

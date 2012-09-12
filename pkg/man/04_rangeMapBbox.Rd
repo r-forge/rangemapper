@@ -76,33 +76,10 @@ dbcon = rangeMap.start(file = "test.sqlite", overwrite = TRUE, dir = wd )
 global.bbox.save(con = dbcon)
 bbox0 = global.bbox.fetch(dbcon)
 
-# Using multiple *.shp range files
-dbcon = rangeMap.start(file = "test.sqlite", overwrite = TRUE, dir = wd )
-global.bbox.save(con = dbcon, bbox = f)
-bbox1 = global.bbox.fetch(dbcon)
-
-# Using multiple *.shp range files and reprojecting
-dbcon = rangeMap.start(file = "test.sqlite", overwrite = TRUE, dir = wd )
-global.bbox.save(con = dbcon, bbox = f, 
-	p4s = CRS("+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs "))
-bbox2 = global.bbox.fetch(dbcon)
-
-# Using a SpatialPolygons object
-dbcon = rangeMap.start(file = "test.sqlite", overwrite = TRUE, dir = wd )
-
-troaed = selectShpFiles(f, ogr = TRUE, polygons.only = TRUE)[71, ] # path to Troglodytes_aedon
-r = readOGR(troaed$dsn, troaed$layer)
-
-global.bbox.save(con = dbcon, bbox = r)
-bbox3 = global.bbox.fetch(dbcon)
-
-par(mfrow = c(2,2))
 plot(bbox0, axes = TRUE)
-plot(bbox1, axes = TRUE)
-plot(bbox2, axes = TRUE)
-plot(bbox3, axes = TRUE)
 
 
+# more examples at: http://rangemapper.r-forge.r-project.org
 
 }	
 	

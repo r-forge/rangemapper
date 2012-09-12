@@ -42,32 +42,29 @@ dbcon = rangeMap.start(file = "test.sqlite", overwrite = TRUE, dir = tempdir() )
 f = system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined")
 global.bbox.save(con = dbcon, bbox = f, 
 	p4s = CRS("+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +ellps=WGS84 +units=km +no_defs") ) 
-gridSize.save(dbcon, gridSize = 100)  # cell size 1 deg
+gridSize.save(dbcon, gridSize = 200)  # cell size 2 deg
 canvas.save(dbcon) 
-processRanges(spdf = readOGR(f, "wrens", verbose = FALSE), metadata = rangeTraits(), con =  dbcon, ID = "sci_name")
+processRanges(spdf = readOGR(f, "wrens", verbose = FALSE), con =  dbcon, ID = "sci_name")
 rangeMap.save(dbcon) # species richness
-
-SRrestrict = rangeMap.save(dbcon, tableName = "restricted_SR", overwrite = TRUE, 
-		subset = list( metadata_ranges = "Area < 100000") )
 
 
 # PLOTS
 all = rangeMap.fetch(dbcon)
 SR = rangeMap.fetch(dbcon, 'species_richness')
-resSR = rangeMap.fetch(dbcon, 'restricted_SR')
 
 plot(all)
 plot(SR, style = "fisher", sub = "Wrens species richness")
-plot(resSR, style = "resSR", scales = TRUE, sub = "Endemic Wrens")
 
 pal = brewer.pal.get('RdYlGn')[11:1]
 
 plot(SR, style = "fisher", colorpalette = pal)
 
 # if there is tcltk support choose a color palette interactively. 
-if(interactive()) tkColorPalette(pal = brewer.pal.get(),name  = "pal")
-plot(SR, style = "fisher", colorpalette = pal)
-
+if(interactive()) {
+	tkColorPalette(pal = brewer.pal.get(),name  = "pal")
+	plot(SR, style = "fisher", colorpalette = pal)
+	}
+	
 }
 
 
