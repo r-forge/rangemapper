@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+	<title>rangeMapper</title> 
+	<meta name="description" content="rangeMapper: A platform for the study of macroecology of life history traits">
+	<meta name="author" content="Mihai Valcu">
+	<meta name="keywords" content="macroecology, GIS, species richness, life history traits, rangeMapper, Aves,R, spatial analysis" />
+	
+	<link rel="stylesheet" href="style/style.css" type="text/css" />
+		
+	<!-- google-analytics -->
+	<script type="text/javascript">
+
+			  var _gaq = _gaq || [];
+			  _gaq.push(["_setAccount", "UA-25987540-1"]);
+			  _gaq.push(["_trackPageview"]);
+
+			  (function() {
+					var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+					ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+					var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+			  })();
+	</script>
+	
+	<script src="style/syntaxHighlighter.js"> </script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script src="scripts/galleria/galleria-1.2.8.min.js"></script>
+	
+	
+	
+	
+	</head>
+	<body style="max-width:1024px">	
+	
+<div id="layout-leftBar"> <ul id="layout-leftBar" class="level1">
+ <h4> rangeMapper </h4>
+ <li><a href= "index.html" > home </a> </li>
+ <li><a href= "faq.html" > faq </a> </li>
+ <li><a href= "gui.html" > gui </a> </li>
+ <li><a href= "bibliography.html" > bibliography </a> </li>
+ <h4> Examples </h4>
+ <li class="submenu"><a> Getting started </a> <ul class="level2"> <li><a href= "bounding_box.html" > bounding_box </a></li>
+<li><a href= "Species_Richness.html" > Species_Richness </a></li>
+<li><a href= "on-the-fly reprojection.html" > on-the-fly reprojection </a></li>
+<li><a href= "Range_Traits.html" > Range_Traits </a></li>
+<li><a href= "Range_Traits2.html" > Range_Traits2 </a></li> </ul> </li>
+ <li class="submenu"><a> Aggregate assambladges </a> <ul class="level2"> <li><a href= "SQL_functions.html" > SQL_functions </a></li>
+<li><a href= "R_functions.html" > R_functions </a></li> </ul> </li>
+ <li class="submenu"><a> Subsetting </a> <ul class="level2"> <li><a href= "Species.html" > Species </a></li>
+<li><a href= "Assambladge.html" > Assambladge </a></li>
+<li><a href= "Species & Assambladge.html" > Species & Assambladge </a></li> </ul> </li>
+ <h4> Case studies </h4>
+ <li class="submenu"><a> Valcu et al 2012 </a> <ul class="level2"> <li><a href= "appendix_S2.html" > appendix_S2 </a></li>
+<li><a href= "appendix_S3.html" > appendix_S3 </a></li>
+<li><a href= "appendix_S4.html" > appendix_S4 </a></li>
+<li><a href= "appendix_S5.html" > appendix_S5 </a></li> </ul> </li>
+ <li class="submenu"><a> NatureServe </a> <ul class="level2"> <li><a href= "Canidae.html" > Canidae </a></li>
+<li><a href= "Falconidae.html" > Falconidae </a></li> </ul> </li>
+ </ul></div>
+
+<div id="layout-content-box"> <div id="layout-banner"> <div id="layout-title">rangeMapper</div><div id="layout-description">A platform for the study of macroecology of life history traits</div></div>
+<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.2-0) </h6>
+
+<p>SETTING THE SPATIAL BOUNDING BOX</p>
+
+<pre><code class="r">require(rangeMapper)
+wd = tempdir()
+f = system.file(package = &quot;rangeMapper&quot;, &quot;extdata&quot;, &quot;wrens&quot;, &quot;vector&quot;)
+</code></pre>
+
+<p>Using default values for both bbox and p4s</p>
+
+<pre><code class="r">dbcon = rangeMap.start(file = &quot;test.sqlite&quot;, overwrite = TRUE, dir = wd)
+</code></pre>
+
+<pre><code>##  &gt;&gt; New session 2012-09-12 13:42:33 
+##  &gt;&gt; PROJECT: test.sqlite 
+## DIRECTORY: C:\Users\valcu\AppData\Local\Temp\RtmpoTziea 
+</code></pre>
+
+<pre><code class="r">global.bbox.save(con = dbcon)
+</code></pre>
+
+<pre><code>##  &gt;&gt; Using unprojected global bouging box [ -180,180,-90,90 ]... 
+##  &gt;&gt; Bounding box uploaded.
+## PROJ4STRING set to 
+## NA 
+</code></pre>
+
+<pre><code class="r">bbox0 = global.bbox.fetch(dbcon)
+</code></pre>
+
+<p>Using multiple *.shp range files</p>
+
+<pre><code class="r">dbcon = rangeMap.start(file = &quot;test.sqlite&quot;, overwrite = TRUE, dir = wd)
+</code></pre>
+
+<pre><code>##  &gt;&gt; New session 2012-09-12 13:42:33 
+##  &gt;&gt; PROJECT: test.sqlite 
+## DIRECTORY: C:\Users\valcu\AppData\Local\Temp\RtmpoTziea 
+</code></pre>
+
+<pre><code class="r">global.bbox.save(con = dbcon, bbox = f)
+</code></pre>
+
+<pre><code>##  &gt;&gt; Computing global bounding box for 84 ranges... 
+##  &gt;&gt; Checking for proj4 string differences... 
+##  &gt;&gt; Done! 
+##  &gt;&gt; Bounding box uploaded.
+## PROJ4STRING set to 
+## +proj=longlat +datum=NAD83 +no_defs  
+</code></pre>
+
+<pre><code class="r">bbox1 = global.bbox.fetch(dbcon)
+</code></pre>
+
+<p>Using multiple *.shp range files and reprojecting</p>
+
+<pre><code class="r">dbcon = rangeMap.start(file = &quot;test.sqlite&quot;, overwrite = TRUE, dir = wd)
+</code></pre>
+
+<pre><code>##  &gt;&gt; New session 2012-09-12 13:42:35 
+##  &gt;&gt; PROJECT: test.sqlite 
+## DIRECTORY: C:\Users\valcu\AppData\Local\Temp\RtmpoTziea 
+</code></pre>
+
+<pre><code class="r">global.bbox.save(con = dbcon, bbox = f, p4s = CRS(&quot;+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs &quot;))
+</code></pre>
+
+<pre><code>##  &gt;&gt; Computing global bounding box for 84 ranges... 
+##  &gt;&gt; Checking for proj4 string differences... 
+##  &gt;&gt; Done! 
+##  &gt;&gt; Converting to  +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs 
+##  &gt;&gt; Bounding box uploaded.
+## PROJ4STRING set to 
+##  +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs 
+</code></pre>
+
+<pre><code class="r">bbox2 = global.bbox.fetch(dbcon)
+</code></pre>
+
+<p>Using a SpatialPolygons object</p>
+
+<pre><code class="r">dbcon = rangeMap.start(file = &quot;test.sqlite&quot;, overwrite = TRUE, dir = wd)
+</code></pre>
+
+<pre><code>##  &gt;&gt; New session 2012-09-12 13:42:37 
+##  &gt;&gt; PROJECT: test.sqlite 
+## DIRECTORY: C:\Users\valcu\AppData\Local\Temp\RtmpoTziea 
+</code></pre>
+
+<pre><code class="r">
+# Troglodytes_aedon
+troaed = selectShpFiles(f, ogr = TRUE, polygons.only = TRUE)[71, ]
+r = readOGR(troaed$dsn, troaed$layer)
+</code></pre>
+
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;C:/Program Files/R/R-2.15.1/library/rangeMapper/extdata/wrens/vector&quot;, layer: &quot;Troglodytes_aedon&quot;
+## with 1 features and 2 fields
+## Feature type: wkbMultiPolygon with 2 dimensions
+</code></pre>
+
+<pre><code class="r">
+global.bbox.save(con = dbcon, bbox = r)
+</code></pre>
+
+<pre><code>##  &gt;&gt; Bounding box uploaded.
+## PROJ4STRING set to 
+##  +proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0 
+</code></pre>
+
+<pre><code class="r">bbox3 = global.bbox.fetch(dbcon)
+</code></pre>
+
+<pre><code class="r">par(mfrow = c(2, 2))
+plot(bbox0, axes = TRUE)
+plot(bbox1, axes = TRUE)
+plot(bbox2, axes = TRUE)
+plot(bbox3, axes = TRUE)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-6"/> </p>
+
+<p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
+                <footer> Last update <code>09/12/2012 13:40</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
+
+</div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>
