@@ -1,13 +1,8 @@
 
 .extract.p4s <- function(ShpFiles) {
-#  extract proj4 string
-# EXAMPLE
-#  Dir  = choose.dir(paste(system.file(package="rangeMapper"), "extdata", "wrens", "vector", sep = .Platform$file.sep))
-#  ShpFiles = selectShpFiles(Dir)
-
+#ShpFiles = selectShpFiles(paste(system.file(package="rangeMapper"), "extdata", "wrens", "vector", sep = .Platform$file.sep))
 	fl = split(ShpFiles, ShpFiles$layer)
-	unlist(lapply(fl, FUN = function(x) .Call("ogrP4S", x[,1], x[,2], PACKAGE = "rgdal") ))
-
+	unlist(lapply(fl, FUN = function(x) OGRSpatialRef(x[,1], x[,2])  ))
 }
 
 .rect2spp <- function(xmin, xmax, ymin, ymax) {

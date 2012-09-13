@@ -105,7 +105,7 @@ After pushing the initiate project button, choose a location to save the file, n
 	At this step, (see fig. \ref{fig:fig4}) you have to:
 	
 	\begin{enumerate}
-		 \item[-] Push the `COMPUTE CANVAS EXTENT' button and then select all the range polygon files (*.shp format) in order to define the global bounding box of the project. The global bounding box (see \texttt{?global.bbox} for more details) is computed using \texttt{getinfo.shape()} in \cite{maptools} package hence this step is reasonably fast even for thousands of range files. The vector (*.shp) files for the wrens ranges data are stored in the package's directory.  Access the `help/example files' menu to get the exact pathway for this directory.
+		 \item[-] Push the `COMPUTE CANVAS EXTENT' button and then select all the range polygon files (*.shp format) in order to define the global bounding box of the project.  The vector (*.shp) files for the wrens ranges data are stored in the package's directory.  Access the `help/example files' menu to get the exact pathway for this directory.
 		 \item[-] Push the `INPUT GRID SIZE' button and then input the desired resolution (a default value is provided). For the wrens, change the provided default of 125194.3m to a round 125000 m.
 		 \item[-] Push the `COMPUTE CANVAS' button to upload the canvas to the project's database.
 	\end{enumerate}
@@ -257,6 +257,10 @@ Ridgely, R. S., T. F. Allnutt, T. Brooks, D. K. McNicol, D. W. Mehlman, B. E. Yo
 Roger Bivand, with contributions by Hisaji Ono and Richard Dunlap (2009). classInt: Choose univariate class intervals. R package version 0.1-14. \url{http://CRAN.R-project.org/package=classInt}
 
 \bibitem[rangeMapper]{rangeMapper}
-Valcu, M., Dale, J. and Kempenaers, B. (2011) rangeMapper: A platform for the study of macroecology of life history traits. \url{http://rangemapper.r-forge.r-project.org}
+Valcu, M., et al (2012). rangeMapper: a platform for the study of macroecology of life-history traits. Global Ecology and Biogeography 21, 945-951. \url{http://rangemapper.r-forge.r-project.org}
 \end{thebibliography}
 \end{document}
+
+
+
+

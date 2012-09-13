@@ -1,10 +1,10 @@
 Package: rangeMapper
-Version: 0.2-0
-Date: 2012-Sep-12
+Version: 0.2-1
+Date: 2012-Sep-13
 Title: A platform for the study of macroecology of life history traits
 Author: Mihai Valcu  <valcu@orn.mpg.de>, James Dale  <J.Dale@massey.ac.nz> 
 Maintainer: Mihai Valcu  <valcu@orn.mpg.de>
-Depends: R (>= 2.14.0), methods, utils,  RSQLite,RSQLite.extfuns, sp, rgdal, maptools, lattice, RColorBrewer, tcltk, tcltk2, pixmap, classInt
+Depends: R (>= 2.15.0), methods, utils,  RSQLite,RSQLite.extfuns, sp, rgdal, maptools, lattice, RColorBrewer, tcltk, tcltk2, pixmap, classInt
 LinkingTo: rgdal
 Suggests: raster, rgeos
 SystemRequirements: Bwidget, Tktable

@@ -12,10 +12,7 @@ citEntry(entry = "article",
 		number = 9,
          year= 2012,
 		 
-	 textVersion = paste(
-		"Valcu, M., James. D, Kempenaers, B.(2012).",
-		"rangeMapper: A platform for the study of macroecology of life history traits.",
-			"GEB,21(9)")
+	 textVersion = "Valcu, M., et al (2012). rangeMapper: a platform for the study of macroecology of life-history traits. Global Ecology and Biogeography 21, 945-951."
          )
 
 
