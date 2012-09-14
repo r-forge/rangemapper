@@ -7,7 +7,7 @@ exportClasses(rangeMapStart, rangeMap,SpatialPixelsRangeMap)
 
 exportMethods(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapExport, rangeMapStart, summary, plot, vertices)
 
-exportMethods(metadataUpdate)
+exportMethods(metadataUpdate, assemblageFetch)
 
 export(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapExport, rangeMapStart, vertices)
 
@@ -16,6 +16,8 @@ export(bio.save, bio.merge, metadata2bio, global.bbox.save, global.bbox.fetch, c
 export(rangeFetch, metadata.update)
 
 export(rangeMapper, rangeMap)
+
+
 
 
 

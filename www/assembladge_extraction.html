@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+	<title>rangeMapper</title> 
+	<meta name="description" content="rangeMapper: A platform for the study of macroecology of life history traits">
+	<meta name="author" content="Mihai Valcu">
+	<meta name="keywords" content="macroecology, GIS, species richness, life history traits, rangeMapper, Aves,R, spatial analysis" />
+	
+	<link rel="stylesheet" href="style/style.css" type="text/css" />
+		
+	<!-- google-analytics -->
+	<script type="text/javascript">
+
+			  var _gaq = _gaq || [];
+			  _gaq.push(["_setAccount", "UA-25987540-1"]);
+			  _gaq.push(["_trackPageview"]);
+
+			  (function() {
+					var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+					ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+					var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+			  })();
+	</script>
+	
+	<script src="style/syntaxHighlighter.js"> </script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script src="scripts/galleria/galleria-1.2.8.min.js"></script>
+	
+	
+	
+	
+	</head>
+	<body style="max-width:1024px">	
+	
+<div id="layout-leftBar"> <ul id="layout-leftBar" class="level1">
+ <h4> rangeMapper </h4>
+ <li><a href= "index.html" > home </a> </li>
+ <li><a href= "faq.html" > faq </a> </li>
+ <li><a href= "gui.html" > gui </a> </li>
+ <li><a href= "bibliography.html" > bibliography </a> </li>
+ <h4> Examples </h4>
+ <li class="submenu"><a> Getting started </a> <ul class="level2"> <li><a href= "bounding_box.html" > bounding_box </a></li>
+<li><a href= "Species_Richness.html" > Species_Richness </a></li>
+<li><a href= "on-the-fly reprojection.html" > on-the-fly reprojection </a></li>
+<li><a href= "Range_Traits.html" > Range_Traits </a></li>
+<li><a href= "Range_Traits2.html" > Range_Traits2 </a></li> </ul> </li>
+ <li class="submenu"><a> Aggregate assembladges </a> <ul class="level2"> <li><a href= "SQL_functions.html" > SQL_functions </a></li>
+<li><a href= "R_functions.html" > R_functions </a></li> </ul> </li>
+ <li class="submenu"><a> Subsetting </a> <ul class="level2"> <li><a href= "Species.html" > Species </a></li>
+<li><a href= "Assambladge.html" > Assambladge </a></li>
+<li><a href= "Species & Assambladge.html" > Species & Assambladge </a></li> </ul> </li>
+ <li class="submenu"><a> utilities </a> <ul class="level2"> <li><a href= "range_extraction.html" > range_extraction </a></li>
+<li><a href= "assembladge_extraction.html" > assembladge_extraction </a></li> </ul> </li>
+ <h4> Case studies </h4>
+ <li class="submenu"><a> Valcu et al 2012 </a> <ul class="level2"> <li><a href= "appendix_S2.html" > appendix_S2 </a></li>
+<li><a href= "appendix_S3.html" > appendix_S3 </a></li>
+<li><a href= "appendix_S4.html" > appendix_S4 </a></li>
+<li><a href= "appendix_S5.html" > appendix_S5 </a></li> </ul> </li>
+ <li class="submenu"><a> NatureServe </a> <ul class="level2"> <li><a href= "Canidae.html" > Canidae </a></li>
+<li><a href= "Falconidae.html" > Falconidae </a></li> </ul> </li>
+ </ul></div>
+
+<div id="layout-content-box"> <div id="layout-banner"> <div id="layout-title">rangeMapper</div><div id="layout-description">A platform for the study of macroecology of life history traits</div></div>
+<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.2-2) </h6>
+
+<p>EXTRACT ARBITRARY ASSEMBLADGES <br/>
+Create species richness map &amp; import life history data</p>
+
+<pre><code class="r">require(rangeMapper)
+
+projName = &quot;wrens.sqlite&quot;
+projLoc = paste(tempdir(), projName, sep = .Platform$file.sep)
+
+dbcon = rangeMap.start(file = projName,dir = tempdir() , overwrite = TRUE)
+f = system.file(package = &quot;rangeMapper&quot;, &quot;extdata&quot;, &quot;wrens&quot;, &quot;vector_combined&quot;)
+global.bbox.save(con = dbcon, bbox = f) 
+gridSize.save(dbcon, gridSize = 3) 
+canvas.save(dbcon) 
+data(wrens)
+bio.save(con = dbcon, loc = wrens ,  ID = &quot;sci_name&quot;)
+r = readOGR(f, &quot;wrens&quot;, verbose = FALSE)
+processRanges(spdf = r, con =  dbcon, ID = &quot;sci_name&quot;)
+rangeMap.save(dbcon)
+</code></pre>
+
+<p>Extract species sets  (species assembladges) </p>
+
+<pre><code class="r">sr = rangeMap.fetch(dbcon)
+image(sr, axes = TRUE)
+grid()
+
+p = list(x = -76.39, y = 9.26)
+# or use locator: p = locator(1, type = &#39;p&#39;)
+xy = SpatialPoints(do.call(cbind, p), proj4string = CRS(&quot;+proj=longlat +datum=NAD83 +no_defs &quot;))
+
+af = assemblageFetch(rangeMap(projLoc), xy)
+
+points(p, col = 4, cex = 2)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-2"/> </p>
+
+<pre><code class="r">print(af)
+</code></pre>
+
+<pre><code>##    id                       bioid
+## 1 933     Campylorhynchus_griseus
+## 2 933     Campylorhynchus_zonatus
+## 3 933    Microcerculus_marginatus
+## 4 933 Thryothorus_fasciatoventris
+## 5 933        Thryothorus_leucotis
+## 6 933          Thryothorus_spadix
+## 7 933        Troglodytes_musculus
+</code></pre>
+
+<p>Extract species sets (species assembladges)  &amp; the associated life history data </p>
+
+<pre><code class="r">af = assemblageFetch(rangeMap(projLoc), xy, &quot;wrens&quot;)
+
+print(af[, c(1, 4, 6:8)])
+</code></pre>
+
+<pre><code>##    id                  com_name body_size body_mass clutch_size
+## 1 933            bicolored wren     21.50     42.40        4.00
+## 2 933          band-backed wren     18.50     34.60        4.00
+## 3 933 southern nightingale-wren     11.00     18.27        2.50
+## 4 933        black-bellied wren     15.00     24.00        3.00
+## 5 933        buff-breasted wren     14.25     19.50        2.50
+## 6 933         sooty-headed wren     14.50     22.80        2.00
+## 7 933       southern house wren     12.00     12.00        4.22
+</code></pre>
+
+<p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
+                <footer> Last update <code>09/14/2012 16:01</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
+
+</div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>

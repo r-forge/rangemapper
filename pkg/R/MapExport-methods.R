@@ -33,7 +33,7 @@ setMethod("rangeMapExport",
 rangeMap.export  <- function(con, dirName = dirName, ...) {
 	
 	x = new("rangeMap", CON = con)
-	if(missing(dirName))  dirName =  dirname(dbGetInfo(CON)$dbname)
+	if(missing(dirName))  dirName =  dirname(dbGetInfo(con)$dbname)
 	
 	rangeMapExport(x, dirName = dirName, ...)	
 
