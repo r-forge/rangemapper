@@ -6,7 +6,7 @@ setMethod("assemblageFetch",
 		definition = function(object, xy) {
 		
 		# CANVAS
-		cnv = canvas.fetch(dbcon)
+		cnv = canvas.fetch(object@CON)
 
 		#Assembladge IDs
 		assembl_id = over(xy, cnv)$id
@@ -26,7 +26,7 @@ setMethod("assemblageFetch",
 		definition = function(object, xy, BIO) {
 		
 		# CANVAS
-		cnv = canvas.fetch(dbcon)
+		cnv = canvas.fetch(object@CON)
 
 		# BIO_table
 		biotabs = RMQuery(object@CON, "SELECT * FROM sqlite_master WHERE type='table' and name like 'BIO_%' ")$name
