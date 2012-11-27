@@ -51,6 +51,7 @@
  <li class="submenu"><a> Subsetting </a> <ul class="level2"> <li><a href= "Species.html" > Species </a></li>
 <li><a href= "Assambladge.html" > Assambladge </a></li>
 <li><a href= "Species & Assambladge.html" > Species & Assambladge </a></li> </ul> </li>
+ <li><a href= "country_overlays.html" > country_overlays </a> </li>
  <li class="submenu"><a> utilities </a> <ul class="level2"> <li><a href= "range_extraction.html" > range_extraction </a></li>
 <li><a href= "assembladge_extraction.html" > assembladge_extraction </a></li> </ul> </li>
  <h4> Case studies </h4>
@@ -63,7 +64,7 @@
  </ul></div>
 
 <div id="layout-content-box"> <div id="layout-banner"> <div id="layout-title">rangeMapper</div><div id="layout-description">A platform for the study of macroecology of life history traits</div></div>
-<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.2-2) </h6>
+<h6> This script runs with  R version 2.15.1 (2012-06-22) & rangeMapper 0.2-3) </h6>
 
 <p>ON-THE-FLY REPROJECTION</p>
 
@@ -86,7 +87,7 @@ global.bbox.save(con = dbcon, bbox = f, p4s = projString)
 ##  &gt;&gt; Converting to  +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=km +no_defs 
 ##  &gt;&gt; Bounding box uploaded.
 ## PROJ4STRING set to 
-##  +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=km +no_defs 
+##  +proj=cea +lon_0=0 +lat_ts=30 +x_0=0+y_0=0 +ellps=WGS84 +units=km +no_defs
 </code></pre>
 
 <pre><code class="r">
@@ -94,13 +95,13 @@ global.bbox.save(con = dbcon, bbox = f, p4s = projString)
 gridSize.save(dbcon, gridSize = 100)
 </code></pre>
 
-<pre><code>##  &gt;&gt; Grid size set to 100 map units. 
+<pre><code>##  &gt;&gt; Grid size set to 100 map units.
 </code></pre>
 
 <pre><code class="r">canvas.save(dbcon)
 </code></pre>
 
-<pre><code>##  &gt;&gt; Canvas uploaded. 
+<pre><code>##  &gt;&gt; Canvas uploaded.
 </code></pre>
 
 <pre><code class="r">
@@ -144,7 +145,7 @@ smr = summary(rangeMap(dbGetInfo(dbcon)$dbname))
 ## [1] &quot;summary.rangeMap&quot;
 </code></pre>
 
-<p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.7 &amp; markdown 0.5.2</code> </footer> <br/>
-                <footer> Last update <code>09/14/2012 16:01</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
+<p><footer>  Website built with <code>R version 2.15.1 (2012-06-22) , knitr 0.8 &amp; markdown 0.5.2</code> </footer> <br/>
+                <footer> Last update <code>11/27/2012 15:53</code> , <a href="mailto:valcu@orn.mpg.de">valcu@orn.mpg.de</a> </footer> </p>
 
 </div></div> <div id="footer"> <div id="footer-badge"> <a href="http://validator.w3.org/check?uri=referer"> <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml11-blue" alt="Valid XHTML 1.1" height="31" width="88" /></a></div></div></body></html>
