@@ -56,7 +56,7 @@ Any valid SQL expression can be used to build up a subset. See \url{http://www.s
 
 
 \note{
-\code{SQL} aggregate functions are more eficient then their \R counterparts. For simple aggregate functions like mean, median, sd, count it is advisable to use \code{SQL} functions rather then R functions. 
+\code{SQL} aggregate functions are more efficient then their \R counterparts. For simple aggregate functions like mean, median, sd, count it is advisable to use \code{SQL} functions rather then R functions. 
 
 }
 

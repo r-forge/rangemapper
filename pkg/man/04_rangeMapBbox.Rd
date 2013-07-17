@@ -1,4 +1,3 @@
-
 \name{global.bbox}
 \alias{global.bbox}
 \alias{global.bbox.save}

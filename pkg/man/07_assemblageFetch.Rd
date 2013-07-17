@@ -1,21 +1,22 @@
 \name{assemblageFetch-methods}
 \docType{methods}
 \alias{assemblageFetch-methods}
+\alias{assemblageFetch}
 \alias{assemblageFetch,rangeMap,SpatialPoints,character-method}
 \alias{assemblageFetch,rangeMap,SpatialPoints,missing-method}
 \title{ Function \code{assemblageFetch}  retrieves the species set of an arbitrary canvas cell}
 \description{
- Function \code{assemblageFetch}  retrieves the species set of an arbitrary canvas cell optionally with the associated life history data}  
-}
+ Function \code{assemblageFetch}  retrieves the species set, and the data associated with it, of an arbitrary canvas cell optionally with the associated life history data}  
+
 \section{Methods}{
 \describe{
 
 \item{\code{signature(object = "rangeMap", xy = "SpatialPoints", BIO = "character")}}{
-assemblageFetch(rangeMap, xy, BIO) returns a dataframe containing the bioid (e.g. species names), canvas id and any associated life history data contained in the BIO table.
+assemblageFetch(rangeMap, xy, BIO) returns a data.frame containing the bioid (e.g. species names), canvas id and any associated life history data contained in the BIO table.
 }
 
 \item{\code{signature(object = "rangeMap", xy = "SpatialPoints", BIO = "missing")}}{
-If \code{BIO} is missing then assemblageFetch(rangeMap, xy) returns only a dataframe containing two columns the bioid (e.g. species names) and the canvas id.
+If \code{BIO} is missing then assemblageFetch(rangeMap, xy) returns only a data.frame containing two columns the bioid (e.g. species names) and the canvas id.
 }
 }}
 \keyword{methods}

@@ -14,11 +14,11 @@ This is a convenience function returning a named \code{\link{list}} of functions
 	\item{use.default}{If \code{TRUE}, the default, the output list contains functions to extract Area, Median, Min and Max extent of the \code{\link{SpatialPolygons}} object. This option is ignored if no functions are given. }
 }
 \value{
-Returns a named list contaning extractor functions to apply on \code{\link{SpatialPolygons}} objects. 
+Returns a named list containing extractor functions to apply on \code{\link{SpatialPolygons}} objects. 
 }
 
 \details{
-The function returns a named list so any aditional functions should be given as 
+The function returns a named list so any additional functions should be given as 
 rangeTraits(funName1 = FUN1, funName2 = FUN2) where FUN1, FUN2 are \code{\link{SpatialPolygons}} extractor functions.
 }
 

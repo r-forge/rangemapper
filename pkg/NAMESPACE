@@ -11,7 +11,7 @@ exportMethods(metadataUpdate, assemblageFetch)
 
 export(bioSave, rangeMapBboxSave, rangeMapBboxFetch, gridSizeSave, gridSizeFetch, gridSizeSave, gridSizeFetch, canvasSave, canvasFetch, rangeMapRemove, rangeFiles, rangeMapFetch, rangeMapProcess,rangeMapSave, rangeMapExport, rangeMapStart, vertices)
 
-export(bio.save, bio.merge, metadata2bio, global.bbox.save, global.bbox.fetch, canvas.fetch, canvas.save, gridSize.save ,gridSize.fetch, rm.rangeMapper,  selectShpFiles, rangeMap.fetch, processRanges, rangeMap.save, rangeMap.start, rangeMap.open, rangeMap.export,rangeTraits, RMQuery, brewer.pal.get, tkColorPalette, tkMakeColorPalette, tkdbBrowse)
+export(bio.save, bio.merge, metadata2bio, global.bbox.save, global.bbox.fetch, canvas.fetch, canvas.save, gridSize.save ,gridSize.fetch, rm.rangeMapper,  selectShpFiles, rangeMap.fetch, processRanges, rangeMap.save, rangeMap.start, rangeMap.open, rangeMap.export,rangeTraits, RMQuery, brewer.pal.get)
 
 export(rangeFetch, metadata.update)
 
