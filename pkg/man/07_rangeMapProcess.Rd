@@ -65,7 +65,8 @@ system.time(processRanges(dir = rdr, con =  dbcon))
 }
 
 # One file containing all the ranges
-r = readOGR(system.file(package = "rangeMapper", "extdata", "wrens", "vector_combined"), "wrens", verbose = FALSE)
+r = readOGR(system.file(package = "rangeMapper", "extdata", 
+	"wrens", "vector_combined"), "wrens", verbose = FALSE)
 
 dbcon = rangeMap.start(file = "wrens.sqlite", overwrite = TRUE, dir = wd )
 global.bbox.save(con = dbcon, bbox = r)
