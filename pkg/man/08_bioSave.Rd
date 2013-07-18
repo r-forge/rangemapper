@@ -53,7 +53,7 @@ r = readOGR(system.file(package = "rangeMapper",
 dbcon = rangeMap.start(file = "wrens.sqlite", overwrite = TRUE, 
 	dir = tempdir() )
 global.bbox.save(con = dbcon, bbox = r)
-gridSize.save(dbcon)  
+gridSize.save(dbcon, gridSize = 2)  
 canvas.save(dbcon) 
 processRanges(spdf = r, con =  dbcon, ID = "sci_name" )
 

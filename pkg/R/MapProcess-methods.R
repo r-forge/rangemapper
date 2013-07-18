@@ -97,7 +97,7 @@ setMethod("rangeMapProcess",
 		message( paste("Processsing ranges, please wait!...", 
 				   paste("Range:", Files$layer[i]),	
 					 paste(round(i/length(Files$layer)*100,2), "% done"), 
-					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n"), 
+					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n")
 					 )
 		
 
@@ -125,7 +125,6 @@ setMethod("rangeMapProcess",
 		signature = c(object = "rangeMapProcess",spdf = "missing", dir = "character", ID = "missing", metadata = "list", parallel = "missing"), 
 		definition = function(object, dir, metadata){
 	
-	# . . . pass to rangeTraits	
 
 	Startprocess = Sys.time()
 
@@ -148,7 +147,7 @@ setMethod("rangeMapProcess",
 		message( paste("Processsing ranges, please wait!...", 
 				   paste("Range:", Files$layer[i]),	
 					 paste(round(i/length(Files$layer)*100,2), "% done"), 
-					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n"), 
+					   paste("Elapsed time:",round(difftime(Sys.time(), Startprocess, units = "mins"),1), "mins"), sep = "\n")
 					)
 		
 
@@ -209,7 +208,8 @@ setMethod("rangeMapProcess",
 		# split by range	
 		message( "Identifing ranges...")	
 		spdf = split(spdf, spdf@data[, ID])
-
+		message( paste(length(spdf), " ranges found.") )
+		
 		rnames = names(spdf)
 		pb = txtProgressBar(min = 0, max = length(rnames), char = ".", style = 3)
 	

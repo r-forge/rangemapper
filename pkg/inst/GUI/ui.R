@@ -25,6 +25,17 @@ shinyUI(pageWithSidebar(
  
 sidebarPanel = sidebarPanel(
 
+###
+HTML('
+
+
+
+<script type="text/javascript">
+
+</script>
+
+'),
+
 #### PROJECT ####
 	# PROJ type
 	HTML('<form class="well form-inline" >
@@ -81,7 +92,7 @@ sidebarPanel = sidebarPanel(
 				'),		
 		
 		# GO!
-		HTML('<br><div class="switch" data-on-label="WAIT!" data-off-label="START" data-on="danger" data-off="primary"><input id = "goNew" type="checkbox" /></div>')			
+		HTML('<br><div id ="goNewBut" class="switch" data-on-label= "WAIT!" data-off-label="START" data-on="danger" data-off="primary"><input id = "goNew" type="checkbox" /></div>')			
 	), 
 	
 	# BIO

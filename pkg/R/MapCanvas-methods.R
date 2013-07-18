@@ -86,7 +86,7 @@ setMethod("rangeMapBboxSave",
 			bbnew =  spsample(bbnew, n = 1000, type = "regular", offset = c(0,0))
 			proj4string(bbnew) = attributes(bb)$p4s
 			bbnew = spTransform(bbnew , p4s )
-			bb = c(sp::bbox(bbnew )[1, ], sp::bbox(bbnew )[2, ] )
+			bb = c(bbox(bbnew )[1, ], bbox(bbnew )[2, ] )
 			attributes(bb)$p4s = p4s@projargs
 		
 		res1 = dbWriteTable(object@CON, object@BBOX, data.frame(t(bb)), append = TRUE, row.names = FALSE)
